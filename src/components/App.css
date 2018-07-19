@@ -1,0 +1,34 @@
+.App {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+}
+
+.App-header {
+  background-color: #222;
+  padding: 20px;
+  color: white;
+  grid-row: 1;
+  grid-column: 1 / span 2;
+}
+
+.App-content {
+  background-color: #ccc;
+  overflow-x: auto;
+  overflow-y: scroll;
+  grid-row: 2;
+  grid-column: 1;
+  box-sizing: border-box;
+}
+
+.App-contentContainer {
+  margin: 20px;
+}
+
+.App-sidebar {
+  grid-row: 2;
+  grid-column: 2;
+  padding: 20px;
+  background-color: #111;
+}
