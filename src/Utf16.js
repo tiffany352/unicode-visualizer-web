@@ -1,9 +1,11 @@
+import GraphemeSplitter from 'grapheme-splitter'
+
 class Utf16 {
   constructor (str) {
     this.str = str
   }
 
-  makePair(high, low) {
+  makePair (high, low) {
     const highBits = high - 0xD800
     const lowBits = low - 0xDC00
     console.log(highBits, lowBits)
@@ -81,6 +83,24 @@ class Utf16 {
     }
 
     return codepoints
+  }
+
+  graphemes () {
+    const splitter = new GraphemeSplitter()
+    const strings = splitter.splitGraphemes(this.str)
+    const graphemes = []
+
+    let offset = 0
+    for (var i = 0; i < strings.length; i++) {
+      graphemes.push({
+        first: offset,
+        last: offset + strings[i].length - 1,
+        text: strings[i]
+      })
+      offset += strings[i].length
+    }
+
+    return graphemes
   }
 }
 

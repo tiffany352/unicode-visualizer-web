@@ -34,6 +34,7 @@ class Data extends Component {
     const text = this.props.text
     const utf16 = new Utf16(text)
     const codepoints = utf16.codepoints()
+    const graphemes = utf16.graphemes()
 
     const rows = []
     for (var i = 0; i < text.length; i++) {
@@ -58,11 +59,17 @@ class Data extends Component {
             }
           </a>
         </td>
+      const grapheme = graphemes.find(createCodepointPredicate(i))
+      const graphemeData = grapheme &&
+        <td rowspan={grapheme.last - grapheme.first + 1} className='Data-grapheme'>
+          {grapheme.text}
+        </td>
       const element = (
         <tr>
           <td className='Data-numeric Data-right Data-offset'>{i}</td>
           <td className='Data-numeric Data-codeunit'>{codeHex}</td>
           {codepointData}
+          {graphemeData}
         </tr>
       )
       rows.push(element)
