@@ -5,6 +5,7 @@
   "dependencies": {
     "eslint-plugin-react": "^7.10.0",
     "grapheme-splitter": "^1.0.2",
+    "pako": "^1.0.6",
     "prop-types": "^15.6.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",

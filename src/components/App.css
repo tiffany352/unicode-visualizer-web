@@ -31,4 +31,6 @@
   grid-column: 2;
   padding: 20px;
   background-color: #111;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
