@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import Utf16 from '../Utf16'
 import './Data.css'
+import setInfoPage from '../actions/setInfoPage';
 
 function decimalToHex (d, padding) {
   var hex = Number(d).toString(16)
@@ -44,7 +45,7 @@ class Data extends Component {
       const codepointData = codepoint &&
         <td rowspan={codepoint.last - codepoint.first + 1} className='Data-left Data-codepoint'>
           <a className='Data-codepointButton'
-            href={`/codepoint/${decimalToHex(codepoint.value, 4)}`}>
+            onClick={() => this.props.selectCodepoint(codepoint.value)}>
             {codepoint.value
               ? (
                 <React.Fragment>
@@ -98,6 +99,14 @@ const mapStateToProps = state => {
   }
 }
 
-const ConnectedData = connect(mapStateToProps)(Data)
+const mapDispatchToProps = dispatch => {
+  return {
+    selectCodepoint: (codepoint) => {
+      dispatch(setInfoPage('codepoint', codepoint))
+    }
+  }
+}
+
+const ConnectedData = connect(mapStateToProps, mapDispatchToProps)(Data)
 
 export default ConnectedData

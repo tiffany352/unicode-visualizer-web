@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './App.css'
 import Input from './Input'
 import Data from './Data'
+import InfoPage from './InfoPage'
 
 class App extends Component {
   render () {
@@ -16,6 +17,7 @@ class App extends Component {
           </div>
         </div>
         <div className='App-sidebar'>
+          <InfoPage />
         </div>
       </div>
     )
