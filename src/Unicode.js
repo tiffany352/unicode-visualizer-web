@@ -42,7 +42,7 @@ class Unicode {
   }
 }
 
-const url = '/ucd.all.grouped.xml.gz'
+const url = './ucd.all.grouped.xml.gz'
 var database = null
 export async function fetchCompressedDatabase () {
   if (database) {
