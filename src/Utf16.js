@@ -18,7 +18,6 @@ class Utf16 {
   makePair (high, low) {
     const highBits = high - 0xD800
     const lowBits = low - 0xDC00
-    console.log(highBits, lowBits)
     return (highBits << 10) + lowBits + 0x10000
   }
 
@@ -27,8 +26,6 @@ class Utf16 {
 
     for (let i = 0; i < this.str.length; i++) {
       const code = this.str.charCodeAt(i)
-      const isHigh = code >= 0xD800 && code <= 0xDBFF
-      const isLow = code >= 0xDC00 && code <= 0xDFFF
       codeunits.push({
         value: code,
         text: decimalToHex(code, 4),

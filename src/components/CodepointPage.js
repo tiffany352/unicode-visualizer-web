@@ -80,16 +80,16 @@ class CodepointPage extends React.Component {
     }
 
     const data = []
-    for (const [prop, entry] of Object.entries(propsTable)) {
+    for (const [prop] of Object.entries(propsTable)) {
       data.push(convertToDisplay(prop, props[prop]))
     }
     const yesValues = []
     const noValues = []
     for (const [prop, value] of Object.entries(props)) {
-      if (value == 'Y') {
+      if (value === 'Y') {
         yesValues.push(convertToDisplay(prop, value)[0])
       }
-      else if (value == 'N') {
+      else if (value === 'N') {
         noValues.push(convertToDisplay(prop, value)[0])
       }
     }
@@ -139,7 +139,6 @@ class CodepointPage extends React.Component {
 
   componentDidUpdate (prevProps) {
     if (prevProps.codepoint !== this.props.codepoint && this.props.codepoint) {
-      console.log("componentDidUpdate")
       this.download()
     }
   }

@@ -27,7 +27,7 @@ class Data extends Component {
     const legends = [ 'Offset', 'Codeunit', 'Codepoint', 'Grapheme Cluster' ]
       .map((legend) => {
       return (
-        <th>
+        <th key={legend}>
           {legend}
         </th>
       )
@@ -53,7 +53,7 @@ class Data extends Component {
       const codeHex = codeunits[i].text
       const codepoint = codepoints.find(createCodepointPredicate(i))
       const codepointData = codepoint &&
-        <td rowspan={codepoint.last - codepoint.first + 1} className='Data-left Data-codepoint'>
+        <td key={`Codepoint${i}`} rowSpan={codepoint.last - codepoint.first + 1} className='Data-left Data-codepoint'>
           <a className='Data-codepointButton'
             onClick={() => this.props.selectCodepoint(codepoint.value)}>
             {codepoint.value
@@ -72,11 +72,11 @@ class Data extends Component {
         </td>
       const grapheme = graphemes.find(createCodepointPredicate(i))
       const graphemeData = grapheme &&
-        <td rowspan={grapheme.last - grapheme.first + 1} className='Data-grapheme'>
+        <td key={`Grapheme${i}`} rowSpan={grapheme.last - grapheme.first + 1} className='Data-grapheme'>
           {grapheme.text}
         </td>
       const element = (
-        <tr>
+        <tr key={`Row${i}`}>
           <td className='Data-numeric Data-right Data-offset'>{i}</td>
           <td className='Data-numeric Data-codeunit'>{codeHex}</td>
           {codepointData}
@@ -89,7 +89,9 @@ class Data extends Component {
     return (
       <table className="Data">
         <thead>
-          {legends}
+          <tr>
+            {legends}
+          </tr>
         </thead>
         <tbody>
           {rows}

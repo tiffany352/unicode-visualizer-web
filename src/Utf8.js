@@ -1,5 +1,3 @@
-import GraphemeSplitter from 'grapheme-splitter'
-
 function decimalToHex (d, padding) {
   let hex = Number(d).toString(16)
   
@@ -24,8 +22,6 @@ class Utf8 {
         text: decimalToHex(this.str[i], 2)
       })
     }
-
-    console.log(this.str, codeunits)
 
     return codeunits
   }
@@ -60,8 +56,6 @@ class Utf8 {
     const [firstTy, firstValue] = this.classify(first)
     let value = firstValue
 
-    console.log("firstTy", firstTy)
-
     if (firstTy === 1) {
       return {
         value: value,
@@ -74,7 +68,6 @@ class Utf8 {
       for (let i = 0; i < firstTy - 1; i++) {
         const byte = this.str[offset + i + 1]
         let [contTy, result] = this.classify(byte, value)
-        console.log("cont", contTy, Number(byte).toString(2))
         if (contTy !== 0) {
           return {
             value: null,
@@ -104,7 +97,6 @@ class Utf8 {
 
     for (let i = 0; i < this.str.length;) {
       const result = this.readCodepoint(i);
-      console.log("iteration", i, result.first, result.last, result.value);
       codepoints.push(result);
       i = result.last + 1;
     }

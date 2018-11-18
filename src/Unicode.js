@@ -38,8 +38,6 @@ class Unicode {
       props[attrs[i].name] = attrs[i].value
     }
 
-    console.log(props)
-
     return props
   }
 }
@@ -53,13 +51,10 @@ export async function fetchCompressedDatabase () {
 
   const response = await fetch(url);
   const bodyArray = await response.arrayBuffer()
-  console.log("compressed xml", new Uint8Array(bodyArray))
   const xmlBinary = inflate(bodyArray)
-  console.log("decompressed xml", xmlBinary)
   const xmlText = new TextDecoder('utf-8').decode(xmlBinary)
   const parser = new DOMParser()
   const doc = parser.parseFromString(xmlText, 'application/xml')
-  console.log("parsed xml", doc)
 
   database = new Unicode(doc)
   return database
