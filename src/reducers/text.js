@@ -3,6 +3,10 @@ function text (state, action) {
     return action.text
   }
 
+  if (action.type === 'normalizeText') {
+    return (state || '').normalize(action.form)
+  }
+
   return state || ''
 }
 

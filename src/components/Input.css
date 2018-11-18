@@ -2,4 +2,14 @@
   font-size: 1.25rem;
   padding: 0.25rem;
   font-family: sans-serif;
+  margin: 0.1rem;
+}
+
+.Input-button {
+  font-size: 1.1rem;
+  padding: 0.3rem 1.0rem;
+  margin: 0.1rem;
+  border-radius: 3px;
+  border: #ccc;
+  background: #eee;
 }

@@ -3,14 +3,9 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import setText from '../actions/setText'
 import './Input.css'
+import normalizeText from '../actions/normalizeText';
 
 class Input extends Component {
-  constructor (props) {
-    super(props)
-
-    this.handleChange = this.handleChange.bind(this)
-  }
-
   render () {
     return (
       <div className="Input">
@@ -20,12 +15,30 @@ class Input extends Component {
           value={this.props.text}
           onChange={this.handleChange}
           placeholder="Enter string to inspect..." />
+        <button
+          className="Input-button"
+          onClick={this.normalizeNFC}>
+          NFC
+        </button>
+        <button
+          className="Input-button"
+          onClick={this.normalizeNFD}>
+          NFD
+        </button>
       </div>
     )
   }
 
-  handleChange (event) {
+  handleChange = (event) => {
     this.props.textChanged(event.target.value)
+  }
+
+  normalizeNFC = () => {
+    this.props.normalizeText('NFC')
+  }
+
+  normalizeNFD = () => {
+    this.props.normalizeText('NFD')
   }
 }
 
@@ -43,7 +56,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     textChanged: (text, confirm) =>
-      dispatch(setText(text, confirm))
+      dispatch(setText(text, confirm)),
+    normalizeText: (form) =>
+      dispatch(normalizeText(form))
   }
 }
 
