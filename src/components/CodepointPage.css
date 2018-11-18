@@ -2,6 +2,10 @@
   color: white;
 }
 
+.CodepointPage-container dt {
+  color: #ccc;
+}
+
 .CodepointPage-container h1 {
   font-size: 1.2em;
 }
