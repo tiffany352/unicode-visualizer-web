@@ -1,7 +1,11 @@
 {
   "name": "unicode-visualizer-web",
   "version": "0.1.0",
-  "private": true,
+  "description": "A static web app for inspecting Unicode strings",
+  "keywords": ["unicode", "utf-16", "utf-8", "tool"],
+  "homepage": "https://tiffnix.com/unicode/",
+  "license": "MPL-2.0",
+  "repository": "github:tiffany352/unicode-visualizer-web",
   "dependencies": {
     "eslint-plugin-react": "^7.10.0",
     "grapheme-splitter": "^1.0.2",
