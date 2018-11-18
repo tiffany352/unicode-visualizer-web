@@ -5,16 +5,7 @@ import Utf16 from '../Utf16'
 import './Data.css'
 import setInfoPage from '../actions/setInfoPage';
 import Utf8 from '../Utf8';
-
-function decimalToHex (d, padding) {
-  var hex = Number(d).toString(16)
-
-  while (hex.length < padding) {
-      hex = "0" + hex
-  }
-
-  return hex
-}
+import { decimalToHex } from '../Util'
 
 function createCodepointPredicate(index) {
   return (codepoint) => {
