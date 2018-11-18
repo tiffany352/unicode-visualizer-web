@@ -35,10 +35,10 @@ class Utf8 {
     else if (byte <= 0b11011111) {
       return [2, (value << 5) | (byte & 0b00011111)]
     }
-    else if (byte < 0b11101111) {
+    else if (byte <= 0b11101111) {
       return [3, (value << 4) | (byte & 0b00001111)]
     }
-    else if (byte < 0b11110111) {
+    else if (byte <= 0b11110111) {
       return [4, (value << 3) | (byte & 0b00000111)]
     }
     else {
