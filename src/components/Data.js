@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import Utf16 from '../Utf16'
 import './Data.css'
 import setInfoPage from '../actions/setInfoPage';
+import Utf8 from '../Utf8';
 
 function decimalToHex (d, padding) {
   var hex = Number(d).toString(16)
@@ -33,14 +34,23 @@ class Data extends Component {
     })
 
     const text = this.props.text
-    const utf16 = new Utf16(text)
-    const codepoints = utf16.codepoints()
-    const graphemes = utf16.graphemes()
+    var encoding = null
+    switch (this.props.encoding) {
+      case 'UTF-8':
+      encoding = new Utf8(text);
+      break;
+      case 'UTF-16':
+      default:
+      encoding = new Utf16(text);
+      break;
+    }
+    const codeunits = encoding.codeunits()
+    const codepoints = encoding.codepoints()
+    const graphemes = encoding.graphemes()
 
     const rows = []
-    for (var i = 0; i < text.length; i++) {
-      const code = text.charCodeAt(i)
-      const codeHex = decimalToHex(code, 4)
+    for (var i = 0; i < codeunits.length; i++) {
+      const codeHex = codeunits[i].text
       const codepoint = codepoints.find(createCodepointPredicate(i))
       const codepointData = codepoint &&
         <td rowspan={codepoint.last - codepoint.first + 1} className='Data-left Data-codepoint'>
@@ -95,7 +105,8 @@ Data.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    text: state.text
+    text: state.text,
+    encoding: state.encoding
   }
 }
 

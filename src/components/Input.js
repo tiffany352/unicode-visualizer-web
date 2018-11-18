@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import setText from '../actions/setText'
 import './Input.css'
 import normalizeText from '../actions/normalizeText';
+import setEncoding from '../actions/setEncoding';
 
 class Input extends Component {
   render () {
@@ -25,6 +26,13 @@ class Input extends Component {
           onClick={this.normalizeNFD}>
           NFD
         </button>
+        <select
+          className="Input-button"
+          value={this.props.encoding}
+          onChange={this.handleEncodingChange}>
+          <option value="UTF-8">utf-8</option>
+          <option value="UTF-16">utf-16</option>
+        </select>
       </div>
     )
   }
@@ -40,6 +48,10 @@ class Input extends Component {
   normalizeNFD = () => {
     this.props.normalizeText('NFD')
   }
+
+  handleEncodingChange = (event) => {
+    this.props.setEncoding(event.target.value)
+  }
 }
 
 Input.propTypes = {
@@ -49,7 +61,8 @@ Input.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    text: state.text
+    text: state.text,
+    encoding: state.encoding
   }
 }
 
@@ -58,7 +71,9 @@ const mapDispatchToProps = dispatch => {
     textChanged: (text, confirm) =>
       dispatch(setText(text, confirm)),
     normalizeText: (form) =>
-      dispatch(normalizeText(form))
+      dispatch(normalizeText(form)),
+    setEncoding: (encoding) =>
+      dispatch(setEncoding(encoding))
   }
 }
 

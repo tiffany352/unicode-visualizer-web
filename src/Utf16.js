@@ -1,5 +1,15 @@
 import GraphemeSplitter from 'grapheme-splitter'
 
+function decimalToHex (d, padding) {
+  let hex = Number(d).toString(16)
+
+  while (hex.length < padding) {
+      hex = "0" + hex
+  }
+
+  return hex
+}
+
 class Utf16 {
   constructor (str) {
     this.str = str
@@ -12,12 +22,28 @@ class Utf16 {
     return (highBits << 10) + lowBits + 0x10000
   }
 
+  codeunits () {
+    const codeunits = []
+
+    for (let i = 0; i < this.str.length; i++) {
+      const code = this.str.charCodeAt(i)
+      const isHigh = code >= 0xD800 && code <= 0xDBFF
+      const isLow = code >= 0xDC00 && code <= 0xDFFF
+      codeunits.push({
+        value: code,
+        text: decimalToHex(code, 4),
+      })
+    }
+
+    return codeunits
+  }
+
   codepoints () {
     const codepoints = []
 
-    var highSurrogate = null
-    var lowSurrogate = null
-    for (var i = 0; i < this.str.length; i++) {
+    let highSurrogate = null
+    let lowSurrogate = null
+    for (let i = 0; i < this.str.length; i++) {
       const code = this.str.charCodeAt(i)
       const isHigh = code >= 0xD800 && code <= 0xDBFF
       const isLow = code >= 0xDC00 && code <= 0xDFFF
@@ -91,7 +117,7 @@ class Utf16 {
     const graphemes = []
 
     let offset = 0
-    for (var i = 0; i < strings.length; i++) {
+    for (let i = 0; i < strings.length; i++) {
       graphemes.push({
         first: offset,
         last: offset + strings[i].length - 1,
