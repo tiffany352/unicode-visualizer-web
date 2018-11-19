@@ -2,20 +2,25 @@
   "name": "unicode-visualizer-web",
   "version": "0.1.0",
   "description": "A static web app for inspecting Unicode strings",
-  "keywords": ["unicode", "utf-16", "utf-8", "tool"],
+  "keywords": [
+    "unicode",
+    "utf-16",
+    "utf-8",
+    "tool"
+  ],
   "homepage": "https://tiffnix.com/unicode/",
   "license": "MPL-2.0",
   "repository": "github:tiffany352/unicode-visualizer-web",
   "dependencies": {
-    "eslint-plugin-react": "^7.10.0",
-    "grapheme-splitter": "^1.0.2",
+    "eslint-plugin-react": "^7.11.1",
+    "grapheme-splitter": "^1.0.4",
     "pako": "^1.0.6",
     "prop-types": "^15.6.2",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
-    "react-redux": "^5.0.7",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "react-redux": "^5.1.1",
     "react-scripts": "1.1.4",
-    "redux": "^4.0.0"
+    "redux": "^4.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -24,9 +29,9 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "eslint": "^5.1.0",
+    "eslint": "^5.9.0",
     "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-node": "^7.0.1",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0"
