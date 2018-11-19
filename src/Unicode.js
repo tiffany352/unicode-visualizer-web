@@ -42,6 +42,19 @@ class Unicode {
       props[attrs[i].name] = attrs[i].value
     }
 
+    const names = []
+    const children = node.children
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i]
+      if (child.nodeName === 'name-alias') {
+        names.push({
+          alias: child.getAttribute('alias'),
+          aliasType: child.getAttribute('type'),
+        })
+      }
+    }
+    props.names = names
+
     return props
   }
 }
