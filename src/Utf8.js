@@ -4,9 +4,97 @@
 
 import { decimalToHex } from './Util'
 
+function wtf8Encode(str) {
+  const values = []
+
+  const writeCode = (value) => {
+    if (value <= 0x7F) {
+      values.push(value);
+    }
+    else if (value <= 0x7FF) {
+      values.push(0b11000000 | (value >> 6))
+      values.push(0b10000000 | (value & 0b00111111))
+    }
+    else if (value <= 0xFFFF) {
+      values.push(0b11100000 | (value >> 12))
+      values.push(0b10000000 | ((value >> 6) & 0b00111111))
+      values.push(0b10000000 | ((value >> 0) & 0b00111111))
+    }
+    else if (value <= 0x10FFFF) {
+      values.push(0b11110000 | (value >> 18))
+      values.push(0b10000000 | ((value >> 12) & 0b00111111))
+      values.push(0b10000000 | ((value >> 6) & 0b00111111))
+      values.push(0b10000000 | ((value >> 0) & 0b00111111))
+    }
+  }
+
+  let highSurrogate = null
+  let lowSurrogate = null
+
+  const writePair = () => {
+    const high = highSurrogate - 0xD800
+    const low = lowSurrogate - 0xDC00
+    const code = ((high << 10) | low) + 0x10000
+    writeCode(code)
+    highSurrogate = null
+    lowSurrogate = null
+  }
+  const writeOrphanLow = () => {
+    writeCode(lowSurrogate)
+    lowSurrogate = null
+  }
+  const writeOrphanHigh = () => {
+    writeCode(highSurrogate)
+    highSurrogate = null
+  }
+  
+  for (let i = 0; i < str.length; i++) {
+    const code = str.charCodeAt(i)
+    const isHigh = code >= 0xD800 && code <= 0xDBFF
+    const isLow = code >= 0xDC00 && code <= 0xDFFF
+
+    if (isHigh) {
+      if (highSurrogate) {
+        writeOrphanHigh();
+      }
+      highSurrogate = code;
+      if (lowSurrogate) {
+        writePair();
+      }
+    }
+    else if (isLow) {
+      if (lowSurrogate) {
+        writeOrphanLow();
+      }
+      lowSurrogate = code;
+      if (highSurrogate) {
+        writePair();
+      }
+    }
+    else { // normal
+      if (highSurrogate) {
+        writeOrphanHigh();
+      }
+      else if (lowSurrogate) {
+        writeOrphanLow();
+      }
+      writeCode(code);
+    }
+  }
+
+  if (highSurrogate) {
+    writeOrphanHigh();
+  }
+  else if (lowSurrogate) {
+    writeOrphanLow();
+  }
+
+  return new Uint8Array(values)
+}
+
 class Utf8 {
   constructor (str) {
-    this.str = new TextEncoder('utf-8').encode(str)
+    this.str = wtf8Encode(str)
   }
   
   codeunits () {
@@ -118,6 +206,20 @@ class Utf8 {
 
     for (let i = 0; i < this.str.length;) {
       const result = this.readCodepoint(i);
+      const code = result.value
+      if (code) {
+        const isHigh = code >= 0xD800 && code <= 0xDBFF
+        const isLow = code >= 0xDC00 && code <= 0xDFFF
+        if (isHigh) {
+          result.value = null
+          result.text = 'WTF-8 Orphan Surrogate High'
+        }
+        else if (isLow) {
+          result.value = null
+          result.text = 'WTF-8 Orphan Surrogate Low'
+        }
+      }
+  
       codepoints.push(result);
       i = result.last + 1;
     }

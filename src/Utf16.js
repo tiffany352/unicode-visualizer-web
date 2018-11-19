@@ -65,7 +65,8 @@ class Utf16 {
           codepoints.push({
             first: i - 1,
             last: i - 1,
-            value: null
+            value: null,
+            text: 'Orphan Surrogate High'
           })
           highSurrogate = code
         }
@@ -86,7 +87,8 @@ class Utf16 {
           codepoints.push({
             first: i - 1,
             last: i - 1,
-            value: null
+            value: null,
+            text: 'Orphan Surrogate Low'
           })
           lowSurrogate = code
         }
@@ -99,7 +101,8 @@ class Utf16 {
           codepoints.push({
             first: i - 1,
             last: i - 1,
-            value: null
+            value: null,
+            text: highSurrogate ? 'Orphan Surrogate High' : 'Orphan Surrogate Low'
           })
           lowSurrogate = null
           highSurrogate = null
@@ -110,6 +113,15 @@ class Utf16 {
           value: code
         })
       }
+    }
+
+    if (lowSurrogate || highSurrogate) {
+      codepoints.push({
+        first: this.str.length - 1,
+        last: this.str.length - 1,
+        value: null,
+        text: highSurrogate ? 'Orphan Surrogate High' : 'Orphan Surrogate Low'
+      })
     }
 
     return codepoints

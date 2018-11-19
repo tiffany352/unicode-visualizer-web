@@ -61,7 +61,7 @@ class Data extends Component {
                   {String.fromCodePoint(codepoint.value)}
                 </React.Fragment>
               )
-              : "Invalid UTF-16"
+              : (codepoint.text || "Invalid UTF-16")
             }
           </a>
         </td>
