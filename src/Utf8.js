@@ -13,9 +13,34 @@ class Utf8 {
     const codeunits = []
 
     for (let i = 0; i < this.str.length; i++) {
+      const byte = this.str[i]
+      let tooltip
+      switch (this.classify(byte)[0]) {
+        case 0:
+        tooltip = 'Continuation'
+        break
+        case 1:
+        tooltip = 'ASCII Char'
+        break
+        case 2:
+        tooltip = '2-byte Starter'
+        break
+        case 3:
+        tooltip = '3-byte Starter'
+        break
+        case 4:
+        tooltip = '4-byte Starter'
+        break
+        case -1:
+        default:
+        tooltip = 'Invalid UTF-8'
+        break
+      }
+
       codeunits.push({
-        value: this.str[i],
-        text: decimalToHex(this.str[i], 2)
+        value: byte,
+        text: decimalToHex(byte, 2),
+        class: tooltip
       })
     }
 

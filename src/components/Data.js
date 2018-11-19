@@ -73,7 +73,12 @@ class Data extends Component {
       const element = (
         <tr key={`Row${i}`}>
           <td className='Data-numeric Data-right Data-offset'>{i}</td>
-          <td className='Data-numeric Data-codeunit'>{codeHex}</td>
+          <td className='Data-numeric Data-codeunit'>
+            {codeHex}
+            <span className='Data-codeunitClass'>
+              &#20; {codeunits[i].class}
+            </span>
+          </td>
           {codepointData}
           {graphemeData}
         </tr>

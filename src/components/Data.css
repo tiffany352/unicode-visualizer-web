@@ -26,6 +26,12 @@ th, td {
   font-family: monospace;
 }
 
+.Data-codeunitClass {
+  font-size: 0.75rem;
+  color: #999999;
+  font-family: sans-serif;
+}
+
 .Data-codepoint {
   padding: 0;
 }

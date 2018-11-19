@@ -21,9 +21,21 @@ class Utf16 {
 
     for (let i = 0; i < this.str.length; i++) {
       const code = this.str.charCodeAt(i)
+      const isHigh = code >= 0xD800 && code <= 0xDBFF
+      const isLow = code >= 0xDC00 && code <= 0xDFFF
+
+      let tooltip = 'Codepoint'
+      if (isHigh) {
+        tooltip = 'Surrogate High'
+      }
+      else if (isLow) {
+        tooltip = 'Surrogate Low'
+      }
+
       codeunits.push({
         value: code,
         text: decimalToHex(code, 4),
+        class: tooltip,
       })
     }
 
