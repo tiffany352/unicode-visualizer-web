@@ -12,12 +12,12 @@
   "license": "MPL-2.0",
   "repository": "github:tiffany352/unicode-visualizer-web",
   "dependencies": {
-    "eslint-plugin-react": "^7.11.1",
+    "eslint-plugin-react": "^7.12.4",
     "grapheme-splitter": "^1.0.4",
-    "pako": "^1.0.6",
-    "prop-types": "^15.6.2",
-    "react": "^16.6.3",
-    "react-dom": "^16.6.3",
+    "pako": "^1.0.10",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
     "react-redux": "^5.1.1",
     "react-scripts": "1.1.4",
     "redux": "^4.0.1"
@@ -29,9 +29,9 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "eslint": "^5.9.0",
+    "eslint": "^5.15.1",
     "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-node": "^7.0.1",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0"
