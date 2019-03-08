@@ -4,7 +4,7 @@
 
 .App {
   display: grid;
-  grid-template-columns: 3fr 1fr;
+  grid-template-columns: 3fr;
   grid-template-rows: auto 1fr;
   height: 100vh;
 }
@@ -18,7 +18,7 @@
 }
 
 .App-content {
-  background-color: #ccc;
+  background-color: #888;
   overflow-x: auto;
   overflow-y: scroll;
   grid-row: 2;
@@ -28,6 +28,9 @@
 
 .App-contentContainer {
   margin: 20px;
+  padding: 10px;
+  max-width: 60rem;
+  background: #f8f8f8;
 }
 
 .App-sidebar {
@@ -37,4 +40,21 @@
   background-color: #111;
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+.App-logo {
+  display: block;
+  float: left;
+  color: #fff;
+  font-size: 1.5rem;
+  padding: 0.2rem 1.0rem;
+  text-decoration: none;
+}
+
+blockquote {
+  font-size: 1.3rem;
+  background: #eee;
+  border: 1px solid #bbb;
+  border-radius: 3px;
+  padding: 1rem;
 }

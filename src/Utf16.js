@@ -6,8 +6,8 @@ import GraphemeSplitter from 'grapheme-splitter'
 import { decimalToHex } from './Util'
 
 class Utf16 {
-  constructor (str) {
-    this.str = str
+  constructor (array) {
+    this.array = Uint16Array.from(array)
   }
 
   makePair (high, low) {
@@ -19,8 +19,8 @@ class Utf16 {
   codeunits () {
     const codeunits = []
 
-    for (let i = 0; i < this.str.length; i++) {
-      const code = this.str.charCodeAt(i)
+    for (let i = 0; i < this.array.length; i++) {
+      const code = this.array[i]
       const isHigh = code >= 0xD800 && code <= 0xDBFF
       const isLow = code >= 0xDC00 && code <= 0xDFFF
 
@@ -47,8 +47,8 @@ class Utf16 {
 
     let highSurrogate = null
     let lowSurrogate = null
-    for (let i = 0; i < this.str.length; i++) {
-      const code = this.str.charCodeAt(i)
+    for (let i = 0; i < this.array.length; i++) {
+      const code = this.array[i]
       const isHigh = code >= 0xD800 && code <= 0xDBFF
       const isLow = code >= 0xDC00 && code <= 0xDFFF
 
@@ -117,8 +117,8 @@ class Utf16 {
 
     if (lowSurrogate || highSurrogate) {
       codepoints.push({
-        first: this.str.length - 1,
-        last: this.str.length - 1,
+        first: this.array.length - 1,
+        last: this.array.length - 1,
         value: null,
         text: highSurrogate ? 'Orphan Surrogate High' : 'Orphan Surrogate Low'
       })
@@ -127,9 +127,16 @@ class Utf16 {
     return codepoints
   }
 
+  toString() {
+    const array = Array.from(this.array)
+
+    return array.map((code) => String.fromCharCode(code)).join('')
+  }
+
   graphemes () {
     const splitter = new GraphemeSplitter()
-    const strings = splitter.splitGraphemes(this.str)
+    const string = this.toString()
+    const strings = splitter.splitGraphemes(string)
     const graphemes = []
 
     let offset = 0

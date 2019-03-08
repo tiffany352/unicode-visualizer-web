@@ -4,7 +4,7 @@
 
 import { decimalToHex } from './Util'
 
-function wtf8Encode(str) {
+export function wtf8Encode(str) {
   const values = []
 
   const writeCode = (value) => {
@@ -94,7 +94,7 @@ function wtf8Encode(str) {
 
 class Utf8 {
   constructor (str) {
-    this.str = wtf8Encode(str)
+    this.str = str
   }
   
   codeunits () {

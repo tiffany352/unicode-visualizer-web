@@ -3,84 +3,33 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import setText from '../actions/setText'
+import Form from './Form'
 import './Input.css'
-import normalizeText from '../actions/normalizeText';
-import setEncoding from '../actions/setEncoding';
+import StringBlob from '../StringBlob'
 
-class Input extends Component {
+export default class Input extends Component {
+  state = {
+    text: '',
+  }
+
   render () {
+    const blob = StringBlob.fromString(this.state.text)
     return (
-      <div className="Input">
+      <Form path={() => `/inspect/${blob.urlEncode()}`}>
         <input
           className="Input-text"
           type="text"
-          value={this.props.text}
-          onChange={this.handleChange}
+          value={this.state.text}
+          onChange={this.textChanged}
           placeholder="Enter string to inspect..." />
-        <button
-          className="Input-button"
-          onClick={this.normalizeNFC}>
-          NFC
-        </button>
-        <button
-          className="Input-button"
-          onClick={this.normalizeNFD}>
-          NFD
-        </button>
-        <select
-          className="Input-button"
-          value={this.props.encoding}
-          onChange={this.handleEncodingChange}>
-          <option value="UTF-8">utf-8</option>
-          <option value="UTF-16">utf-16</option>
-        </select>
-      </div>
+        <input className="Input-button" type="submit" value="Inspect" />
+      </Form>
     )
   }
 
-  handleChange = (event) => {
-    this.props.textChanged(event.target.value)
-  }
-
-  normalizeNFC = () => {
-    this.props.normalizeText('NFC')
-  }
-
-  normalizeNFD = () => {
-    this.props.normalizeText('NFD')
-  }
-
-  handleEncodingChange = (event) => {
-    this.props.setEncoding(event.target.value)
+  textChanged = (event) => {
+    this.setState({
+      text: event.target.value,
+    })
   }
 }
-
-Input.propTypes = {
-  text: PropTypes.string.isRequired,
-  textChanged: PropTypes.func.isRequired
-}
-
-const mapStateToProps = state => {
-  return {
-    text: state.text,
-    encoding: state.encoding
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    textChanged: (text, confirm) =>
-      dispatch(setText(text, confirm)),
-    normalizeText: (form) =>
-      dispatch(normalizeText(form)),
-    setEncoding: (encoding) =>
-      dispatch(setEncoding(encoding))
-  }
-}
-
-const ConnectedInput = connect(mapStateToProps, mapDispatchToProps)(Input)
-
-export default ConnectedInput

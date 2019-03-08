@@ -331,6 +331,10 @@ class CodepointPage extends React.Component {
         <h1>
           U+{decimalToHex(this.props.codepoint, 4)} {props.na}
         </h1>
+        <p className="CodepointPage-display">
+          {String.fromCodePoint(this.props.codepoint)}
+        </p>
+        <h3>Properties</h3>
         <dl>
           {elements}
         </dl>

@@ -2,14 +2,24 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-.CodepointPage-container {
-  color: white;
+.CodepointPage-container dt {
+  color: #555;
+  font-size: 1.1rem;
 }
 
-.CodepointPage-container dt {
-  color: #ccc;
+.CodepointPage-container dd {
+  margin-bottom: 0.5rem;
 }
 
 .CodepointPage-container h1 {
   font-size: 1.2em;
+}
+
+.CodepointPage-display {
+  font-size: 72px;
+  margin: 0 0;
+  background: #fff;
+  padding: 0 1rem;
+  width: min-content;
+  border-radius: 5px;
 }

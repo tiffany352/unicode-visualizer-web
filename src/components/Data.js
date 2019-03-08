@@ -3,13 +3,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import Utf16 from '../Utf16'
 import './Data.css'
-import setInfoPage from '../actions/setInfoPage';
-import Utf8 from '../Utf8';
 import { decimalToHex } from '../Util'
+import StringBlob from '../StringBlob'
 
 function createCodepointPredicate(index) {
   return (codepoint) => {
@@ -17,7 +15,11 @@ function createCodepointPredicate(index) {
   }
 }
 
-class Data extends Component {
+export default class Data extends Component {
+  static propTypes = {
+    blob: PropTypes.instanceOf(StringBlob),
+  }
+
   render () {
     const legends = [ 'Offset', 'Codeunit', 'Codepoint', 'Grapheme Cluster' ]
       .map((legend) => {
@@ -28,20 +30,12 @@ class Data extends Component {
       )
     })
 
-    const text = this.props.text
-    var encoding = null
-    switch (this.props.encoding) {
-      case 'UTF-8':
-      encoding = new Utf8(text);
-      break;
-      case 'UTF-16':
-      default:
-      encoding = new Utf16(text);
-      break;
-    }
-    const codeunits = encoding.codeunits()
-    const codepoints = encoding.codepoints()
-    const graphemes = encoding.graphemes()
+    const blob = this.props.blob
+    const encoder = blob.getEncoder()
+
+    const codeunits = encoder.codeunits()
+    const codepoints = encoder.codepoints()
+    const graphemes = encoder.graphemes()
 
     const rows = []
     for (var i = 0; i < codeunits.length; i++) {
@@ -49,21 +43,17 @@ class Data extends Component {
       const codepoint = codepoints.find(createCodepointPredicate(i))
       const codepointData = codepoint &&
         <td key={`Codepoint${i}`} rowSpan={codepoint.last - codepoint.first + 1} className='Data-left Data-codepoint'>
-          <a className='Data-codepointButton'
-            onClick={() => this.props.selectCodepoint(codepoint.value)}>
-            {codepoint.value
-              ? (
-                <React.Fragment>
-                  <span className='Data-numeric'>
-                    U+{decimalToHex(codepoint.value, 4)}
-                  </span>
-                  &nbsp;
-                  {String.fromCodePoint(codepoint.value)}
-                </React.Fragment>
-              )
-              : (codepoint.text || "Invalid UTF-16")
-            }
-          </a>
+          <Link to={`/codepoint/u+${decimalToHex(codepoint.value, 4)}`}>
+            {(codepoint.value && (
+              <React.Fragment>
+                <span className='Data-numeric'>
+                  U+{decimalToHex(codepoint.value, 4)}
+                </span>
+                &nbsp;
+                {String.fromCodePoint(codepoint.value)}
+              </React.Fragment>
+            )) || codepoint.text || "Invalid UTF-16"}
+          </Link>
         </td>
       const grapheme = graphemes.find(createCodepointPredicate(i))
       const graphemeData = grapheme &&
@@ -100,26 +90,3 @@ class Data extends Component {
     )
   }
 }
-
-Data.propTypes = {
-  text: PropTypes.string.isRequired
-}
-
-const mapStateToProps = state => {
-  return {
-    text: state.text,
-    encoding: state.encoding
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    selectCodepoint: (codepoint) => {
-      dispatch(setInfoPage('codepoint', codepoint))
-    }
-  }
-}
-
-const ConnectedData = connect(mapStateToProps, mapDispatchToProps)(Data)
-
-export default ConnectedData
