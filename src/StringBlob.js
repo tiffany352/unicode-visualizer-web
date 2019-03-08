@@ -1,42 +1,75 @@
-import { hexEncode, hexDecode } from './Util'
-import Utf8, { wtf8Encode } from './Utf8'
-import Utf16 from './Utf16'
+import GraphemeSplitter from 'grapheme-splitter'
+import * as Utf8 from './Utf8'
+import * as Utf16 from './Utf16'
 
 export const Encoding = Object.freeze({
   UTF8: Symbol('utf8'),
   UTF16: Symbol('utf16'),
 })
 
-const encodingBytesPerUnit = {
-  [Encoding.UTF8]: 1,
-  [Encoding.UTF16]: 2,
+function getEncoder(encoding) {
+  switch (encoding) {
+    case Encoding.UTF8:
+      return Utf8
+    case Encoding.UTF16:
+      return Utf16
+    default:
+      throw new Error("Invalid encoding")
+  }
 }
 
+/*
+type CodeunitInfo = {
+  value: number,
+  text: string,
+  class: string
+}
+
+type CodepointInfo = {
+  value: number|null,
+  text: string,
+  // code unit offset
+  first: number,
+  last: number,
+}
+
+interface Encoder {
+  type Data
+
+  urlEncode(encoded: Data): string
+  urlDecode(data: string): Data
+  stringEncode(data: Data): string
+  stringDecode(input: string): Data
+  getCodeunits(data: Data): CodeunitInfo[]
+  getCodepoints(data: Data): CodepointInfo[]
+}
+*/
+
 export default class StringBlob {
-  constructor(encoding, data) {
+  constructor(encoding, encoder, data) {
     this.encoding = encoding
+    this.encoder = encoder
     this.data = data
   }
 
-  static fromString(string) {
-    const buf = new ArrayBuffer(string.length * 2)
-    const array = new Uint16Array(buf)
-
-    for (let i = 0; i < string.length; i++) {
-      array[i] = string.charCodeAt(i)
-    }
-
-    return new StringBlob(Encoding.UTF16, array)
+  convert(encoding) {
+    return StringBlob.stringDecode(encoding, this.stringEncode())
   }
 
-  static encodeUtf8(string) {
-    return new StringBlob(Encoding.UTF8, wtf8Encode(string))
+  normalize(mode) {
+    const oldStr = this.stringEncode()
+    const newStr = oldStr.normalize(mode)
+    return StringBlob.stringDecode(this.encoding, newStr)
   }
 
-  stringOf() {
-    const array = Array.from(this.data)
+  static stringDecode(encoding, string) {
+    const encoder = getEncoder(encoding)
 
-    return array.map((code) => String.fromCharCode(code)).join('')
+    return new StringBlob(encoding, encoder, encoder.stringDecode(string))
+  }
+
+  stringEncode() {
+    return this.encoder.stringEncode(this.data)
   }
 
   urlEncode() {
@@ -46,7 +79,7 @@ export default class StringBlob {
     }
 
     const proto = encodingNames[this.encoding]
-    const payload = hexEncode(this.data, encodingBytesPerUnit[this.encoding])
+    const payload = this.encoder.urlEncode(this.data)
 
     return `${proto}:${payload}`
   }
@@ -60,26 +93,47 @@ export default class StringBlob {
     const [ proto, payload ] = string.split(':')
 
     const encoding = encodings[proto]
-    const data = hexDecode(payload, encodingBytesPerUnit[encoding])
+    const encoder = getEncoder(encoding)
+    const data = encoder.urlDecode(payload)
 
-    switch (encoding) {
-      case Encoding.UTF8:
-        return new StringBlob(encoding, new Uint8Array(data))
-      case Encoding.UTF16:
-        return new StringBlob(encoding, new Uint16Array(data))
-      default:
-        throw new Error("Invalid encoding")
-    }
+    return new StringBlob(encoding, encoder, data)
   }
 
-  getEncoder() {
-    switch (this.encoding) {
-      case Encoding.UTF8:
-        return new Utf8(this.data)
-      case Encoding.UTF16:
-        return new Utf16(this.data)
-      default:
-        throw new Error("Invalid encoding")
+  getCodeunits () {
+    return this.encoder.getCodeunits(this.data)
+  }
+
+  getCodepoints () {
+    return this.encoder.getCodepoints(this.data)
+  }
+
+  getGraphemes () {
+    const splitter = new GraphemeSplitter()
+    const codepoints = this.getCodepoints()
+
+    const strFirstToIndex = new Map()
+    const strLastToIndex = new Map()
+    let string = ''
+    for (let i = 0; i < codepoints.length; i++) {
+      const info = codepoints[i]
+      strFirstToIndex.set(string.length, info.first)
+      string += String.fromCodePoint(info.value)
+      strLastToIndex.set(string.length - 1, info.last)
     }
+
+    const graphemes = splitter.splitGraphemes(string)
+    const result = []
+  
+    let strOffset = 0
+    for (let i = 0; i < graphemes.length; i++) {
+      result.push({
+        first: strFirstToIndex.get(strOffset),
+        last: strLastToIndex.get(strOffset + graphemes[i].length - 1),
+        text: graphemes[i]
+      })
+      strOffset += graphemes[i].length
+    }
+  
+    return result
   }
 }

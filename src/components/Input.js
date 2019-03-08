@@ -5,7 +5,7 @@
 import React, { Component } from 'react'
 import Form from './Form'
 import './Input.css'
-import StringBlob from '../StringBlob'
+import StringBlob, { Encoding } from '../StringBlob'
 
 export default class Input extends Component {
   state = {
@@ -13,7 +13,7 @@ export default class Input extends Component {
   }
 
   render () {
-    const blob = StringBlob.fromString(this.state.text)
+    const blob = StringBlob.stringDecode(Encoding.UTF16, this.state.text)
     return (
       <Form path={() => `/inspect/${blob.urlEncode()}`}>
         <input

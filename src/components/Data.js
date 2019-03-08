@@ -31,11 +31,10 @@ export default class Data extends Component {
     })
 
     const blob = this.props.blob
-    const encoder = blob.getEncoder()
 
-    const codeunits = encoder.codeunits()
-    const codepoints = encoder.codepoints()
-    const graphemes = encoder.graphemes()
+    const codeunits = blob.getCodeunits()
+    const codepoints = blob.getCodepoints()
+    const graphemes = blob.getGraphemes()
 
     const rows = []
     for (var i = 0; i < codeunits.length; i++) {

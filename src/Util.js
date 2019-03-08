@@ -6,18 +6,18 @@ export function decimalToHex (d, padding) {
   return Number(d).toString(16).padStart(padding, '0')
 }
 
-export function hexEncode(array, bytesPerItem) {
+export function hexEncode(array, padding) {
   return Array.from(array)
-    .map((byte) => byte.toString(16).padStart(bytesPerItem * 2, '0'))
+    .map((byte) => byte.toString(16).padStart(padding, '0'))
     .join('.')
 }
 
-export function hexDecode(string, bytesPerItem) {
+export function hexDecode(string, padding) {
   string = string.replace(/[^a-fA-F0-9]/g, '')
   const array = []
 
-  for (let i = 0; i < string.length; i += bytesPerItem * 2) {
-    const slice = string.substring(i, i + bytesPerItem * 2)
+  for (let i = 0; i < string.length; i += padding) {
+    const slice = string.substring(i, i + padding)
     array.push(parseInt(slice, 16))
   }
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
 import Data from '../Data'
-import StringBlob from '../../StringBlob'
+import StringBlob, { Encoding } from '../../StringBlob'
 import './Inspect.css'
 
 class Inspect extends React.Component {
@@ -36,7 +36,7 @@ class Inspect extends React.Component {
           </button>
 
           <blockquote>
-            {blob.stringOf()}
+            {blob.stringEncode()}
           </blockquote>
 
           <Data blob={blob} />
@@ -49,26 +49,22 @@ class Inspect extends React.Component {
     const { match, history } = this.props
 
     const blob = StringBlob.urlDecode(match.params.blob)
-    const result = func(blob.stringOf())
+    const result = func(blob)
 
     history.push(`${result.urlEncode()}`)
   }
 
   normalizeNFC = (event) =>
-    this.transform((str) =>
-      StringBlob.fromString(str.normalize('NFC')))
+    this.transform((blob) => blob.normalize('NFC'))
 
   normalizeNFD = (event) =>
-    this.transform((str) =>
-      StringBlob.fromString(str.normalize('NFD')))
+    this.transform((blob) => blob.normalize('NFD'))
 
   convertUtf8 = (event) =>
-    this.transform((str) =>
-      StringBlob.encodeUtf8(str))
+    this.transform((blob) => blob.convert(Encoding.UTF8))
 
   convertUtf16 = (event) =>
-    this.transform((str) =>
-      StringBlob.fromString(str))
+    this.transform((blob) => blob.convert(Encoding.UTF16))
 }
 
 export default withRouter(Inspect)
