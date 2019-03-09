@@ -4,21 +4,28 @@
 
 .App {
   display: grid;
-  grid-template-columns: 3fr 1fr;
+  grid-template-columns: 3fr;
   grid-template-rows: auto 1fr;
   height: 100vh;
 }
 
 .App-header {
   background-color: #222;
-  padding: 20px;
+  padding: 1em;
   color: white;
   grid-row: 1;
   grid-column: 1 / span 2;
+  display: flex;
+}
+
+@media (max-width: 800px) {
+  .App-header {
+    font-size: 0.6rem;
+  }
 }
 
 .App-content {
-  background-color: #ccc;
+  background-color: #888;
   overflow-x: auto;
   overflow-y: scroll;
   grid-row: 2;
@@ -27,7 +34,10 @@
 }
 
 .App-contentContainer {
-  margin: 20px;
+  margin: 10px;
+  padding: 10px;
+  max-width: 60rem;
+  background: #f8f8f8;
 }
 
 .App-sidebar {
@@ -37,4 +47,13 @@
   background-color: #111;
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+.App-logo {
+  display: block;
+  float: left;
+  color: #fff;
+  font-size: 1.5em;
+  padding: 0.2em 1.0em;
+  text-decoration: none;
 }

@@ -2,31 +2,109 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import { decimalToHex } from './Util'
+import { decimalToHex, hexEncode, hexDecode } from './Util'
 
-function wtf8Encode(str) {
-  const values = []
+function readByte (byte, accumulator = 0) {
+  if (byte <= 0b01111111) {
+    return [1, byte]
+  }
+  else if (byte <= 0b10111111) {
+    // continuation
+    return [0, (accumulator << 6) | (byte & 0b00111111)]
+  }
+  else if (byte <= 0b11011111) {
+    return [2, (accumulator << 5) | (byte & 0b00011111)]
+  }
+  else if (byte <= 0b11101111) {
+    return [3, (accumulator << 4) | (byte & 0b00001111)]
+  }
+  else if (byte <= 0b11110111) {
+    return [4, (accumulator << 3) | (byte & 0b00000111)]
+  }
+  else {
+    // error
+    return [-1, null]
+  }
+}
 
-  const writeCode = (value) => {
-    if (value <= 0x7F) {
-      values.push(value);
-    }
-    else if (value <= 0x7FF) {
-      values.push(0b11000000 | (value >> 6))
-      values.push(0b10000000 | (value & 0b00111111))
-    }
-    else if (value <= 0xFFFF) {
-      values.push(0b11100000 | (value >> 12))
-      values.push(0b10000000 | ((value >> 6) & 0b00111111))
-      values.push(0b10000000 | ((value >> 0) & 0b00111111))
-    }
-    else if (value <= 0x10FFFF) {
-      values.push(0b11110000 | (value >> 18))
-      values.push(0b10000000 | ((value >> 12) & 0b00111111))
-      values.push(0b10000000 | ((value >> 6) & 0b00111111))
-      values.push(0b10000000 | ((value >> 0) & 0b00111111))
+function readCodepoint (bytes, offset = 0) {
+  const first = bytes[offset]
+  const [firstTy, firstValue] = readByte(first)
+  let codepoint = firstValue
+
+  if (firstTy === 1) {
+    return {
+      value: codepoint,
+      first: offset,
+      last: offset,
     }
   }
+
+  if (firstTy > 1) {
+    for (let i = 0; i < firstTy - 1; i++) {
+      const byte = bytes[offset + i + 1]
+      let [contTy, result] = readByte(byte, codepoint)
+      if (contTy !== 0) {
+        return {
+          value: null,
+          first: offset,
+          last: offset + i
+        }
+      }
+      codepoint = result
+    }
+
+    return {
+      value: codepoint,
+      first: offset,
+      last: offset + firstTy - 1
+    }
+  }
+  
+  return {
+    value: null,
+    first: offset,
+    last: offset
+  }
+}
+
+function writeCodepoint (codepoint, accumulator = []) {
+  if (codepoint <= 0x7F) {
+    accumulator.push(codepoint);
+  }
+  else if (codepoint <= 0x7FF) {
+    accumulator.push(0b11000000 | (codepoint >> 6))
+    accumulator.push(0b10000000 | (codepoint & 0b00111111))
+  }
+  else if (codepoint <= 0xFFFF) {
+    accumulator.push(0b11100000 | (codepoint >> 12))
+    accumulator.push(0b10000000 | ((codepoint >> 6) & 0b00111111))
+    accumulator.push(0b10000000 | ((codepoint >> 0) & 0b00111111))
+  }
+  else if (codepoint <= 0x10FFFF) {
+    accumulator.push(0b11110000 | (codepoint >> 18))
+    accumulator.push(0b10000000 | ((codepoint >> 12) & 0b00111111))
+    accumulator.push(0b10000000 | ((codepoint >> 6) & 0b00111111))
+    accumulator.push(0b10000000 | ((codepoint >> 0) & 0b00111111))
+  }
+
+  return accumulator
+}
+
+export function stringEncode(utf8) {
+  let result = []
+  for (let i = 0; i < utf8.length;) {
+    const { value, last } = readCodepoint(utf8, i)
+    result.push(String.fromCodePoint(value))
+    i = last + 1
+  }
+  return result.join('')
+}
+
+export function stringDecode(str) {
+  const values = []
+
+  const writeCode = (code) => writeCodepoint(code, values)
 
   let highSurrogate = null
   let lowSurrogate = null
@@ -92,146 +170,74 @@ function wtf8Encode(str) {
   return new Uint8Array(values)
 }
 
-class Utf8 {
-  constructor (str) {
-    this.str = wtf8Encode(str)
-  }
-  
-  codeunits () {
-    const codeunits = []
+export function getCodeunits (utf8) {
+  const codeunits = []
 
-    for (let i = 0; i < this.str.length; i++) {
-      const byte = this.str[i]
-      let tooltip
-      switch (this.classify(byte)[0]) {
-        case 0:
-        tooltip = 'Continuation'
-        break
-        case 1:
-        tooltip = 'ASCII Char'
-        break
-        case 2:
-        tooltip = '2-byte Starter'
-        break
-        case 3:
-        tooltip = '3-byte Starter'
-        break
-        case 4:
-        tooltip = '4-byte Starter'
-        break
-        case -1:
-        default:
-        tooltip = 'Invalid UTF-8'
-        break
-      }
-
-      codeunits.push({
-        value: byte,
-        text: decimalToHex(byte, 2),
-        class: tooltip
-      })
+  for (let i = 0; i < utf8.length; i++) {
+    const byte = utf8[i]
+    let tooltip
+    switch (readByte(byte)[0]) {
+      case 0:
+      tooltip = 'Continuation'
+      break
+      case 1:
+      tooltip = 'ASCII Char'
+      break
+      case 2:
+      tooltip = '2-byte Starter'
+      break
+      case 3:
+      tooltip = '3-byte Starter'
+      break
+      case 4:
+      tooltip = '4-byte Starter'
+      break
+      case -1:
+      default:
+      tooltip = 'Invalid UTF-8'
+      break
     }
 
-    return codeunits
+    codeunits.push({
+      value: byte,
+      text: decimalToHex(byte, 2),
+      class: tooltip
+    })
   }
 
-  classify (byte, value) {
-    value = value || 0
-
-    if (byte <= 0b01111111) {
-      return [1, byte]
-    }
-    else if (byte <= 0b10111111) {
-      // continuation
-      return [0, (value << 6) | (byte & 0b00111111)]
-    }
-    else if (byte <= 0b11011111) {
-      return [2, (value << 5) | (byte & 0b00011111)]
-    }
-    else if (byte <= 0b11101111) {
-      return [3, (value << 4) | (byte & 0b00001111)]
-    }
-    else if (byte <= 0b11110111) {
-      return [4, (value << 3) | (byte & 0b00000111)]
-    }
-    else {
-      // error
-      return [-1, null]
-    }
-  }
-
-  readCodepoint (offset) {
-    const first = this.str[offset]
-    const [firstTy, firstValue] = this.classify(first)
-    let value = firstValue
-
-    if (firstTy === 1) {
-      return {
-        value: value,
-        first: offset,
-        last: offset,
-      }
-    }
-
-    if (firstTy > 1) {
-      for (let i = 0; i < firstTy - 1; i++) {
-        const byte = this.str[offset + i + 1]
-        let [contTy, result] = this.classify(byte, value)
-        if (contTy !== 0) {
-          return {
-            value: null,
-            first: offset,
-            last: offset + i
-          }
-        }
-        value = result
-      }
-
-      return {
-        value: value,
-        first: offset,
-        last: offset + firstTy - 1
-      }
-    }
-    
-    return {
-      value: null,
-      first: offset,
-      last: offset
-    }
-  }
-  
-  codepoints () {
-    const codepoints = []
-
-    for (let i = 0; i < this.str.length;) {
-      const result = this.readCodepoint(i);
-      const code = result.value
-      if (code) {
-        const isHigh = code >= 0xD800 && code <= 0xDBFF
-        const isLow = code >= 0xDC00 && code <= 0xDFFF
-        if (isHigh) {
-          result.value = null
-          result.text = 'WTF-8 Orphan Surrogate High'
-        }
-        else if (isLow) {
-          result.value = null
-          result.text = 'WTF-8 Orphan Surrogate Low'
-        }
-      }
-  
-      codepoints.push(result);
-      i = result.last + 1;
-    }
-    
-    return codepoints
-  }
-  
-  graphemes () {
-    const graphemes = []
-    
-    return graphemes
-  }
+  return codeunits
 }
 
-export default Utf8
+export function getCodepoints (utf8) {
+  const codepoints = []
+
+  for (let i = 0; i < utf8.length;) {
+    const result = readCodepoint(utf8, i);
+    const code = result.value
+    if (code) {
+      const isHigh = code >= 0xD800 && code <= 0xDBFF
+      const isLow = code >= 0xDC00 && code <= 0xDFFF
+      if (isHigh) {
+        result.value = null
+        result.text = 'WTF-8 Orphan Surrogate High'
+      }
+      else if (isLow) {
+        result.value = null
+        result.text = 'WTF-8 Orphan Surrogate Low'
+      }
+    }
+
+    codepoints.push(result);
+    i = result.last + 1;
+  }
+  
+  return codepoints
+}
+
+export function urlEncode(utf8) {
+  return hexEncode(utf8, 2)
+}
+
+export function urlDecode(str) {
+  return new Uint8Array(hexDecode(str, 2))
+}

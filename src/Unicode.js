@@ -59,7 +59,7 @@ class Unicode {
   }
 }
 
-const url = './ucd.all.grouped.xml.gz'
+const url = process.env.PUBLIC_URL + '/ucd.all.grouped.xml.gz'
 var database = null
 export async function fetchCompressedDatabase () {
   if (database) {

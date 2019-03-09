@@ -3,13 +3,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import Utf16 from '../Utf16'
 import './Data.css'
-import setInfoPage from '../actions/setInfoPage';
-import Utf8 from '../Utf8';
 import { decimalToHex } from '../Util'
+import StringBlob from '../StringBlob'
 
 function createCodepointPredicate(index) {
   return (codepoint) => {
@@ -17,109 +15,94 @@ function createCodepointPredicate(index) {
   }
 }
 
-class Data extends Component {
+export default class Data extends Component {
+  static propTypes = {
+    blob: PropTypes.instanceOf(StringBlob),
+  }
+
   render () {
-    const legends = [ 'Offset', 'Codeunit', 'Codepoint', 'Grapheme Cluster' ]
-      .map((legend) => {
-      return (
-        <th key={legend}>
-          {legend}
-        </th>
-      )
-    })
+    const blob = this.props.blob
 
-    const text = this.props.text
-    var encoding = null
-    switch (this.props.encoding) {
-      case 'UTF-8':
-      encoding = new Utf8(text);
-      break;
-      case 'UTF-16':
-      default:
-      encoding = new Utf16(text);
-      break;
-    }
-    const codeunits = encoding.codeunits()
-    const codepoints = encoding.codepoints()
-    const graphemes = encoding.graphemes()
+    const codeunits = blob.getCodeunits()
+    const codepoints = blob.getCodepoints()
+    const graphemes = blob.getGraphemes()
 
-    const rows = []
+    const cells = []
+
+    const legends = [ '', 'Codeunit', 'Codepoint', 'Grapheme Cluster' ]
+    cells.push(
+      <React.Fragment>
+        {legends.map((legend, index) => (
+          <div
+            className="Data-cell Data-heading"
+            key={legend}
+            style={{
+              gridColumn: index + 1
+            }}
+          >
+            {legend}
+          </div>
+        ))}
+      </React.Fragment>
+    )
+
     for (var i = 0; i < codeunits.length; i++) {
       const codeHex = codeunits[i].text
       const codepoint = codepoints.find(createCodepointPredicate(i))
       const codepointData = codepoint &&
-        <td key={`Codepoint${i}`} rowSpan={codepoint.last - codepoint.first + 1} className='Data-left Data-codepoint'>
-          <a className='Data-codepointButton'
-            onClick={() => this.props.selectCodepoint(codepoint.value)}>
-            {codepoint.value
-              ? (
-                <React.Fragment>
-                  <span className='Data-numeric'>
-                    U+{decimalToHex(codepoint.value, 4)}
-                  </span>
-                  &nbsp;
-                  {String.fromCodePoint(codepoint.value)}
-                </React.Fragment>
-              )
-              : (codepoint.text || "Invalid UTF-16")
-            }
-          </a>
-        </td>
+        <div
+          className="Data-cell Data-codepoint"
+          key={`Codepoint${i}`}
+          style={{
+            gridRowStart: codepoint.first + 2,
+            gridRowEnd: codepoint.last + 3,
+          }}
+        >
+          <Link to={`/codepoint/u+${decimalToHex(codepoint.value, 4)}`}>
+            {(codepoint.value && (
+              <React.Fragment>
+                <span className='Data-numeric'>
+                  U+{decimalToHex(codepoint.value, 4)}
+                </span>
+                &nbsp;
+                {String.fromCodePoint(codepoint.value)}
+              </React.Fragment>
+            )) || codepoint.text || "Invalid UTF-16"}
+          </Link>
+        </div>
+
       const grapheme = graphemes.find(createCodepointPredicate(i))
       const graphemeData = grapheme &&
-        <td key={`Grapheme${i}`} rowSpan={grapheme.last - grapheme.first + 1} className='Data-grapheme'>
+        <div
+          className='Data-cell Data-grapheme'
+          key={`Grapheme${i}`}
+          style={{
+            gridRowStart: grapheme.first + 2,
+            gridRowEnd: grapheme.last + 3,
+          }}
+        >
           {grapheme.text}
-        </td>
+        </div>
       const element = (
-        <tr key={`Row${i}`}>
-          <td className='Data-numeric Data-right Data-offset'>{i}</td>
-          <td className='Data-numeric Data-codeunit'>
-            {codeHex}
+        <React.Fragment key={`Row${i}`}>
+          <div className='Data-cell Data-offset'>{i}</div>
+          <div className='Data-cell Data-codeunit'>
+            <span className='Data-numeric'>{codeHex}</span>
             <span className='Data-codeunitClass'>
               &#20; {codeunits[i].class}
             </span>
-          </td>
+          </div>
           {codepointData}
           {graphemeData}
-        </tr>
+        </React.Fragment>
       )
-      rows.push(element)
+      cells.push(element)
     }
 
     return (
-      <table className="Data">
-        <thead>
-          <tr>
-            {legends}
-          </tr>
-        </thead>
-        <tbody>
-          {rows}
-        </tbody>
-      </table>
+      <div className="Data-grid">
+        {cells}
+      </div>
     )
   }
 }
-
-Data.propTypes = {
-  text: PropTypes.string.isRequired
-}
-
-const mapStateToProps = state => {
-  return {
-    text: state.text,
-    encoding: state.encoding
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    selectCodepoint: (codepoint) => {
-      dispatch(setInfoPage('codepoint', codepoint))
-    }
-  }
-}
-
-const ConnectedData = connect(mapStateToProps, mapDispatchToProps)(Data)
-
-export default ConnectedData
