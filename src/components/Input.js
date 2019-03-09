@@ -6,16 +6,30 @@ import React, { Component } from 'react'
 import Form from './Form'
 import './Input.css'
 import StringBlob, { Encoding } from '../StringBlob'
+import { decimalToHex } from '../Util';
 
 export default class Input extends Component {
   state = {
     text: '',
   }
 
+  createUrl = () => {
+    const text = this.state.text
+    if (text.length === 0) {
+      return `#`
+    }
+    else if (String.fromCodePoint(text.codePointAt(0)) === text) {
+      return `/codepoint/u+${decimalToHex(text.codePointAt(0), 4)}`
+    }
+    else {
+      const blob = StringBlob.stringDecode(Encoding.UTF16, this.state.text)
+      return `/inspect/${blob.urlEncode()}`
+    }
+  }
+
   render () {
-    const blob = StringBlob.stringDecode(Encoding.UTF16, this.state.text)
     return (
-      <Form path={() => `/inspect/${blob.urlEncode()}`}>
+      <Form path={this.createUrl}>
         <input
           className="Input-text"
           type="text"
