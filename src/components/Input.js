@@ -29,7 +29,7 @@ export default class Input extends Component {
 
   render () {
     return (
-      <Form path={this.createUrl}>
+      <Form path={this.createUrl} className="Input-form">
         <input
           className="Input-text"
           type="text"

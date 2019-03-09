@@ -2,42 +2,70 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-table {
-  border-collapse: collapse;
-  background-color: #f8f8f8;
+/* Grid classes */
+
+.Data-grid {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  background-color: rgb(153, 153, 153);
+  padding: 1px;
   width: 100%;
-  font-size: 1.25em;
+  font-size: 1em;
+  grid-gap: 1px;
+  overflow-x: auto;
 }
 
-th, td {
-  border: 1px solid rgb(153, 153, 153);
-  padding: 4px 16px;
+.Data-cell {
+  background: #f8f8f8;
+  padding: 4px 8px 4px 8px;
 }
 
-thead {
+.Data-heading {
   background: #f0f0f0;
+  grid-row: 1;
 }
 
-.Data-left {
-  text-align: left;
-}
-
-.Data-right {
+.Data-offset {
+  grid-column: 1;
   text-align: right;
+  font-family: monospace;
+  padding: 4px 3px;
 }
+
+.Data-codeunit {
+  grid-column: 2;
+}
+
+.Data-codepoint {
+  grid-column: 3;
+}
+
+.Data-grapheme {
+  grid-column: 4;
+}
+
+@media (max-width: 800px) {
+  .Data-offset {
+    font-size: 0.75rem;
+    padding: 4px 2px;
+  }
+
+  .Data-heading {
+    font-size: 0.8rem;
+  }
+}
+
+/* Other */
 
 .Data-numeric {
   font-family: monospace;
+  font-weight: 600;
 }
 
 .Data-codeunitClass {
   font-size: 0.75rem;
   color: #999999;
-  font-family: sans-serif;
-}
-
-.Data-codepoint {
-  padding: 0;
 }
 
 .Data-codepointButton {

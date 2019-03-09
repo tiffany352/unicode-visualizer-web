@@ -9,7 +9,7 @@ class NavForm extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.submitHandler}>
+      <form onSubmit={this.submitHandler} className={this.props.className}>
         {this.props.children}
       </form>
     )

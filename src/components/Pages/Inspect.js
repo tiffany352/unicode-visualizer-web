@@ -35,7 +35,7 @@ class Inspect extends React.Component {
             UTF-16
           </button>
 
-          <blockquote>
+          <blockquote className="Inspect-blockquote">
             {blob.stringEncode()}
           </blockquote>
 

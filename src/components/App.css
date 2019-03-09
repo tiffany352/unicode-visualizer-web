@@ -11,10 +11,17 @@
 
 .App-header {
   background-color: #222;
-  padding: 20px;
+  padding: 1em;
   color: white;
   grid-row: 1;
   grid-column: 1 / span 2;
+  display: flex;
+}
+
+@media (max-width: 800px) {
+  .App-header {
+    font-size: 0.6rem;
+  }
 }
 
 .App-content {
@@ -27,7 +34,7 @@
 }
 
 .App-contentContainer {
-  margin: 20px;
+  margin: 10px;
   padding: 10px;
   max-width: 60rem;
   background: #f8f8f8;
@@ -46,15 +53,7 @@
   display: block;
   float: left;
   color: #fff;
-  font-size: 1.5rem;
-  padding: 0.2rem 1.0rem;
+  font-size: 1.5em;
+  padding: 0.2em 1.0em;
   text-decoration: none;
-}
-
-blockquote {
-  font-size: 1.3rem;
-  background: #eee;
-  border: 1px solid #bbb;
-  border-radius: 3px;
-  padding: 1rem;
 }

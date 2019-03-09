@@ -7,3 +7,13 @@
   border: 1px solid #bbb;
   background: #d8d8d8;
 }
+
+.Inspect-blockquote {
+  font-size: 1.3rem;
+  background: #eee;
+  border: 1px solid #bbb;
+  border-radius: 3px;
+  padding: 1rem;
+  margin: 1rem 1rem;
+  overflow-x: auto;
+}
