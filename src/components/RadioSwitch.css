@@ -1,0 +1,32 @@
+.RadioSwitch {
+  display: inline-flex;
+  margin: 0.5em;
+}
+
+.RadioSwitch input {
+  display: none;
+}
+
+.RadioSwitch label {
+  font-size: 1em;
+  background: #e0e0e0;
+  border: 1px solid #bbbbbb;
+  padding: 0.3em;
+  margin-right: -1px;
+}
+
+.RadioSwitch label:hover {
+  background: #f5f5f5;
+}
+
+.RadioSwitch input:checked + label {
+  background: #f0f0f0;
+}
+
+.RadioSwitch label:first-of-type {
+  border-radius: 3px 0 0 3px;
+}
+
+.RadioSwitch label:last-of-type {
+  border-radius: 0 3px 3px 0;
+}

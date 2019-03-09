@@ -91,6 +91,10 @@ function writeCodepoint (codepoint, accumulator = []) {
   return accumulator
 }
 
+export function reinterpret(array) {
+  return new Uint8Array(array)
+}
+
 export function stringEncode(utf8) {
   let result = []
   for (let i = 0; i < utf8.length;) {

@@ -14,7 +14,7 @@ class Codepoint extends React.Component {
           <CodepointPage codepoint={codepoint} />
         </div>
       </div>
-    )  
+    )
   }
 }
 

@@ -10,6 +10,10 @@ function makePair (high, low) {
   return (highBits << 10) + lowBits + 0x10000
 }
 
+export function reinterpret(array) {
+  return new Uint16Array(array)
+}
+
 export function stringEncode (utf16) {
   return Array.from(utf16).map((code) => String.fromCharCode(code)).join('')
 }
