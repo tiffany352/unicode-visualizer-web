@@ -4,23 +4,23 @@
 
 import { decimalToHex, hexEncode, hexDecode } from "./Util";
 
-function makePair(high, low) {
+function makePair(high: number, low: number) {
   const highBits = high - 0xd800;
   const lowBits = low - 0xdc00;
   return (highBits << 10) + lowBits + 0x10000;
 }
 
-export function reinterpret(array) {
+export function reinterpret(array: Iterable<number>) {
   return new Uint16Array(array);
 }
 
-export function stringEncode(utf16) {
+export function stringEncode(utf16: Uint16Array) {
   return Array.from(utf16)
     .map(code => String.fromCharCode(code))
     .join("");
 }
 
-export function stringDecode(str) {
+export function stringDecode(str: string) {
   const result = [];
   for (let i = 0; i < str.length; i++) {
     result.push(str.charCodeAt(i));
@@ -28,7 +28,7 @@ export function stringDecode(str) {
   return new Uint16Array(result);
 }
 
-export function getCodeunits(utf16) {
+export function getCodeunits(utf16: Uint16Array) {
   const codeunits = [];
 
   for (let i = 0; i < utf16.length; i++) {
@@ -53,7 +53,7 @@ export function getCodeunits(utf16) {
   return codeunits;
 }
 
-export function getCodepoints(utf16) {
+export function getCodepoints(utf16: Uint16Array) {
   const codepoints = [];
 
   let highSurrogate = null;
@@ -133,10 +133,10 @@ export function getCodepoints(utf16) {
   return codepoints;
 }
 
-export function urlEncode(utf16) {
+export function urlEncode(utf16: Uint16Array) {
   return hexEncode(utf16, 4);
 }
 
-export function urlDecode(str) {
+export function urlDecode(str: string) {
   return new Uint16Array(hexDecode(str, 4));
 }
