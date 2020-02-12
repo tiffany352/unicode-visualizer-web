@@ -2,19 +2,22 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-export function decimalToHex(d, padding) {
+export function decimalToHex(d: number, padding: number) {
   return Number(d)
     .toString(16)
     .padStart(padding, "0");
 }
 
-export function hexEncode(array, padding) {
+export function hexEncode(
+  array: ArrayLike<number> | Iterable<number>,
+  padding: number
+) {
   return Array.from(array)
     .map(byte => byte.toString(16).padStart(padding, "0"))
     .join(".");
 }
 
-export function hexDecode(string, padding) {
+export function hexDecode(string: string, padding: number) {
   string = string.replace(/[^a-fA-F0-9]/g, "");
   const array = [];
 

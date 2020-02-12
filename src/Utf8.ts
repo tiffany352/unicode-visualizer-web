@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import { decimalToHex, hexEncode, hexDecode } from "./Util";
+import { EncodedString, CodepointInfo } from "./StringBlob";
 
 enum Type {
   Continuation = 0,
@@ -12,13 +13,6 @@ enum Type {
   FourByteStarter = 4,
   Invalid = -1
 }
-
-type Codepoint = {
-  value: number | null;
-  first: number;
-  last: number;
-  text?: string;
-};
 
 function readByte(byte: number, accumulator = 0): [Type, number] {
   if (byte <= 0b01111111) {
@@ -38,7 +32,7 @@ function readByte(byte: number, accumulator = 0): [Type, number] {
   }
 }
 
-function readCodepoint(bytes: Uint8Array, offset = 0): Codepoint {
+function readCodepoint(bytes: Uint8Array, offset = 0): CodepointInfo {
   const first = bytes[offset];
   const [firstTy, firstValue] = readByte(first);
   let codepoint = firstValue;
@@ -97,20 +91,6 @@ function writeCodepoint(codepoint: number, accumulator: number[] = []) {
   }
 
   return accumulator;
-}
-
-export function reinterpret(array: number[]) {
-  return new Uint8Array(array);
-}
-
-export function stringEncode(utf8: Uint8Array) {
-  let result = [];
-  for (let i = 0; i < utf8.length; ) {
-    const { value, last } = readCodepoint(utf8, i);
-    result.push(String.fromCodePoint(value || 0));
-    i = last + 1;
-  }
-  return result.join("");
 }
 
 export function stringDecode(str: string) {
@@ -173,76 +153,102 @@ export function stringDecode(str: string) {
     writeCode(lowSurrogate);
   }
 
-  return new Uint8Array(values);
-}
-
-export function getCodeunits(utf8: Uint8Array) {
-  const codeunits = [];
-
-  for (let i = 0; i < utf8.length; i++) {
-    const byte = utf8[i];
-    let tooltip;
-    switch (readByte(byte)[0]) {
-      case 0:
-        tooltip = "Continuation";
-        break;
-      case 1:
-        tooltip = "ASCII Char";
-        break;
-      case 2:
-        tooltip = "2-byte Starter";
-        break;
-      case 3:
-        tooltip = "3-byte Starter";
-        break;
-      case 4:
-        tooltip = "4-byte Starter";
-        break;
-      case -1:
-      default:
-        tooltip = "Invalid UTF-8";
-        break;
-    }
-
-    codeunits.push({
-      value: byte,
-      text: decimalToHex(byte, 2),
-      class: tooltip
-    });
-  }
-
-  return codeunits;
-}
-
-export function getCodepoints(utf8: Uint8Array) {
-  const codepoints = [];
-
-  for (let i = 0; i < utf8.length; ) {
-    const result = readCodepoint(utf8, i);
-    const code = result.value;
-    if (code) {
-      const isHigh = code >= 0xd800 && code <= 0xdbff;
-      const isLow = code >= 0xdc00 && code <= 0xdfff;
-      if (isHigh) {
-        result.value = null;
-        result.text = "WTF-8 Orphan Surrogate High";
-      } else if (isLow) {
-        result.value = null;
-        result.text = "WTF-8 Orphan Surrogate Low";
-      }
-    }
-
-    codepoints.push(result);
-    i = result.last + 1;
-  }
-
-  return codepoints;
-}
-
-export function urlEncode(utf8: Uint8Array) {
-  return hexEncode(utf8, 2);
+  return new Utf8String(values);
 }
 
 export function urlDecode(str: string) {
-  return new Uint8Array(hexDecode(str, 2));
+  return new Utf8String(hexDecode(str, 2));
+}
+
+export function reinterpret(data: ArrayBuffer) {
+  return new Utf8String(data);
+}
+
+export default class Utf8String implements EncodedString {
+  data: Uint8Array;
+
+  constructor(data: ArrayBuffer | number[]) {
+    this.data = new Uint8Array(data);
+  }
+
+  getArrayBuffer() {
+    return this.data.buffer;
+  }
+
+  urlEncode() {
+    return hexEncode(this.data, 2);
+  }
+
+  stringEncode() {
+    let result = [];
+    for (let i = 0; i < this.data.length; ) {
+      const { value, last } = readCodepoint(this.data, i);
+      result.push(String.fromCodePoint(value || 0));
+      i = last + 1;
+    }
+    return result.join("");
+  }
+
+  getCodepoints() {
+    const codepoints = [];
+
+    for (let i = 0; i < this.data.length; ) {
+      const result = readCodepoint(this.data, i);
+      const code = result.value;
+      if (code) {
+        const isHigh = code >= 0xd800 && code <= 0xdbff;
+        const isLow = code >= 0xdc00 && code <= 0xdfff;
+        if (isHigh) {
+          result.value = null;
+          result.text = "WTF-8 Orphan Surrogate High";
+        } else if (isLow) {
+          result.value = null;
+          result.text = "WTF-8 Orphan Surrogate Low";
+        }
+      }
+
+      codepoints.push(result);
+      i = result.last + 1;
+    }
+
+    return codepoints;
+  }
+
+  getCodeunits() {
+    const codeunits = [];
+
+    for (let i = 0; i < this.data.length; i++) {
+      const byte = this.data[i];
+      let tooltip;
+      switch (readByte(byte)[0]) {
+        case 0:
+          tooltip = "Continuation";
+          break;
+        case 1:
+          tooltip = "ASCII Char";
+          break;
+        case 2:
+          tooltip = "2-byte Starter";
+          break;
+        case 3:
+          tooltip = "3-byte Starter";
+          break;
+        case 4:
+          tooltip = "4-byte Starter";
+          break;
+        case -1:
+        default:
+          tooltip = "Invalid UTF-8";
+          break;
+      }
+
+      codeunits.push({
+        value: byte,
+        text: decimalToHex(byte, 2),
+        class: tooltip
+      });
+    }
+
+    return codeunits;
+  }
 }

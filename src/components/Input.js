@@ -20,7 +20,7 @@ export default class Input extends Component {
     } else if (String.fromCodePoint(text.codePointAt(0)) === text) {
       return `/codepoint/u+${decimalToHex(text.codePointAt(0), 4)}`;
     } else {
-      const blob = StringBlob.stringDecode(Encoding.UTF16, this.state.text);
+      const blob = StringBlob.stringDecode(Encoding.Utf16, this.state.text);
       return `/inspect/${blob.urlEncode()}`;
     }
   };

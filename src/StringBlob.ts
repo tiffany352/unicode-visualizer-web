@@ -1,125 +1,129 @@
 import GraphemeSplitter from "grapheme-splitter";
 import * as Utf8 from "./Utf8";
 import * as Utf16 from "./Utf16";
-import * as Windows1252 from "./Windows1252";
+import Windows1252String, * as Windows1252 from "./Windows1252";
 
-export const Encoding = Object.freeze({
-  UTF8: Symbol("utf8"),
-  UTF16: Symbol("utf16"),
-  WINDOWS1252: Symbol("windows1252")
-});
+export enum Encoding {
+  Utf8,
+  Utf16,
+  Windows1252
+}
 
-export function encodingFromTag(tag) {
+export function encodingFromTag(tag: string): Encoding {
   switch (tag) {
     case "utf8":
-      return Encoding.UTF8;
+      return Encoding.Utf8;
     case "utf16":
-      return Encoding.UTF16;
+      return Encoding.Utf16;
     case "windows1252":
-      return Encoding.WINDOWS1252;
+      return Encoding.Windows1252;
     default:
       throw new Error("Invalid encoding tag");
   }
 }
 
-export function encodingToTag(encoding) {
+export function encodingToTag(encoding: Encoding): string {
   switch (encoding) {
-    case Encoding.UTF8:
+    case Encoding.Utf8:
       return "utf8";
-    case Encoding.UTF16:
+    case Encoding.Utf16:
       return "utf16";
-    case Encoding.WINDOWS1252:
+    case Encoding.Windows1252:
       return "windows1252";
     default:
       throw new Error("Invalid encoding");
   }
 }
 
-function getEncoder(encoding) {
+function getEncoder(encoding: Encoding): Encoder {
   switch (encoding) {
-    case Encoding.UTF8:
+    case Encoding.Utf8:
       return Utf8;
-    case Encoding.UTF16:
+    case Encoding.Utf16:
       return Utf16;
-    case Encoding.WINDOWS1252:
+    case Encoding.Windows1252:
       return Windows1252;
     default:
       throw new Error("Invalid encoding");
   }
 }
 
-/*
-type CodeunitInfo = {
-  value: number,
-  text: string,
-  class: string
-}
+export type CodeunitInfo = {
+  value: number;
+  text: string;
+  class: string;
+};
 
-type CodepointInfo = {
-  value: number|null,
-  text: string,
+export type CodepointInfo = {
+  value: number | null;
+  text?: string;
   // code unit offset
-  first: number,
-  last: number,
+  first: number;
+  last: number;
+};
+
+export interface EncodedString {
+  urlEncode(): string;
+  stringEncode(): string;
+  getCodeunits(): CodeunitInfo[];
+  getCodepoints(): CodepointInfo[];
+  getArrayBuffer(): ArrayBuffer;
 }
 
 interface Encoder {
-  type Data
-
-  urlEncode(encoded: Data): string
-  urlDecode(data: string): Data
-  stringEncode(data: Data): string
-  stringDecode(input: string): Data
-  getCodeunits(data: Data): CodeunitInfo[]
-  getCodepoints(data: Data): CodepointInfo[]
-  reinterpret(input: ArrayBuffer): Data
+  urlDecode(data: string): EncodedString;
+  stringDecode(input: string): EncodedString;
+  reinterpret(data: ArrayBuffer): EncodedString;
 }
-*/
 
 export default class StringBlob {
-  constructor(encoding, encoder, data) {
+  encoding: Encoding;
+  encoder: Encoder;
+  data: EncodedString;
+
+  constructor(encoding: Encoding, encoder: Encoder, data: EncodedString) {
     this.encoding = encoding;
     this.encoder = encoder;
     this.data = data;
   }
 
-  convert(encoding) {
+  convert(encoding: Encoding) {
     return StringBlob.stringDecode(encoding, this.stringEncode());
   }
 
-  reinterpret(encoding) {
+  reinterpret(encoding: Encoding) {
     const encoder = getEncoder(encoding);
     return new StringBlob(
       encoding,
       encoder,
-      encoder.reinterpret(this.data.buffer)
+      encoder.reinterpret(this.data.getArrayBuffer())
     );
   }
 
-  normalize(mode) {
+  normalize(mode: string) {
     const oldStr = this.stringEncode();
     const newStr = oldStr.normalize(mode);
     return StringBlob.stringDecode(this.encoding, newStr);
   }
 
-  static stringDecode(encoding, string) {
+  static stringDecode(encoding: Encoding, string: string) {
     const encoder = getEncoder(encoding);
 
     return new StringBlob(encoding, encoder, encoder.stringDecode(string));
   }
 
   stringEncode() {
-    return this.encoder.stringEncode(this.data);
+    return this.data.stringEncode();
   }
 
   urlEncode() {
     const proto = encodingToTag(this.encoding);
-    const payload = this.encoder.urlEncode(this.data);
+    const payload = this.data.urlEncode();
 
     return `${proto}:${payload}`;
   }
 
-  static urlDecode(string) {
+  static urlDecode(string: string) {
     const [proto, payload] = string.split(":");
 
     const encoding = encodingFromTag(proto);
@@ -130,11 +134,11 @@ export default class StringBlob {
   }
 
   getCodeunits() {
-    return this.encoder.getCodeunits(this.data);
+    return this.data.getCodeunits();
   }
 
   getCodepoints() {
-    return this.encoder.getCodepoints(this.data);
+    return this.data.getCodepoints();
   }
 
   getGraphemes() {
@@ -147,7 +151,7 @@ export default class StringBlob {
     for (let i = 0; i < codepoints.length; i++) {
       const info = codepoints[i];
       strFirstToIndex.set(string.length, info.first);
-      string += String.fromCodePoint(info.value);
+      string += String.fromCodePoint(info.value || 0);
       strLastToIndex.set(string.length - 1, info.last);
     }
 
@@ -169,10 +173,10 @@ export default class StringBlob {
 
   possiblyMojibake() {
     const original = this.stringEncode();
-    const encoded = this.convert(Encoding.WINDOWS1252);
+    const encoded = this.convert(Encoding.Windows1252);
     const compare = encoded.convert(this.encoding).stringEncode();
     if (original === compare) {
-      for (const byte of encoded.data) {
+      for (const byte of (encoded.data as Windows1252String).data) {
         if (byte > 0x7f) return true;
       }
     }

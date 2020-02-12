@@ -57,7 +57,7 @@ export default function Index(props) {
         <ul>
           {examples.map(({ string, description }) => {
             const urlEncoded = StringBlob.stringDecode(
-              Encoding.UTF16,
+              Encoding.Utf16,
               string
             ).urlEncode();
             return (

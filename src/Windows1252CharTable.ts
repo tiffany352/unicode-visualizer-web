@@ -1,4 +1,9 @@
-const charTable = [
+export type Entry = {
+  name: string;
+  unicode: number;
+};
+
+const charTable: Entry[] = [
   { name: "NUL", unicode: 0x0000 },
   { name: "SOH", unicode: 0x0001 },
   { name: "STX", unicode: 0x0002 },

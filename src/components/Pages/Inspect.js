@@ -64,7 +64,7 @@ class Inspect extends React.Component {
           >
             <RadioOption value="utf8">UTF-8</RadioOption>
             <RadioOption value="utf16">UTF-16</RadioOption>
-            {blob.encoding === Encoding.WINDOWS1252 && (
+            {blob.encoding === Encoding.Windows1252 && (
               <RadioOption value="windows1252">Windows-1252</RadioOption>
             )}
           </RadioSwitch>
@@ -112,12 +112,12 @@ class Inspect extends React.Component {
 
   createMojibake = () =>
     this.transform(blob =>
-      blob.convert(Encoding.UTF8).reinterpret(Encoding.WINDOWS1252)
+      blob.convert(Encoding.Utf8).reinterpret(Encoding.Windows1252)
     );
 
   undoMojibake = () =>
     this.transform(blob =>
-      blob.convert(Encoding.WINDOWS1252).reinterpret(Encoding.UTF8)
+      blob.convert(Encoding.Windows1252).reinterpret(Encoding.Utf8)
     );
 
   onConvert = name =>
