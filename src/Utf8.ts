@@ -113,26 +113,25 @@ export function stringDecode(str: string) {
     const isHigh = code >= 0xd800 && code <= 0xdbff;
     const isLow = code >= 0xdc00 && code <= 0xdfff;
 
-    if (isHigh && lowSurrogate) {
-    }
-
     if (isHigh) {
       if (highSurrogate) {
         writeCode(highSurrogate);
         highSurrogate = null;
-      }
-      if (lowSurrogate) {
+      } else if (lowSurrogate) {
         writePair(lowSurrogate, code);
         lowSurrogate = null;
+      } else {
+        highSurrogate = code;
       }
     } else if (isLow) {
       if (lowSurrogate) {
         writeCode(lowSurrogate);
         lowSurrogate = null;
-      }
-      if (highSurrogate) {
+      } else if (highSurrogate) {
         writePair(code, highSurrogate);
         highSurrogate = null;
+      } else {
+        lowSurrogate = code;
       }
     } else {
       // normal
