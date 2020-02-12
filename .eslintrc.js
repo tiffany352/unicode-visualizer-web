@@ -1,5 +1,3 @@
 module.exports = {
-    "extends": [
-      "react-app"
-    ]
+  extends: ["react-app"]
 };

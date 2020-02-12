@@ -2,32 +2,30 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import React, { Component } from 'react'
-import Form from './Form'
-import './Input.css'
-import StringBlob, { Encoding } from '../StringBlob'
-import { decimalToHex } from '../Util';
+import React, { Component } from "react";
+import Form from "./Form";
+import "./Input.css";
+import StringBlob, { Encoding } from "../StringBlob";
+import { decimalToHex } from "../Util";
 
 export default class Input extends Component {
   state = {
-    text: '',
-  }
+    text: ""
+  };
 
   createUrl = () => {
-    const text = this.state.text
+    const text = this.state.text;
     if (text.length === 0) {
-      return `#`
+      return `#`;
+    } else if (String.fromCodePoint(text.codePointAt(0)) === text) {
+      return `/codepoint/u+${decimalToHex(text.codePointAt(0), 4)}`;
+    } else {
+      const blob = StringBlob.stringDecode(Encoding.UTF16, this.state.text);
+      return `/inspect/${blob.urlEncode()}`;
     }
-    else if (String.fromCodePoint(text.codePointAt(0)) === text) {
-      return `/codepoint/u+${decimalToHex(text.codePointAt(0), 4)}`
-    }
-    else {
-      const blob = StringBlob.stringDecode(Encoding.UTF16, this.state.text)
-      return `/inspect/${blob.urlEncode()}`
-    }
-  }
+  };
 
-  render () {
+  render() {
     return (
       <Form path={this.createUrl} className="Input-form">
         <input
@@ -35,15 +33,16 @@ export default class Input extends Component {
           type="text"
           value={this.state.text}
           onChange={this.textChanged}
-          placeholder="Enter string to inspect..." />
+          placeholder="Enter string to inspect..."
+        />
         <input className="Input-button" type="submit" value="Inspect" />
       </Form>
-    )
+    );
   }
 
-  textChanged = (event) => {
+  textChanged = event => {
     this.setState({
-      text: event.target.value,
-    })
-  }
+      text: event.target.value
+    });
+  };
 }

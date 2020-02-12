@@ -4,77 +4,77 @@
 
 // A class for dealing with the unicode character database, encoded as a single huge xml file.
 
-import { inflate } from 'pako'
+import { inflate } from "pako";
 
 class Unicode {
-  constructor (xml) {
-    this.xml = xml
+  constructor(xml) {
+    this.xml = xml;
   }
 
-  getCodepoint (codepoint) {
-    for (const node of this.xml.getElementsByTagName('char')) {
-      const cp = node.getAttribute('cp')
+  getCodepoint(codepoint) {
+    for (const node of this.xml.getElementsByTagName("char")) {
+      const cp = node.getAttribute("cp");
       if (cp) {
-        const cpInt = parseInt(cp, 16)
+        const cpInt = parseInt(cp, 16);
         if (cpInt === codepoint) {
-          return this.parseCharNode(node)
+          return this.parseCharNode(node);
         }
       }
     }
 
-    console.log("codepoint not found in ucd", codepoint)
+    console.log("codepoint not found in ucd", codepoint);
 
-    return null
+    return null;
   }
 
   parseCharNode(node) {
-    const parent = node.parentElement
-    const props = {}
-    if (parent.nodeName === 'group') {
-      const attrs = parent.attributes
+    const parent = node.parentElement;
+    const props = {};
+    if (parent.nodeName === "group") {
+      const attrs = parent.attributes;
       for (let i = 0; i < attrs.length; i++) {
-        props[attrs[i].name] = attrs[i].value
+        props[attrs[i].name] = attrs[i].value;
       }
     }
 
-    const attrs = node.attributes
+    const attrs = node.attributes;
     for (let i = 0; i < attrs.length; i++) {
-      props[attrs[i].name] = attrs[i].value
+      props[attrs[i].name] = attrs[i].value;
     }
 
-    const names = []
-    const children = node.children
+    const names = [];
+    const children = node.children;
     for (let i = 0; i < children.length; i++) {
-      const child = children[i]
-      if (child.nodeName === 'name-alias') {
+      const child = children[i];
+      if (child.nodeName === "name-alias") {
         names.push({
-          alias: child.getAttribute('alias'),
-          aliasType: child.getAttribute('type'),
-        })
+          alias: child.getAttribute("alias"),
+          aliasType: child.getAttribute("type")
+        });
       }
     }
-    props.names = names
+    props.names = names;
 
-    return props
+    return props;
   }
 }
 
-const url = process.env.PUBLIC_URL + '/ucd.all.grouped.xml.gz'
-var database = null
-export async function fetchCompressedDatabase () {
+const url = process.env.PUBLIC_URL + "/ucd.all.grouped.xml.gz";
+var database = null;
+export async function fetchCompressedDatabase() {
   if (database) {
-    return database
+    return database;
   }
 
   const response = await fetch(url);
-  const bodyArray = await response.arrayBuffer()
-  const xmlBinary = inflate(bodyArray)
-  const xmlText = new TextDecoder('utf-8').decode(xmlBinary)
-  const parser = new DOMParser()
-  const doc = parser.parseFromString(xmlText, 'application/xml')
+  const bodyArray = await response.arrayBuffer();
+  const xmlBinary = inflate(bodyArray);
+  const xmlText = new TextDecoder("utf-8").decode(xmlBinary);
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(xmlText, "application/xml");
 
-  database = new Unicode(doc)
-  return database
+  database = new Unicode(doc);
+  return database;
 }
 
-export default Unicode
+export default Unicode;

@@ -2,52 +2,52 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import React from 'react'
-import './CodepointPage.css'
-import { fetchCompressedDatabase } from '../Unicode';
+import React from "react";
+import "./CodepointPage.css";
+import { fetchCompressedDatabase } from "../Unicode";
 
-function decimalToHex (d, padding) {
-  var hex = Number(d).toString(16)
+function decimalToHex(d, padding) {
+  var hex = Number(d).toString(16);
 
   while (hex.length < padding) {
-      hex = "0" + hex
+    hex = "0" + hex;
   }
 
-  return hex
+  return hex;
 }
 
 const generalCategory = {
-  Lu: 'Letter, uppercase',
-  Ll: 'Letter, lowercase',
-  Lt: 'Letter, titlecase',
-  Lm: 'Letter, modifier',
-  Lo: 'Letter, other',
-  Mn: 'Mark, nonspacing',
-  Mc: 'Mark, spacing combining',
-  Me: 'Mark, enclosing',
-  Nd: 'Number, decimal digit',
-  Nl: 'Number, letter',
-  No: 'Number, other',
-  Pc: 'Punctuation, connector',
-  Pd: 'Punctuation, dash',
-  Ps: 'Punctuation, open',
-  Pe: 'Punctuation, close',
-  Pi: 'Punctuation, initial quote',
-  Pf: 'Punctuation, final quote',
-  Po: 'Punctuation, other',
-  Sm: 'Symbol, math',
-  Sc: 'Symbol, currency',
-  Sk: 'Symbol, modifier',
-  So: 'Symbol, other',
-  Zs: 'Separtaor, space',
-  Zl: 'Separtaor, line',
-  Zp: 'Separator, paragraph',
-  Cc: 'Other, control',
-  Cf: 'Other, format',
-  Cs: 'Other, surrogate',
-  Co: 'Other, private use',
-  Cn: 'Other, not assigned'
-}
+  Lu: "Letter, uppercase",
+  Ll: "Letter, lowercase",
+  Lt: "Letter, titlecase",
+  Lm: "Letter, modifier",
+  Lo: "Letter, other",
+  Mn: "Mark, nonspacing",
+  Mc: "Mark, spacing combining",
+  Me: "Mark, enclosing",
+  Nd: "Number, decimal digit",
+  Nl: "Number, letter",
+  No: "Number, other",
+  Pc: "Punctuation, connector",
+  Pd: "Punctuation, dash",
+  Ps: "Punctuation, open",
+  Pe: "Punctuation, close",
+  Pi: "Punctuation, initial quote",
+  Pf: "Punctuation, final quote",
+  Po: "Punctuation, other",
+  Sm: "Symbol, math",
+  Sc: "Symbol, currency",
+  Sk: "Symbol, modifier",
+  So: "Symbol, other",
+  Zs: "Separtaor, space",
+  Zl: "Separtaor, line",
+  Zp: "Separator, paragraph",
+  Cc: "Other, control",
+  Cf: "Other, format",
+  Cs: "Other, surrogate",
+  Co: "Other, private use",
+  Cn: "Other, not assigned"
+};
 
 const scriptName = {
   Adlm: "Adlam",
@@ -241,7 +241,8 @@ const scriptName = {
   Xpeo: "Old Persian",
   Xsux: "Cuneiform, Sumero-Akkadian",
   Yiii: "Yi",
-  Zanb: "Zanabazar Square (Zanabazarin Dörböljin Useg, Xewtee Dörböljin Bicig, Horizontal Square Script)",
+  Zanb:
+    "Zanabazar Square (Zanabazarin Dörböljin Useg, Xewtee Dörböljin Bicig, Horizontal Square Script)",
   Zinh: "Inherited script",
   Zmth: "Mathematical notation",
   Zsye: "Symbols (Emoji variant)",
@@ -249,88 +250,97 @@ const scriptName = {
   Zxxx: "Unwritten documents",
   Zyyy: "Undetermined script",
   Zzzz: "Uncoded script"
-}
+};
 
 const numericTypes = {
-  None: 'Not numeric',
-  De: 'Decimal',
-  Di: 'Digit',
-  Nu: 'Numeric'
-}
+  None: "Not numeric",
+  De: "Decimal",
+  Di: "Digit",
+  Nu: "Numeric"
+};
 
 const eastAsianWidths = {
-  A: 'Ambiguous',
-  F: 'Fullwidth',
-  H: 'Halfwidth',
-  Na: 'Narrow',
-  W: 'Wide',
-  N: 'Neutral'
-}
+  A: "Ambiguous",
+  F: "Fullwidth",
+  H: "Halfwidth",
+  Na: "Narrow",
+  W: "Wide",
+  N: "Neutral"
+};
 
 class CodepointPage extends React.Component {
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
 
-    this.state = {}
+    this.state = {};
   }
 
-  render () {
-    const props = this.state.data
+  render() {
+    const props = this.state.data;
     if (!props) {
       return (
         <div className="CodepointPage-container">
-          <h1>
-            U+{decimalToHex(this.props.codepoint, 4)}
-          </h1>
+          <h1>U+{decimalToHex(this.props.codepoint, 4)}</h1>
           <p className="CodepointPage-display">
             {String.fromCodePoint(this.props.codepoint)}
           </p>
           <h1>Loading...</h1>
         </div>
-      )
+      );
     }
 
-    const parseCodepointStr = (input) =>
-      input.split(' ').map((codeStr) => String.fromCodePoint(parseInt(codeStr, 16))).join('')
+    const parseCodepointStr = input =>
+      input
+        .split(" ")
+        .map(codeStr => String.fromCodePoint(parseInt(codeStr, 16)))
+        .join("");
 
-    const otherNames = props.names.map((name) => `${name.alias} (${name.aliasType})`)
-    const uppercased = props.uc === '#' ? 'Already uppercase' : `${parseCodepointStr(props.uc)} (U+${props.uc})`
-    const lowercased = props.lc === '#' ? ['Already lowercase'] : `${parseCodepointStr(props.lc)} (U+${props.lc})`
+    const otherNames = props.names.map(
+      name => `${name.alias} (${name.aliasType})`
+    );
+    const uppercased =
+      props.uc === "#"
+        ? "Already uppercase"
+        : `${parseCodepointStr(props.uc)} (U+${props.uc})`;
+    const lowercased =
+      props.lc === "#"
+        ? ["Already lowercase"]
+        : `${parseCodepointStr(props.lc)} (U+${props.lc})`;
 
     const data = [
-      ['Name', props.na],
-      ['Other Names', `${otherNames.join(', ')}`],
-      ['Block', props.blk.replace(/_/g, ' ')],
-      ['Appeared', `Unicode ${props.age}`],
-      ['General Category', `${generalCategory[props.gc]} (${props.gc})`],
-      ['Script', scriptName[props.sc]],
-      ['Uppercase', `${uppercased}`],
-      ['Lowercase', `${lowercased}`],
-      ['Numeric Value', `${numericTypes[props.nt]}: ${props.nv}`],
-      ['East-Asian Width', `${eastAsianWidths[props.ea]}`],
-      ['Stroke Count', props.kTotalStrokes],
-      ['Mandarin', props.kMandarin],
-      ['Cantonese', props.kCantonese],
-      ['Korean', props.kKorean],
-      ['Japanese (On)', props.kJapaneseOn],
-      ['Japanese (Kun)', props.kJapaneseKun],
-      ['Definition', props.kDefinition],
-      ['Comment', props.isc]
-    ].filter(([, value]) => value && value.length > 0)
-    const yesValues = []
+      ["Name", props.na],
+      ["Other Names", `${otherNames.join(", ")}`],
+      ["Block", props.blk.replace(/_/g, " ")],
+      ["Appeared", `Unicode ${props.age}`],
+      ["General Category", `${generalCategory[props.gc]} (${props.gc})`],
+      ["Script", scriptName[props.sc]],
+      ["Uppercase", `${uppercased}`],
+      ["Lowercase", `${lowercased}`],
+      ["Numeric Value", `${numericTypes[props.nt]}: ${props.nv}`],
+      ["East-Asian Width", `${eastAsianWidths[props.ea]}`],
+      ["Stroke Count", props.kTotalStrokes],
+      ["Mandarin", props.kMandarin],
+      ["Cantonese", props.kCantonese],
+      ["Korean", props.kKorean],
+      ["Japanese (On)", props.kJapaneseOn],
+      ["Japanese (Kun)", props.kJapaneseKun],
+      ["Definition", props.kDefinition],
+      ["Comment", props.isc]
+    ].filter(([, value]) => value && value.length > 0);
+    const yesValues = [];
     for (const [prop, value] of Object.entries(props)) {
-      if (value === 'Y') {
-        yesValues.push(prop)
+      if (value === "Y") {
+        yesValues.push(prop);
       }
     }
-    data.push(['Has Properties', yesValues.join(', ')])
+    data.push(["Has Properties", yesValues.join(", ")]);
 
     const elements = data.map(([name, value]) => (
       <React.Fragment key={name}>
         <dt>{name}</dt>
         <dd>{value}</dd>
       </React.Fragment>
-    ))
+    ));
 
     return (
       <div className="CodepointPage-container">
@@ -341,39 +351,36 @@ class CodepointPage extends React.Component {
           {String.fromCodePoint(this.props.codepoint)}
         </p>
         <h3>Properties</h3>
-        <dl>
-          {elements}
-        </dl>
+        <dl>{elements}</dl>
       </div>
-    )  
+    );
   }
 
-  async download () {
+  async download() {
     try {
-      const unicode = await fetchCompressedDatabase()
-      const codepoint = this.props.codepoint
+      const unicode = await fetchCompressedDatabase();
+      const codepoint = this.props.codepoint;
       if (codepoint) {
         this.setState({
           data: unicode.getCodepoint(codepoint)
-        })
+        });
       }
-    }
-    catch(e) {
-      console.log(e)
+    } catch (e) {
+      console.log(e);
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     if (this.props.codepoint) {
-      this.download()
+      this.download();
     }
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     if (prevProps.codepoint !== this.props.codepoint && this.props.codepoint) {
-      this.download()
+      this.download();
     }
   }
 }
 
-export default CodepointPage
+export default CodepointPage;
