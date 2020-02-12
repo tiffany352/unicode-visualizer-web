@@ -48,30 +48,36 @@ export default class Data extends Component<Props> {
     for (var i = 0; i < codeunits.length; i++) {
       const codeHex = codeunits[i].text;
       const codepoint = codepoints.find(createCodepointPredicate(i));
-      const codepointData = codepoint && (
-        <div
-          className="Data-cell Data-codepoint"
-          key={`Codepoint${i}`}
-          style={{
-            gridRowStart: codepoint.first + 2,
-            gridRowEnd: codepoint.last + 3
-          }}
-        >
-          <Link to={`/codepoint/u+${decimalToHex(codepoint.value || 0, 4)}`}>
-            {(codepoint.value && (
-              <React.Fragment>
-                <span className="Data-numeric">
-                  U+{decimalToHex(codepoint.value, 4)}
-                </span>
-                &nbsp;
-                {String.fromCodePoint(codepoint.value)}
-              </React.Fragment>
-            )) ||
-              codepoint.text ||
-              "Invalid UTF-16"}
-          </Link>
-        </div>
-      );
+      let codepointData;
+      if (codepoint) {
+        let codepointDesc;
+        if (codepoint.value !== null) {
+          codepointDesc = (
+            <Link to={`/codepoint/u+${decimalToHex(codepoint.value, 4)}`}>
+              <span className="Data-numeric">
+                U+{decimalToHex(codepoint.value, 4)}
+              </span>
+              &nbsp;
+              {String.fromCodePoint(codepoint.value)}
+            </Link>
+          );
+        } else {
+          codepointDesc = codepoint.text || "Invalid codepoint";
+        }
+
+        codepointData = (
+          <div
+            className="Data-cell Data-codepoint"
+            key={`Codepoint${i}`}
+            style={{
+              gridRowStart: codepoint.first + 2,
+              gridRowEnd: codepoint.last + 3
+            }}
+          >
+            {codepointDesc}
+          </div>
+        );
+      }
 
       const grapheme = graphemes.find(createCodepointPredicate(i));
       const graphemeData = grapheme && (
