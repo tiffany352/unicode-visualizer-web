@@ -1,8 +1,8 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 import CodepointPage from "../CodepointPage";
 
-class Codepoint extends React.Component {
+class Codepoint extends React.Component<RouteComponentProps<{ code: string }>> {
   render() {
     const { match } = this.props;
 

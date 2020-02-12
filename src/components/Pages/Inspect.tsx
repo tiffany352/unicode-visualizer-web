@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 import Data from "../Data";
 import StringBlob, {
   encodingFromTag,
@@ -10,7 +10,7 @@ import RadioSwitch from "../RadioSwitch";
 import RadioOption from "../RadioOption";
 import "./Inspect.css";
 
-class Inspect extends React.Component {
+class Inspect extends React.Component<RouteComponentProps<{ blob: string }>> {
   render() {
     const { match } = this.props;
 
@@ -99,7 +99,7 @@ class Inspect extends React.Component {
     );
   }
 
-  transform(func) {
+  transform(func: (string: StringBlob) => StringBlob) {
     const { match, history } = this.props;
 
     const blob = StringBlob.urlDecode(match.params.blob);
@@ -108,7 +108,7 @@ class Inspect extends React.Component {
     history.push(`${result.urlEncode()}`);
   }
 
-  onNormalize = mode => this.transform(blob => blob.normalize(mode));
+  onNormalize = (mode: string) => this.transform(blob => blob.normalize(mode));
 
   createMojibake = () =>
     this.transform(blob =>
@@ -120,7 +120,7 @@ class Inspect extends React.Component {
       blob.convert(Encoding.Windows1252).reinterpret(Encoding.Utf8)
     );
 
-  onConvert = name =>
+  onConvert = (name: string) =>
     this.transform(blob => blob.convert(encodingFromTag(name)));
 }
 

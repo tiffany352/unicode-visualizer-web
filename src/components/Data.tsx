@@ -7,19 +7,19 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import "./Data.css";
 import { decimalToHex } from "../Util";
-import StringBlob from "../StringBlob";
+import StringBlob, { CodepointInfo } from "../StringBlob";
 
-function createCodepointPredicate(index) {
-  return codepoint => {
+function createCodepointPredicate(index: number) {
+  return (codepoint: { first: number }) => {
     return codepoint.first === index;
   };
 }
 
-export default class Data extends Component {
-  static propTypes = {
-    blob: PropTypes.instanceOf(StringBlob)
-  };
+type Props = {
+  blob: StringBlob;
+};
 
+export default class Data extends Component<Props> {
   render() {
     const blob = this.props.blob;
 
@@ -58,7 +58,7 @@ export default class Data extends Component {
             gridRowEnd: codepoint.last + 3
           }}
         >
-          <Link to={`/codepoint/u+${decimalToHex(codepoint.value, 4)}`}>
+          <Link to={`/codepoint/u+${decimalToHex(codepoint.value || 0, 4)}`}>
             {(codepoint.value && (
               <React.Fragment>
                 <span className="Data-numeric">

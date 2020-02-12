@@ -1,10 +1,19 @@
 import React from "react";
 import "./RadioSwitch.css";
+import { Props as OptionProps } from "./RadioOption";
 
-export default class RadioSwitch extends React.Component {
+type Child = React.ReactElement<OptionProps> | false;
+
+type Props = {
+  children: Child[];
+  value?: string;
+  onSelect: (value: string) => void;
+};
+
+export default class RadioSwitch extends React.Component<Props> {
   render() {
     return (
-      <radiogroup class="RadioSwitch">
+      <div className="RadioSwitch">
         {this.props.children.map(option => {
           if (React.isValidElement(option)) {
             return React.cloneElement(option, {
@@ -16,11 +25,11 @@ export default class RadioSwitch extends React.Component {
             return option;
           }
         })}
-      </radiogroup>
+      </div>
     );
   }
 
-  selectItem(value) {
+  selectItem(value: string) {
     console.log("selectItem", value);
     this.props.onSelect(value);
   }

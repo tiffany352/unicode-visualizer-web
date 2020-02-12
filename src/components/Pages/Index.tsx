@@ -37,7 +37,7 @@ const examples = [
   }
 ];
 
-export default function Index(props) {
+export default function Index(_props: {}) {
   return (
     <div className="App-content">
       <div className="App-contentContainer">
