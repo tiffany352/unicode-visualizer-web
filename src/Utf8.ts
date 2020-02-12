@@ -4,7 +4,23 @@
 
 import { decimalToHex, hexEncode, hexDecode } from "./Util";
 
-function readByte(byte, accumulator = 0) {
+enum Type {
+  Continuation = 0,
+  Ascii = 1,
+  TwoByteStarter = 2,
+  ThreeByteStarter = 3,
+  FourByteStarter = 4,
+  Invalid = -1
+}
+
+type Codepoint = {
+  value: number | null;
+  first: number;
+  last: number;
+  text?: string;
+};
+
+function readByte(byte: number, accumulator = 0): [Type, number] {
   if (byte <= 0b01111111) {
     return [1, byte];
   } else if (byte <= 0b10111111) {
@@ -18,11 +34,11 @@ function readByte(byte, accumulator = 0) {
     return [4, (accumulator << 3) | (byte & 0b00000111)];
   } else {
     // error
-    return [-1, null];
+    return [-1, 0];
   }
 }
 
-function readCodepoint(bytes, offset = 0) {
+function readCodepoint(bytes: Uint8Array, offset = 0): Codepoint {
   const first = bytes[offset];
   const [firstTy, firstValue] = readByte(first);
   let codepoint = firstValue;
@@ -35,7 +51,7 @@ function readCodepoint(bytes, offset = 0) {
     };
   }
 
-  if (firstTy > 1) {
+  if (firstTy >= 1) {
     for (let i = 0; i < firstTy - 1; i++) {
       const byte = bytes[offset + i + 1];
       let [contTy, result] = readByte(byte, codepoint);
@@ -63,7 +79,7 @@ function readCodepoint(bytes, offset = 0) {
   };
 }
 
-function writeCodepoint(codepoint, accumulator = []) {
+function writeCodepoint(codepoint: number, accumulator: number[] = []) {
   if (codepoint <= 0x7f) {
     accumulator.push(codepoint);
   } else if (codepoint <= 0x7ff) {
@@ -83,43 +99,33 @@ function writeCodepoint(codepoint, accumulator = []) {
   return accumulator;
 }
 
-export function reinterpret(array) {
+export function reinterpret(array: number[]) {
   return new Uint8Array(array);
 }
 
-export function stringEncode(utf8) {
+export function stringEncode(utf8: Uint8Array) {
   let result = [];
   for (let i = 0; i < utf8.length; ) {
     const { value, last } = readCodepoint(utf8, i);
-    result.push(String.fromCodePoint(value));
+    result.push(String.fromCodePoint(value || 0));
     i = last + 1;
   }
   return result.join("");
 }
 
-export function stringDecode(str) {
-  const values = [];
+export function stringDecode(str: string) {
+  const values: number[] = [];
 
-  const writeCode = code => writeCodepoint(code, values);
+  const writeCode = (code: number) => writeCodepoint(code, values);
 
-  let highSurrogate = null;
-  let lowSurrogate = null;
+  let highSurrogate: number | null = null;
+  let lowSurrogate: number | null = null;
 
-  const writePair = () => {
+  const writePair = (lowSurrogate: number, highSurrogate: number) => {
     const high = highSurrogate - 0xd800;
     const low = lowSurrogate - 0xdc00;
     const code = ((high << 10) | low) + 0x10000;
     writeCode(code);
-    highSurrogate = null;
-    lowSurrogate = null;
-  };
-  const writeOrphanLow = () => {
-    writeCode(lowSurrogate);
-    lowSurrogate = null;
-  };
-  const writeOrphanHigh = () => {
-    writeCode(highSurrogate);
-    highSurrogate = null;
   };
 
   for (let i = 0; i < str.length; i++) {
@@ -127,43 +133,50 @@ export function stringDecode(str) {
     const isHigh = code >= 0xd800 && code <= 0xdbff;
     const isLow = code >= 0xdc00 && code <= 0xdfff;
 
+    if (isHigh && lowSurrogate) {
+    }
+
     if (isHigh) {
       if (highSurrogate) {
-        writeOrphanHigh();
+        writeCode(highSurrogate);
+        highSurrogate = null;
       }
-      highSurrogate = code;
       if (lowSurrogate) {
-        writePair();
+        writePair(lowSurrogate, code);
+        lowSurrogate = null;
       }
     } else if (isLow) {
       if (lowSurrogate) {
-        writeOrphanLow();
+        writeCode(lowSurrogate);
+        lowSurrogate = null;
       }
-      lowSurrogate = code;
       if (highSurrogate) {
-        writePair();
+        writePair(code, highSurrogate);
+        highSurrogate = null;
       }
     } else {
       // normal
       if (highSurrogate) {
-        writeOrphanHigh();
+        writeCode(highSurrogate);
+        highSurrogate = null;
       } else if (lowSurrogate) {
-        writeOrphanLow();
+        writeCode(lowSurrogate);
+        lowSurrogate = null;
       }
       writeCode(code);
     }
   }
 
   if (highSurrogate) {
-    writeOrphanHigh();
+    writeCode(highSurrogate);
   } else if (lowSurrogate) {
-    writeOrphanLow();
+    writeCode(lowSurrogate);
   }
 
   return new Uint8Array(values);
 }
 
-export function getCodeunits(utf8) {
+export function getCodeunits(utf8: Uint8Array) {
   const codeunits = [];
 
   for (let i = 0; i < utf8.length; i++) {
@@ -201,7 +214,7 @@ export function getCodeunits(utf8) {
   return codeunits;
 }
 
-export function getCodepoints(utf8) {
+export function getCodepoints(utf8: Uint8Array) {
   const codepoints = [];
 
   for (let i = 0; i < utf8.length; ) {
@@ -226,10 +239,10 @@ export function getCodepoints(utf8) {
   return codepoints;
 }
 
-export function urlEncode(utf8) {
+export function urlEncode(utf8: Uint8Array) {
   return hexEncode(utf8, 2);
 }
 
-export function urlDecode(str) {
+export function urlDecode(str: string) {
   return new Uint8Array(hexDecode(str, 2));
 }
