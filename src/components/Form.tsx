@@ -1,6 +1,5 @@
 import React, { FormEvent } from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import { History } from "history";
 
 type Props = {
   className: string;

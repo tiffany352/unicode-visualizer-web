@@ -4,10 +4,9 @@
 
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
 import "./Data.css";
 import { decimalToHex } from "../Util";
-import StringBlob, { CodepointInfo } from "../StringBlob";
+import StringBlob from "../StringBlob";
 
 function createCodepointPredicate(index: number) {
   return (codepoint: { first: number }) => {

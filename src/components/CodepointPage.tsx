@@ -4,19 +4,10 @@
 
 import React from "react";
 import "./CodepointPage.css";
-import { fetchCompressedDatabase } from "../Unicode";
+import { fetchCompressedDatabase, CodepointData } from "../Unicode";
+import { decimalToHex } from "../Util";
 
-function decimalToHex(d, padding) {
-  var hex = Number(d).toString(16);
-
-  while (hex.length < padding) {
-    hex = "0" + hex;
-  }
-
-  return hex;
-}
-
-const generalCategory = {
+const generalCategory: { [key: string]: string } = {
   Lu: "Letter, uppercase",
   Ll: "Letter, lowercase",
   Lt: "Letter, titlecase",
@@ -49,7 +40,7 @@ const generalCategory = {
   Cn: "Other, not assigned"
 };
 
-const scriptName = {
+const scriptName: { [key: string]: string } = {
   Adlm: "Adlam",
   Afak: "Afaka",
   Aghb: "Caucasian Albanian",
@@ -252,14 +243,14 @@ const scriptName = {
   Zzzz: "Uncoded script"
 };
 
-const numericTypes = {
+const numericTypes: { [key: string]: string } = {
   None: "Not numeric",
   De: "Decimal",
   Di: "Digit",
   Nu: "Numeric"
 };
 
-const eastAsianWidths = {
+const eastAsianWidths: { [key: string]: string } = {
   A: "Ambiguous",
   F: "Fullwidth",
   H: "Halfwidth",
@@ -268,36 +259,76 @@ const eastAsianWidths = {
   N: "Neutral"
 };
 
-class CodepointPage extends React.Component {
-  constructor(props) {
-    super(props);
+type Props = {
+  codepoint: number;
+};
 
-    this.state = {};
+enum Status {
+  Loading,
+  Loaded,
+  Error
+}
+
+type State =
+  | {
+      status: Status.Loading;
+    }
+  | {
+      status: Status.Loaded;
+      data: CodepointData;
+    }
+  | {
+      status: Status.Error;
+      error: string;
+    };
+
+function codepointString(codepoint: number) {
+  if (codepoint > 0 && codepoint <= 0x10ffff) {
+    return String.fromCodePoint(codepoint);
   }
+  return "";
+}
+
+class CodepointPage extends React.Component<Props, State> {
+  state: State = {
+    status: Status.Loading
+  };
 
   render() {
-    const props = this.state.data;
-    if (!props) {
+    if (this.state.status === Status.Loading) {
       return (
         <div className="CodepointPage-container">
           <h1>U+{decimalToHex(this.props.codepoint, 4)}</h1>
           <p className="CodepointPage-display">
-            {String.fromCodePoint(this.props.codepoint)}
+            {codepointString(this.props.codepoint)}
           </p>
           <h1>Loading...</h1>
         </div>
       );
+    } else if (this.state.status === Status.Error) {
+      return (
+        <div className="CodepointPage-container">
+          <h1>U+{decimalToHex(this.props.codepoint, 4)}</h1>
+          <p className="CodepointPage-display">
+            {codepointString(this.props.codepoint)}
+          </p>
+          <h1>{this.state.error}</h1>
+        </div>
+      );
     }
+    const info = this.state.data;
 
-    const parseCodepointStr = input =>
+    const parseCodepointStr = (input: string) =>
       input
         .split(" ")
         .map(codeStr => String.fromCodePoint(parseInt(codeStr, 16)))
         .join("");
 
-    const otherNames = props.names.map(
+    const otherNames = info.names.map(
       name => `${name.alias} (${name.aliasType})`
     );
+    const props = info.props;
+
     const uppercased =
       props.uc === "#"
         ? "Already uppercase"
@@ -357,26 +388,70 @@ class CodepointPage extends React.Component {
   }
 
   async download() {
+    const codepoint = this.props.codepoint;
+
+    let error = null;
+
+    if (codepoint < 0) {
+      error = "Negative values are not valid Unicode codepoints";
+    } else if (codepoint > 0x10ffff) {
+      error = "Values above U+10FFFF are not valid Unicode codepoints";
+    } else if (codepoint >= 0xe000 && codepoint <= 0xf8ff) {
+      error =
+        "Codepoint belongs to the Private Use Area (Basic Multilingual Plane)";
+    } else if (codepoint >= 0xf0000 && codepoint <= 0xffffd) {
+      error = "Codepoint belongs to Supplementary Private Use Area-A";
+    } else if (codepoint >= 0x100000 && codepoint <= 0x10fffd) {
+      error = "Codepoint belongs to Supplementary Private Use Area-B";
+    } else if (
+      codepoint % 0x10000 === 0xfffe ||
+      codepoint % 0x10000 === 0xffff ||
+      (codepoint >= 0xfdd0 && codepoint <= 0xfdef)
+    ) {
+      error =
+        'Codepoint is "permanently reserved for internal use" according to Corrigendum #9';
+    } else if (codepoint >= 0xd800 && codepoint <= 0xdbff) {
+      error = "UTF-16 high surrogate value, not a valid Unicode codepoint";
+    } else if (codepoint >= 0xdc00 && codepoint <= 0xdfff) {
+      error = "UTF-16 low surrogate value, not a valid Unicode codepoint";
+    }
+
+    if (error) {
+      this.setState({
+        status: Status.Error,
+        error
+      });
+      return;
+    }
+
     try {
       const unicode = await fetchCompressedDatabase();
-      const codepoint = this.props.codepoint;
-      if (codepoint) {
+      const data = unicode.getCodepoint(codepoint);
+      if (data) {
         this.setState({
-          data: unicode.getCodepoint(codepoint)
+          data,
+          status: Status.Loaded
+        });
+      } else {
+        this.setState({
+          status: Status.Error,
+          error: "No data found in Unicode Character Database"
         });
       }
     } catch (e) {
+      this.setState({
+        status: Status.Error,
+        error: e.toString()
+      });
       console.log(e);
     }
   }
 
   componentDidMount() {
-    if (this.props.codepoint) {
-      this.download();
-    }
+    this.download();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: Props) {
     if (prevProps.codepoint !== this.props.codepoint && this.props.codepoint) {
       this.download();
     }

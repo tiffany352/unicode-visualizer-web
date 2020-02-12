@@ -6,12 +6,24 @@
 
 import { inflate } from "pako";
 
+export type CodepointData = {
+  props: {
+    [key: string]: string;
+  };
+  names: {
+    alias: string;
+    aliasType: string;
+  }[];
+};
+
 class Unicode {
-  constructor(xml) {
+  xml: Document;
+
+  constructor(xml: Document) {
     this.xml = xml;
   }
 
-  getCodepoint(codepoint) {
+  getCodepoint(codepoint: number) {
     for (const node of this.xml.getElementsByTagName("char")) {
       const cp = node.getAttribute("cp");
       if (cp) {
@@ -27,10 +39,10 @@ class Unicode {
     return null;
   }
 
-  parseCharNode(node) {
+  parseCharNode(node: Element): CodepointData {
     const parent = node.parentElement;
-    const props = {};
-    if (parent.nodeName === "group") {
+    const props: { [key: string]: string } = {};
+    if (parent && parent.nodeName === "group") {
       const attrs = parent.attributes;
       for (let i = 0; i < attrs.length; i++) {
         props[attrs[i].name] = attrs[i].value;
@@ -47,20 +59,26 @@ class Unicode {
     for (let i = 0; i < children.length; i++) {
       const child = children[i];
       if (child.nodeName === "name-alias") {
-        names.push({
-          alias: child.getAttribute("alias"),
-          aliasType: child.getAttribute("type")
-        });
+        const alias = child.getAttribute("alias");
+        const aliasType = child.getAttribute("type");
+        if (alias && aliasType) {
+          names.push({
+            alias,
+            aliasType
+          });
+        }
       }
     }
-    props.names = names;
 
-    return props;
+    return {
+      names,
+      props
+    };
   }
 }
 
 const url = process.env.PUBLIC_URL + "/ucd.all.grouped.xml.gz";
-var database = null;
+let database: Unicode | null = null;
 export async function fetchCompressedDatabase() {
   if (database) {
     return database;
@@ -68,7 +86,7 @@ export async function fetchCompressedDatabase() {
 
   const response = await fetch(url);
   const bodyArray = await response.arrayBuffer();
-  const xmlBinary = inflate(bodyArray);
+  const xmlBinary = inflate(new Uint8Array(bodyArray));
   const xmlText = new TextDecoder("utf-8").decode(xmlBinary);
   const parser = new DOMParser();
   const doc = parser.parseFromString(xmlText, "application/xml");
