@@ -401,7 +401,7 @@ class CodepointPage extends React.Component<Props, State> {
           <dd>
             {renderBoxes(
               Utf16String.fromCodepoint(this.props.codepoint).data,
-              2
+              4
             )}
           </dd>
         </dl>
