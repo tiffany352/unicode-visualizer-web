@@ -6,6 +6,7 @@
 
 import { inflate } from "pako";
 import { urlSlugNormalize } from "./Util";
+import dataFileUrl from "./ucd.all.grouped.xml.gz";
 
 export type CodepointData = {
   codepoint: number;
@@ -163,14 +164,13 @@ class Unicode {
   }
 }
 
-const url = process.env.PUBLIC_URL + "/ucd.all.grouped.xml.gz";
 let database: Unicode | null = null;
 export async function fetchCompressedDatabase() {
   if (database) {
     return database;
   }
 
-  const response = await fetch(url);
+  const response = await fetch(dataFileUrl);
   const bodyArray = await response.arrayBuffer();
   const xmlBinary = inflate(new Uint8Array(bodyArray));
   const xmlText = new TextDecoder("utf-8").decode(xmlBinary);
