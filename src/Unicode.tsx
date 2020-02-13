@@ -5,6 +5,7 @@
 // A class for dealing with the unicode character database, encoded as a single huge xml file.
 
 import { inflate } from "pako";
+import { urlSlugNormalize } from "./Util";
 
 export type CodepointData = {
   codepoint: number;
@@ -120,7 +121,7 @@ class Unicode {
   getBlockInfo(name: string): ExtBlockData | null {
     for (const node of this.xml.getElementsByTagName("block")) {
       const block = this.parseBlockNode(node);
-      if (block && block.name == name) {
+      if (block && urlSlugNormalize(block.name) === name) {
         const codepoints = this.getCodepointsMatching(
           value => value >= block.first && value <= block.last
         );

@@ -75,6 +75,7 @@ class BlockInfo extends React.Component<Props> {
         }
         content = (
           <>
+            <h2>{block.name}</h2>
             <p>
               This block contains characters from{" "}
               <code>{displayUnicode(block.first)}</code> to{" "}
@@ -91,10 +92,7 @@ class BlockInfo extends React.Component<Props> {
 
     return (
       <div className="App-content">
-        <div className="App-contentContainer">
-          <h2>{this.props.blockName}</h2>
-          {content}
-        </div>
+        <div className="App-contentContainer">{content}</div>
       </div>
     );
   }

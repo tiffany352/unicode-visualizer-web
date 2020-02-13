@@ -1,6 +1,6 @@
 import React from "react";
 import { BlockData, fetchCompressedDatabase } from "../../Unicode";
-import { displayUnicode } from "../../Util";
+import { displayUnicode, urlSlugNormalize } from "../../Util";
 import { Link } from "react-router-dom";
 import "./BlockList.css";
 
@@ -39,7 +39,10 @@ export default class BlockList extends React.Component {
         break;
       case Status.Loaded: {
         const blocks = this.state.blocks.map(block => (
-          <Link to={`/block/${block.name}`} className="Blocks-row">
+          <Link
+            to={`/block/${urlSlugNormalize(block.name)}`}
+            className="Blocks-row"
+          >
             <div className="Blocks-cell">{block.name}</div>
             <div className="Blocks-cell Blocks-code">
               {displayUnicode(block.first)}
