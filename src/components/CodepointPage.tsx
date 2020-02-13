@@ -5,7 +5,7 @@
 import React from "react";
 import "./CodepointPage.css";
 import { fetchCompressedDatabase, CodepointData } from "../Unicode";
-import { decimalToHex } from "../Util";
+import { decimalToHex, codepointString } from "../Util";
 
 const generalCategory: { [key: string]: string } = {
   Lu: "Letter, uppercase",
@@ -281,13 +281,6 @@ type State =
       status: Status.Error;
       error: string;
     };
-
-function codepointString(codepoint: number) {
-  if (codepoint > 0 && codepoint <= 0x10ffff) {
-    return String.fromCodePoint(codepoint);
-  }
-  return "";
-}
 
 class CodepointPage extends React.Component<Props, State> {
   state: State = {

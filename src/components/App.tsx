@@ -9,6 +9,8 @@ import Input from "./Input";
 import Index from "./Pages/Index";
 import Inspect from "./Pages/Inspect";
 import Codepoint from "./Pages/Codepoint";
+import BlockList from "./Pages/BlockList";
+import BlockInfo from "./Pages/BlockInfo";
 
 class App extends Component {
   render() {
@@ -24,6 +26,8 @@ class App extends Component {
           <Route path="/" exact component={Index} />
           <Route path="/inspect/:blob" component={Inspect} />
           <Route path="/codepoint/u+:code" component={Codepoint} />
+          <Route path="/browse/blocks" component={BlockList} />
+          <Route path="/block/:blockName" component={BlockInfo} />
         </div>
       </Router>
     );

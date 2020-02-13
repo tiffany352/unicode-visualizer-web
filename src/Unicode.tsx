@@ -7,6 +7,7 @@
 import { inflate } from "pako";
 
 export type CodepointData = {
+  codepoint: number;
   props: {
     [key: string]: string;
   };
@@ -16,6 +17,16 @@ export type CodepointData = {
   }[];
 };
 
+export type BlockData = {
+  first: number;
+  last: number;
+  name: string;
+};
+
+export type ExtBlockData = BlockData & {
+  codepoints: CodepointData[];
+};
+
 class Unicode {
   xml: Document;
 
@@ -23,20 +34,30 @@ class Unicode {
     this.xml = xml;
   }
 
-  getCodepoint(codepoint: number) {
+  getCodepointsMatching(
+    filter: (codepoint: number) => boolean
+  ): CodepointData[] {
+    const values = [];
     for (const node of this.xml.getElementsByTagName("char")) {
       const cp = node.getAttribute("cp");
       if (cp) {
         const cpInt = parseInt(cp, 16);
-        if (cpInt === codepoint) {
-          return this.parseCharNode(node);
+        if (filter(cpInt)) {
+          values.push(this.parseCharNode(node));
         }
       }
     }
 
-    console.log("codepoint not found in ucd", codepoint);
+    return values;
+  }
 
-    return null;
+  getCodepoint(codepoint: number): CodepointData | null {
+    const values = this.getCodepointsMatching(value => value === codepoint);
+    if (values.length > 0) {
+      return values[0];
+    } else {
+      return null;
+    }
   }
 
   parseCharNode(node: Element): CodepointData {
@@ -70,10 +91,64 @@ class Unicode {
       }
     }
 
+    const cpStr = node.getAttribute("cp");
+    const codepoint = cpStr && parseInt(cpStr, 16);
+
+    if (!codepoint) {
+      throw new Error("Failed to parse codepoint");
+    }
+
     return {
       names,
-      props
+      props,
+      codepoint
     };
+  }
+
+  getBlockList(): BlockData[] {
+    // <block first-cp="0000" last-cp="007F" name="Basic Latin"/>
+    const blocks = [];
+    for (const node of this.xml.getElementsByTagName("block")) {
+      const block = this.parseBlockNode(node);
+      if (block) {
+        blocks.push(block);
+      }
+    }
+    return blocks;
+  }
+
+  getBlockInfo(name: string): ExtBlockData | null {
+    for (const node of this.xml.getElementsByTagName("block")) {
+      const block = this.parseBlockNode(node);
+      if (block && block.name == name) {
+        const codepoints = this.getCodepointsMatching(
+          value => value >= block.first && value <= block.last
+        );
+        codepoints.sort((left, right) => left.codepoint - right.codepoint);
+        return {
+          ...block,
+          codepoints
+        };
+      }
+    }
+    return null;
+  }
+
+  parseBlockNode(node: Element): BlockData | null {
+    const firstStr = node.getAttribute("first-cp");
+    const lastStr = node.getAttribute("last-cp");
+    const name = node.getAttribute("name");
+    const first = firstStr && parseInt(firstStr, 16);
+    const last = lastStr && parseInt(lastStr, 16);
+    if (first && last && name) {
+      return {
+        first,
+        last,
+        name
+      };
+    }
+
+    return null;
   }
 }
 

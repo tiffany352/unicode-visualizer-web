@@ -2,6 +2,17 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+export function codepointString(codepoint: number) {
+  if (codepoint > 0 && codepoint <= 0x10ffff) {
+    return String.fromCodePoint(codepoint);
+  }
+  return "";
+}
+
+export function displayUnicode(code: number) {
+  return `U+${decimalToHex(code, 4)}`;
+}
+
 export function decimalToHex(d: number, padding: number) {
   return Number(d)
     .toString(16)

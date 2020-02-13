@@ -1,0 +1,38 @@
+.Blocks-table {
+  display: grid;
+  grid-template-columns: 1fr 8em 8em;
+  background-color: rgb(153, 153, 153);
+  padding: 1px;
+  gap: 1px;
+}
+
+.Blocks-header {
+  background-color: rgb(200, 200, 200);
+  font-weight: 500;
+}
+
+.Blocks-row {
+  grid-column: 1 / 3;
+  display: contents;
+  text-decoration: none;
+  color: unset;
+}
+
+.Blocks-row:nth-child(odd) > .Blocks-cell {
+  background-color: rgb(230, 230, 230);
+}
+
+a.Blocks-row:hover > .Blocks-cell {
+  margin: -1px;
+  background-color: rgb(226, 237, 255);
+  border: 1px solid rgb(131, 183, 218);
+}
+
+.Blocks-cell {
+  padding: 10px;
+  background-color: white;
+}
+
+.Blocks-code {
+  font-family: monospace;
+}

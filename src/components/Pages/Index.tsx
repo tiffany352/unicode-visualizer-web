@@ -53,6 +53,12 @@ export default function Index(_props: {}) {
           need to do so, it's possible to directly pass Base16 encoded text like
           so: <code>/inspect/utf16:006100620063</code>.
         </p>
+        <h3>Browse</h3>
+        <ul>
+          <li>
+            <Link to="/browse/blocks">Codepoints by block</Link>
+          </li>
+        </ul>
         <h3>Example queries</h3>
         <ul>
           {examples.map(({ string, description }) => {
