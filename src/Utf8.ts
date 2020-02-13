@@ -170,6 +170,12 @@ export default class Utf8String implements EncodedString {
     this.data = new Uint8Array(data);
   }
 
+  static fromCodepoint(code: number) {
+    const values: number[] = [];
+    writeCodepoint(code, values);
+    return new Utf8String(values);
+  }
+
   getArrayBuffer() {
     return this.data.buffer;
   }

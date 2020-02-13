@@ -23,3 +23,16 @@
   width: min-content;
   border-radius: 5px;
 }
+
+.CodepointPage-boxes {
+  display: flex;
+  flex-direction: row;
+}
+
+.CodepointPage-box {
+  margin-left: -1px;
+  padding: 0.3em;
+  border: 1px solid rgb(102, 102, 102);
+  font-family: monospace;
+  font-size: 1.3em;
+}

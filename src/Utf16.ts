@@ -34,6 +34,10 @@ export default class Utf16String implements EncodedString {
     this.data = new Uint16Array(data);
   }
 
+  static fromCodepoint(code: number) {
+    return stringDecode(String.fromCodePoint(code));
+  }
+
   getArrayBuffer() {
     return this.data.buffer;
   }

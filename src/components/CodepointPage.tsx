@@ -6,6 +6,8 @@ import React from "react";
 import "./CodepointPage.css";
 import { fetchCompressedDatabase, CodepointData } from "../Unicode";
 import { decimalToHex, codepointString } from "../Util";
+import Utf8String from "../Utf8";
+import Utf16String from "../Utf16";
 
 const generalCategory: { [key: string]: string } = {
   Lu: "Letter, uppercase",
@@ -282,6 +284,17 @@ type State =
       error: string;
     };
 
+function renderBoxes(data: Iterable<number>, padding: number) {
+  const array = Array.from(data);
+  return (
+    <div className="CodepointPage-boxes">
+      {array.map(value => (
+        <div className="CodepointPage-box">{decimalToHex(value, padding)}</div>
+      ))}
+    </div>
+  );
+}
+
 class CodepointPage extends React.Component<Props, State> {
   state: State = {
     status: Status.Loading
@@ -375,7 +388,23 @@ class CodepointPage extends React.Component<Props, State> {
           {String.fromCodePoint(this.props.codepoint)}
         </p>
         <h3>Properties</h3>
-        <dl>{elements}</dl>
+        <dl>
+          {elements}
+          <dt>UTF-8</dt>
+          <dd>
+            {renderBoxes(
+              Utf8String.fromCodepoint(this.props.codepoint).data,
+              2
+            )}
+          </dd>
+          <dt>UTF-16</dt>
+          <dd>
+            {renderBoxes(
+              Utf16String.fromCodepoint(this.props.codepoint).data,
+              2
+            )}
+          </dd>
+        </dl>
       </div>
     );
   }
