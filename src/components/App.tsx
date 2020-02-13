@@ -3,7 +3,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Switch,
+  RouteComponentProps
+} from "react-router-dom";
 import "./App.css";
 import Input from "./Input";
 import Index from "./Pages/Index";
@@ -11,6 +17,19 @@ import Inspect from "./Pages/Inspect";
 import Codepoint from "./Pages/Codepoint";
 import BlockList from "./Pages/BlockList";
 import BlockInfo from "./Pages/BlockInfo";
+
+function NotFound(props: RouteComponentProps) {
+  return (
+    <div className="App-content">
+      <div className="App-contentContainer">
+        <h2>Not found</h2>
+        <p>
+          The path <code>{props.location.pathname}</code> doesn't exist.
+        </p>
+      </div>
+    </div>
+  );
+}
 
 class App extends Component {
   render() {
@@ -23,11 +42,14 @@ class App extends Component {
             </Link>
             <Input />
           </div>
-          <Route path="/" exact component={Index} />
-          <Route path="/inspect/:blob" component={Inspect} />
-          <Route path="/codepoint/u+:code" component={Codepoint} />
-          <Route path="/browse/blocks" component={BlockList} />
-          <Route path="/block/:blockName" component={BlockInfo} />
+          <Switch>
+            <Route path="/" exact component={Index} />
+            <Route path="/inspect/:blob" component={Inspect} />
+            <Route path="/codepoint/u+:code" component={Codepoint} />
+            <Route path="/browse/blocks" component={BlockList} />
+            <Route path="/block/:blockName" component={BlockInfo} />
+            <Route component={NotFound} />
+          </Switch>
         </div>
       </Router>
     );
