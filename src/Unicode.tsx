@@ -92,6 +92,16 @@ class Unicode {
       }
     }
 
+    if (props.na === "" && names.length > 0) {
+      // Some characters don't have this set for some reason.
+      const prefer = names.find(name => name.aliasType !== "abbreviation");
+      if (prefer) {
+        props.na = prefer.alias;
+      } else {
+        props.na = names[0].alias;
+      }
+    }
+
     const cpStr = node.getAttribute("cp");
     const codepoint = cpStr && parseInt(cpStr, 16);
 
