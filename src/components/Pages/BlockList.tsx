@@ -1,8 +1,7 @@
 import React from "react";
 import { BlockData, fetchCompressedDatabase } from "../../Unicode";
 import { displayUnicode, urlSlugNormalize } from "../../Util";
-import { Link } from "react-router-dom";
-import "./BlockList.css";
+import Table from "../Table";
 
 enum Status {
   Loading,
@@ -38,29 +37,17 @@ export default class BlockList extends React.Component {
         content = <h3>Error: {this.state.error}</h3>;
         break;
       case Status.Loaded: {
-        const blocks = this.state.blocks.map(block => (
-          <Link
-            to={`/block/${urlSlugNormalize(block.name)}`}
-            className="Blocks-row"
-          >
-            <div className="Blocks-cell">{block.name}</div>
-            <div className="Blocks-cell Blocks-code">
-              {displayUnicode(block.first)}
-            </div>
-            <div className="Blocks-cell Blocks-code">
-              {displayUnicode(block.last)}
-            </div>
-          </Link>
-        ));
+        const blocks = this.state.blocks.map(block => ({
+          link: `/block/${urlSlugNormalize(block.name)}`,
+          contents: [
+            block.name,
+            <code>{displayUnicode(block.first)}</code>,
+            <code>{displayUnicode(block.last)}</code>
+          ]
+        }));
+        const headings = ["Name", "Start", "End"];
         content = (
-          <div className="Blocks-table">
-            <div className="Blocks-row Blocks-header">
-              <div className="Blocks-cell">Name</div>
-              <div className="Blocks-cell">Start</div>
-              <div className="Blocks-cell">End</div>
-            </div>
-            {blocks}
-          </div>
+          <Table columns="1fr 8em 8em" headings={headings} rows={blocks} />
         );
         break;
       }

@@ -2,7 +2,7 @@ import React from "react";
 import { fetchCompressedDatabase, ExtBlockData } from "../../Unicode";
 import { displayUnicode, decimalToHex, codepointString } from "../../Util";
 import { Link, RouteComponentProps } from "react-router-dom";
-import "./BlockInfo.css";
+import Table from "../Table";
 
 enum Status {
   Loading,
@@ -44,31 +44,23 @@ class BlockInfo extends React.Component<Props> {
       case Status.Loaded: {
         const block = this.state.block;
 
-        const codepoints = block.codepoints.map(data => (
-          <Link
-            to={`/codepoint/u+${decimalToHex(data.codepoint, 4)}`}
-            className="BlockInfo-row"
-          >
-            <div className="BlockInfo-cell BlockInfo-code">
-              {displayUnicode(data.codepoint)}
-            </div>
-            <div className="BlockInfo-cell BlockInfo-char">
-              {codepointString(data.codepoint)}
-            </div>
-            <div className="BlockInfo-cell">{data.props.na}</div>
-          </Link>
-        ));
+        const codepoints = block.codepoints.map(data => ({
+          link: `/codepoint/u+${decimalToHex(data.codepoint, 4)}`,
+          contents: [
+            <code>{displayUnicode(data.codepoint)}</code>,
+            <code> {codepointString(data.codepoint)}</code>,
+            data.props.na
+          ]
+        }));
         let list;
         if (codepoints.length > 0) {
+          const headings = ["Codepoint", "Char", "Name"];
           list = (
-            <div className="BlockInfo-table">
-              <div className="BlockInfo-row BlockInfo-header">
-                <div className="BlockInfo-cell">Codepoint</div>
-                <div className="BlockInfo-cell">Char</div>
-                <div className="BlockInfo-cell">Name</div>
-              </div>
-              {codepoints}
-            </div>
+            <Table
+              columns="8em 5em 1fr"
+              headings={headings}
+              rows={codepoints}
+            />
           );
         } else {
           list = <h3>No codepoints found in this block.</h3>;
