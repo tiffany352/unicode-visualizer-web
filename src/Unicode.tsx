@@ -29,6 +29,12 @@ export type ExtBlockData = BlockData & {
   codepoints: CodepointData[];
 };
 
+export type Sequence = {
+  name: string;
+  codepoints: number[];
+  text: string;
+};
+
 class Unicode {
   xml: Document;
 
@@ -125,7 +131,6 @@ class Unicode {
   }
 
   getBlockList(): BlockData[] {
-    // <block first-cp="0000" last-cp="007F" name="Basic Latin"/>
     const blocks = [];
     for (const node of this.xml.getElementsByTagName("block")) {
       const block = this.parseBlockNode(node);
@@ -154,6 +159,7 @@ class Unicode {
   }
 
   parseBlockNode(node: Element): BlockData | null {
+    // <block first-cp="0000" last-cp="007F" name="Basic Latin"/>
     const firstStr = node.getAttribute("first-cp");
     const lastStr = node.getAttribute("last-cp");
     const name = node.getAttribute("name");
@@ -167,6 +173,32 @@ class Unicode {
       };
     }
 
+    return null;
+  }
+
+  getSequenceInfo(): Sequence[] {
+    const sequences = [];
+    for (const node of this.xml.getElementsByTagName("named-sequence")) {
+      const sequence = this.parseSequenceNode(node);
+      if (sequence) {
+        sequences.push(sequence);
+      }
+    }
+    return sequences;
+  }
+
+  parseSequenceNode(node: Element): Sequence | null {
+    const name = node.getAttribute("name");
+    const cps = node.getAttribute("cps");
+    const cpList = cps && cps.split(" ");
+    if (name && cpList) {
+      const codepoints = cpList.map(str => parseInt(str, 16));
+      return {
+        name,
+        codepoints,
+        text: String.fromCodePoint(...codepoints)
+      };
+    }
     return null;
   }
 }

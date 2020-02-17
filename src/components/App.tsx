@@ -17,6 +17,7 @@ import Inspect from "./Pages/Inspect";
 import Codepoint from "./Pages/Codepoint";
 import BlockList from "./Pages/BlockList";
 import BlockInfo from "./Pages/BlockInfo";
+import Sequences from "./Pages/Sequences";
 
 function NotFound(props: RouteComponentProps) {
   return (
@@ -47,6 +48,7 @@ class App extends Component {
             <Route path="/inspect/:blob" component={Inspect} />
             <Route path="/codepoint/u+:code" component={Codepoint} />
             <Route path="/browse/blocks" component={BlockList} />
+            <Route path="/browse/sequences" component={Sequences} />
             <Route path="/block/:blockName" component={BlockInfo} />
             <Route component={NotFound} />
           </Switch>

@@ -58,6 +58,9 @@ export default function Index(_props: {}) {
           <li>
             <Link to="/browse/blocks">Codepoints by block</Link>
           </li>
+          <li>
+            <Link to="/browse/sequences">Named sequences</Link>
+          </li>
         </ul>
         <h3>Example queries</h3>
         <ul>
