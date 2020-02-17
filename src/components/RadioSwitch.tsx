@@ -30,7 +30,6 @@ export default class RadioSwitch extends React.Component<Props> {
   }
 
   selectItem(value: string) {
-    console.log("selectItem", value);
     this.props.onSelect(value);
   }
 }

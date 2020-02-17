@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import StringBlob, { Encoding } from "../../StringBlob";
+import DataEntry from "../DataEntry";
+import CodepointEntry from "../CodepointEntry";
 
 const examples = [
   {
@@ -46,13 +48,7 @@ export default function Index(_props: {}) {
           causing a bug in your code? Paste it here and it might help you find
           out why.
         </p>
-        <p>
-          This tool has a textbox at the top for easy entry, but it sometimes
-          mangles certain types of input. For example, any newlines are cut out
-          by the browser, and any invalid Unicode is unlikely to survive. If you
-          need to do so, it's possible to directly pass Base16 encoded text like
-          so: <code>/inspect/utf16:006100620063</code>.
-        </p>
+
         <h3>Browse</h3>
         <ul>
           <li>
@@ -62,6 +58,7 @@ export default function Index(_props: {}) {
             <Link to="/browse/sequences">Named sequences</Link>
           </li>
         </ul>
+
         <h3>Example queries</h3>
         <ul>
           {examples.map(({ string, description }) => {
@@ -84,6 +81,27 @@ export default function Index(_props: {}) {
             !
           </li>
         </ul>
+
+        <h3>Data Entry</h3>
+        <p>
+          The search bar at the top allows you to conveniently paste in text,
+          but it has some limitations. Typically, invalid Unicode gets replaced
+          with <code>U+FFFD</code>, newlines are stripped out, and the text is
+          converted to UTF-16. These widgets let you enter data directly,
+          avoiding any conversion losses.
+        </p>
+        <h4>Base-16 Entry</h4>
+        <p>
+          Insert base-16 encoded text in the relevant format. All non-hex
+          characters are ignored.
+        </p>
+        <DataEntry />
+        <h4>Codepoint List Entry</h4>
+        <p>
+          Insert a list of codepoints. Non-hex characters are used as
+          delimiters.
+        </p>
+        <CodepointEntry />
       </div>
     </div>
   );

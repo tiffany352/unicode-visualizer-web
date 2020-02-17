@@ -1,11 +1,13 @@
 import GraphemeSplitter from "grapheme-splitter";
 import * as Utf8 from "./Utf8";
 import * as Utf16 from "./Utf16";
+import * as Utf32 from "./Utf32";
 import Windows1252String, * as Windows1252 from "./Windows1252";
 
 export enum Encoding {
   Utf8,
   Utf16,
+  Utf32,
   Windows1252
 }
 
@@ -15,6 +17,8 @@ export function encodingFromTag(tag: string): Encoding {
       return Encoding.Utf8;
     case "utf16":
       return Encoding.Utf16;
+    case "utf32":
+      return Encoding.Utf32;
     case "windows1252":
       return Encoding.Windows1252;
     default:
@@ -28,6 +32,8 @@ export function encodingToTag(encoding: Encoding): string {
       return "utf8";
     case Encoding.Utf16:
       return "utf16";
+    case Encoding.Utf32:
+      return "utf32";
     case Encoding.Windows1252:
       return "windows1252";
     default:
@@ -41,6 +47,8 @@ function getEncoder(encoding: Encoding): Encoder {
       return Utf8;
     case Encoding.Utf16:
       return Utf16;
+    case Encoding.Utf32:
+      return Utf32;
     case Encoding.Windows1252:
       return Windows1252;
     default:
@@ -121,6 +129,12 @@ export default class StringBlob {
     const payload = this.data.urlEncode();
 
     return `${proto}:${payload}`;
+  }
+
+  static rawDecode(encoding: Encoding, payload: string) {
+    const encoder = getEncoder(encoding);
+    const data = encoder.urlDecode(payload);
+    return new StringBlob(encoding, encoder, data);
   }
 
   static urlDecode(string: string) {
