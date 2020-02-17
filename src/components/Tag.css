@@ -1,0 +1,12 @@
+.Tag {
+  border: 1px solid rgb(165, 165, 165);
+  color: rgb(44, 44, 44);
+  border-radius: 4px;
+  display: inline-block;
+  margin: 2px;
+  padding: 3px;
+}
+
+.Tag-list {
+  display: inline;
+}

@@ -5,7 +5,7 @@
 // A class for dealing with the unicode character database, encoded as a single huge xml file.
 
 import { inflate } from "pako";
-import { urlSlugNormalize } from "./Util";
+import { urlSlugNormalize, decimalToHex } from "./Util";
 import dataFileUrl from "./ucd.all.grouped.xml.gz";
 
 export type CodepointData = {
@@ -108,6 +108,13 @@ class Unicode {
 
     if (!codepoint) {
       throw new Error("Failed to parse codepoint");
+    }
+
+    if (props.na === "CJK UNIFIED IDEOGRAPH-#") {
+      props.na = `CJK UNIFIED IDEOGRAPH-${decimalToHex(codepoint, 4)}`;
+    }
+    if (props.na === "CJK COMPATIBILITY IDEOGRAPH-#") {
+      props.na = `CJK COMPATIBILITY IDEOGRAPH-${decimalToHex(codepoint, 4)}`;
     }
 
     return {

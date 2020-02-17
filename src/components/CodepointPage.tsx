@@ -5,261 +5,13 @@
 import React from "react";
 import "./CodepointPage.css";
 import { fetchCompressedDatabase, CodepointData } from "../Unicode";
-import { decimalToHex, codepointString } from "../Util";
+import { decimalToHex, codepointString, hexEncode } from "../Util";
 import Utf8String from "../Utf8";
 import Utf16String from "../Utf16";
-
-const generalCategory: { [key: string]: string } = {
-  Lu: "Letter, uppercase",
-  Ll: "Letter, lowercase",
-  Lt: "Letter, titlecase",
-  Lm: "Letter, modifier",
-  Lo: "Letter, other",
-  Mn: "Mark, nonspacing",
-  Mc: "Mark, spacing combining",
-  Me: "Mark, enclosing",
-  Nd: "Number, decimal digit",
-  Nl: "Number, letter",
-  No: "Number, other",
-  Pc: "Punctuation, connector",
-  Pd: "Punctuation, dash",
-  Ps: "Punctuation, open",
-  Pe: "Punctuation, close",
-  Pi: "Punctuation, initial quote",
-  Pf: "Punctuation, final quote",
-  Po: "Punctuation, other",
-  Sm: "Symbol, math",
-  Sc: "Symbol, currency",
-  Sk: "Symbol, modifier",
-  So: "Symbol, other",
-  Zs: "Separtaor, space",
-  Zl: "Separtaor, line",
-  Zp: "Separator, paragraph",
-  Cc: "Other, control",
-  Cf: "Other, format",
-  Cs: "Other, surrogate",
-  Co: "Other, private use",
-  Cn: "Other, not assigned"
-};
-
-const scriptName: { [key: string]: string } = {
-  Adlm: "Adlam",
-  Afak: "Afaka",
-  Aghb: "Caucasian Albanian",
-  Ahom: "Ahom, Tai Ahom",
-  Arab: "Arabic",
-  Aran: "Arabic (Nastaliq variant)",
-  Armi: "Imperial Aramaic",
-  Armn: "Armenian",
-  Avst: "Avestan",
-  Bali: "Balinese",
-  Bamu: "Bamum",
-  Bass: "Bassa Vah",
-  Batk: "Batak",
-  Beng: "Bengali (Bangla)",
-  Bhks: "Bhaiksuki",
-  Blis: "Blissymbols",
-  Bopo: "Bopomofo",
-  Brah: "Brahmi",
-  Brai: "Braille",
-  Bugi: "Buginese",
-  Buhd: "Buhid",
-  Cakm: "Chakma",
-  Cans: "Unified Canadian Aboriginal Syllabics",
-  Cari: "Carian",
-  Cham: "Cham",
-  Cher: "Cherokee",
-  Cirt: "Cirth",
-  Copt: "Coptic",
-  Cpmn: "Cypro-Minoan",
-  Cprt: "Cypriot syllabary",
-  Cyrl: "Cyrillic",
-  Cyrs: "Cyrillic (Old Church Slavonic variant)",
-  Deva: "Devanagari (Nagari)",
-  Dogr: "Dogra",
-  Dsrt: "Deseret (Mormon)",
-  Dupl: "Duployan shorthand, Duployan stenography",
-  Egyd: "Egyptian demotic",
-  Egyh: "Egyptian hieratic",
-  Egyp: "Egyptian hieroglyphs",
-  Elba: "Elbasan",
-  Elym: "Elymaic",
-  Ethi: "Ethiopic (Geʻez)",
-  Geok: "Khutsuri (Asomtavruli and Nuskhuri)",
-  Geor: "Georgian (Mkhedruli and Mtavruli)",
-  Glag: "Glagolitic",
-  Gong: "Gunjala Gondi",
-  Gonm: "Masaram Gondi",
-  Goth: "Gothic",
-  Gran: "Grantha",
-  Grek: "Greek",
-  Gujr: "Gujarati",
-  Guru: "Gurmukhi",
-  Hanb: "Han with Bopomofo (alias for Han + Bopomofo)",
-  Hang: "Hangul (Hangŭl, Hangeul)",
-  Hani: "Han (Hanzi, Kanji, Hanja)",
-  Hano: "Hanunoo (Hanunóo)",
-  Hans: "Han (Simplified variant)",
-  Hant: "Han (Traditional variant)",
-  Hatr: "Hatran",
-  Hebr: "Hebrew",
-  Hira: "Hiragana",
-  Hluw: "Anatolian Hieroglyphs (Luwian Hieroglyphs, Hittite Hieroglyphs)",
-  Hmng: "Pahawh Hmong",
-  Hmnp: "Nyiakeng Puachue Hmong",
-  Hrkt: "Japanese syllabaries (alias for Hiragana + Katakana)",
-  Hung: "Old Hungarian (Hungarian Runic)",
-  Inds: "Indus (Harappan)",
-  Ital: "Old Italic (Etruscan, Oscan, etc.)",
-  Jamo: "Jamo (alias for Jamo subset of Hangul)",
-  Java: "Javanese",
-  Jpan: "Japanese (alias for Han + Hiragana + Katakana)",
-  Jurc: "Jurchen",
-  Kali: "Kayah Li",
-  Kana: "Katakana",
-  Khar: "Kharoshthi",
-  Khmr: "Khmer",
-  Khoj: "Khojki",
-  Kitl: "Khitan large script",
-  Kits: "Khitan small script",
-  Knda: "Kannada",
-  Kore: "Korean (alias for Hangul + Han)",
-  Kpel: "Kpelle",
-  Kthi: "Kaithi",
-  Lana: "Tai Tham (Lanna)",
-  Laoo: "Lao",
-  Latf: "Latin (Fraktur variant)",
-  Latg: "Latin (Gaelic variant)",
-  Latn: "Latin",
-  Leke: "Leke",
-  Lepc: "Lepcha (Róng)",
-  Limb: "Limbu",
-  Lina: "Linear A",
-  Linb: "Linear B",
-  Lisu: "Lisu (Fraser)",
-  Loma: "Loma",
-  Lyci: "Lycian",
-  Lydi: "Lydian",
-  Mahj: "Mahajani",
-  Maka: "Makasar",
-  Mand: "Mandaic, Mandaean",
-  Mani: "Manichaean",
-  Marc: "Marchen",
-  Maya: "Mayan hieroglyphs",
-  Medf: "Medefaidrin (Oberi Okaime, Oberi Ɔkaimɛ)",
-  Mend: "Mende Kikakui",
-  Merc: "Meroitic Cursive",
-  Mero: "Meroitic Hieroglyphs",
-  Mlym: "Malayalam",
-  Modi: "Modi, Moḍī",
-  Mong: "Mongolian",
-  Moon: "Moon (Moon code, Moon script, Moon type)",
-  Mroo: "Mro, Mru",
-  Mtei: "Meitei Mayek (Meithei, Meetei)",
-  Mult: "Multani",
-  Mymr: "Myanmar (Burmese)",
-  Nand: "Nandinagari",
-  Narb: "Old North Arabian (Ancient North Arabian)",
-  Nbat: "Nabataean",
-  Newa: "Newa, Newar, Newari, Nepāla lipi",
-  Nkdb: "Naxi Dongba (na²¹ɕi³³ to³³ba²¹, Nakhi Tomba)",
-  Nkgb: "Naxi Geba (na²¹ɕi³³ gʌ²¹ba²¹, 'Na-'Khi ²Ggŏ-¹baw, Nakhi Geba)",
-  Nkoo: "N’Ko",
-  Nshu: "Nüshu",
-  Ogam: "Ogham",
-  Olck: "Ol Chiki (Ol Cemet’, Ol, Santali)",
-  Orkh: "Old Turkic, Orkhon Runic",
-  Orya: "Oriya (Odia)",
-  Osge: "Osage",
-  Osma: "Osmanya",
-  Palm: "Palmyrene",
-  Pauc: "Pau Cin Hau",
-  Perm: "Old Permic",
-  Phag: "Phags-pa",
-  Phli: "Inscriptional Pahlavi",
-  Phlp: "Psalter Pahlavi",
-  Phlv: "Book Pahlavi",
-  Phnx: "Phoenician",
-  Plrd: "Miao (Pollard)",
-  Piqd: "Klingon (KLI pIqaD)",
-  Prti: "Inscriptional Parthian",
-  Qaaa: "Reserved for private use (start)",
-  Qabx: "Reserved for private use (end)",
-  Rjng: "Rejang (Redjang, Kaganga)",
-  Rohg: "Hanifi Rohingya",
-  Roro: "Rongorongo",
-  Runr: "Runic",
-  Samr: "Samaritan",
-  Sara: "Sarati",
-  Sarb: "Old South Arabian",
-  Saur: "Saurashtra",
-  Sgnw: "SignWriting",
-  Shaw: "Shavian (Shaw)",
-  Shrd: "Sharada, Śāradā",
-  Shui: "Shuishu",
-  Sidd: "Siddham, Siddhaṃ, Siddhamātṛkā",
-  Sind: "Khudawadi, Sindhi",
-  Sinh: "Sinhala",
-  Sogd: "Sogdian",
-  Sogo: "Old Sogdian",
-  Sora: "Sora Sompeng",
-  Soyo: "Soyombo",
-  Sund: "Sundanese",
-  Sylo: "Syloti Nagri",
-  Syrc: "Syriac",
-  Syre: "Syriac (Estrangelo variant)",
-  Syrj: "Syriac (Western variant)",
-  Syrn: "Syriac (Eastern variant)",
-  Tagb: "Tagbanwa",
-  Takr: "Takri, Ṭākrī, Ṭāṅkrī",
-  Tale: "Tai Le",
-  Talu: "New Tai Lue",
-  Taml: "Tamil",
-  Tang: "Tangut",
-  Tavt: "Tai Viet",
-  Telu: "Telugu",
-  Teng: "Tengwar",
-  Tfng: "Tifinagh (Berber)",
-  Tglg: "Tagalog (Baybayin, Alibata)",
-  Thaa: "Thaana",
-  Thai: "Thai",
-  Tibt: "Tibetan",
-  Tirh: "Tirhuta",
-  Ugar: "Ugaritic",
-  Vaii: "Vai",
-  Visp: "Visible Speech",
-  Wara: "Warang Citi (Varang Kshiti)",
-  Wcho: "Wancho",
-  Wole: "Woleai",
-  Xpeo: "Old Persian",
-  Xsux: "Cuneiform, Sumero-Akkadian",
-  Yiii: "Yi",
-  Zanb:
-    "Zanabazar Square (Zanabazarin Dörböljin Useg, Xewtee Dörböljin Bicig, Horizontal Square Script)",
-  Zinh: "Inherited script",
-  Zmth: "Mathematical notation",
-  Zsye: "Symbols (Emoji variant)",
-  Zsym: "Symbols",
-  Zxxx: "Unwritten documents",
-  Zyyy: "Undetermined script",
-  Zzzz: "Uncoded script"
-};
-
-const numericTypes: { [key: string]: string } = {
-  None: "Not numeric",
-  De: "Decimal",
-  Di: "Digit",
-  Nu: "Numeric"
-};
-
-const eastAsianWidths: { [key: string]: string } = {
-  A: "Ambiguous",
-  F: "Fullwidth",
-  H: "Halfwidth",
-  Na: "Narrow",
-  W: "Wide",
-  N: "Neutral"
-};
+import { getDisplayText } from "../Strings";
+import { Tag, TagList } from "./Tag";
+import { Link } from "react-router-dom";
+import StringBlob, { Encoding } from "../StringBlob";
 
 type Props = {
   codepoint: number;
@@ -288,11 +40,65 @@ function renderBoxes(data: Iterable<number>, padding: number) {
   const array = Array.from(data);
   return (
     <div className="CodepointPage-boxes">
-      {array.map(value => (
-        <div className="CodepointPage-box">{decimalToHex(value, padding)}</div>
+      {array.map((value, index) => (
+        <div key={index} className="CodepointPage-box">
+          {decimalToHex(value, padding)}
+        </div>
       ))}
     </div>
   );
+}
+
+function parseCodepointStr(input: string) {
+  return input
+    .split(" ")
+    .map(codeStr => String.fromCodePoint(parseInt(codeStr, 16)))
+    .join("");
+}
+
+function urlString(input: string) {
+  const first = input.codePointAt(0);
+  if (first !== undefined && String.fromCodePoint(first) === input) {
+    return `/codepoint/u+${decimalToHex(first, 4)}`;
+  } else {
+    const blob = StringBlob.stringDecode(Encoding.Utf16, input);
+    return `/inspect/${blob.urlEncode()}`;
+  }
+}
+
+function createUrl(input: string, defaultCase: JSX.Element | string) {
+  if (input === undefined || input === "#") return defaultCase;
+
+  const str = parseCodepointStr(input);
+  return (
+    <Link to={urlString(str)}>
+      {str} (U+{input})
+    </Link>
+  );
+}
+
+function cleanupName(input: string, emptyValue = "") {
+  if (input === undefined || input === emptyValue) return "";
+
+  return input.replace(/_/g, " ");
+}
+
+function normalForm(input: number, form: string) {
+  const str = String.fromCodePoint(input);
+  const norm = str.normalize(form);
+  if (str !== norm) {
+    const codepoints = [];
+    for (const cp of norm) {
+      codepoints.push(cp.codePointAt(0) as number);
+    }
+    const result = hexEncode(codepoints, 4);
+    return (
+      <Link to={urlString(norm)}>
+        {norm} (U+{result})
+      </Link>
+    );
+  }
+  return "";
 }
 
 class CodepointPage extends React.Component<Props, State> {
@@ -324,53 +130,63 @@ class CodepointPage extends React.Component<Props, State> {
     }
     const info = this.state.data;
 
-    const parseCodepointStr = (input: string) =>
-      input
-        .split(" ")
-        .map(codeStr => String.fromCodePoint(parseInt(codeStr, 16)))
-        .join("");
-
     const otherNames = info.names.map(
       name => `${name.alias} (${name.aliasType})`
     );
     const props = info.props;
 
-    const uppercased =
-      props.uc === "#"
-        ? "Already uppercase"
-        : `${parseCodepointStr(props.uc)} (U+${props.uc})`;
-    const lowercased =
-      props.lc === "#"
-        ? ["Already lowercase"]
-        : `${parseCodepointStr(props.lc)} (U+${props.lc})`;
+    const category = getDisplayText(`generalCategory.${props.gc}`);
+    const script = getDisplayText(`scriptName.${props.sc}`);
+    const numericType = getDisplayText(`numericType.${props.nt}`);
+    const eastAsianWidth = getDisplayText(`eastAsianWidth.${props.ea}`);
+    const hangul = getDisplayText(`hangulSyllable.${props.hst}`);
 
-    const data = [
+    const entries: [string, string | JSX.Element][] = [
       ["Name", props.na],
       ["Other Names", `${otherNames.join(", ")}`],
-      ["Block", props.blk.replace(/_/g, " ")],
+      ["Block", cleanupName(props.blk)],
       ["Appeared", `Unicode ${props.age}`],
-      ["General Category", `${generalCategory[props.gc]} (${props.gc})`],
-      ["Script", scriptName[props.sc]],
-      ["Uppercase", `${uppercased}`],
-      ["Lowercase", `${lowercased}`],
-      ["Numeric Value", `${numericTypes[props.nt]}: ${props.nv}`],
-      ["East-Asian Width", `${eastAsianWidths[props.ea]}`],
+      ["General Category", `${category} (${props.gc})`],
+      ["Script", script],
+      ["Uppercase", createUrl(props.uc, "None")],
+      ["Lowercase", createUrl(props.lc, "None")],
+      ["Titlecase", createUrl(props.tc, "None")],
+      ["Numeric Value", `${numericType}: ${props.nv}`],
+      ["Normal Form C", normalForm(this.props.codepoint, "NFC")],
+      ["Normal Form D", normalForm(this.props.codepoint, "NFD")],
+      ["Normal Form KC", normalForm(this.props.codepoint, "NFKC")],
+      ["Normal Form KD", normalForm(this.props.codepoint, "NFKD")],
+      ["East-Asian Width", eastAsianWidth],
+      ["Equivalent Unified Ideograph", createUrl(props.EqUIdeo, "")],
       ["Stroke Count", props.kTotalStrokes],
       ["Mandarin", props.kMandarin],
       ["Cantonese", props.kCantonese],
       ["Korean", props.kKorean],
       ["Japanese (On)", props.kJapaneseOn],
       ["Japanese (Kun)", props.kJapaneseKun],
+      ["Hangul Syllable Type", hangul],
+      ["Hangul Jamo Short Name", props.JSN],
+      ["Indic Syllabic Category", cleanupName(props.InSC, "Other")],
+      ["Indic Matra Category", cleanupName(props.InMC, "NA")],
+      ["Indic Positional Category", cleanupName(props.InPC, "NA")],
       ["Definition", props.kDefinition],
       ["Comment", props.isc]
-    ].filter(([, value]) => value && value.length > 0);
+    ];
+
+    const data = entries.filter(
+      ([, value]) => value && (typeof value !== "string" || value.length > 0)
+    );
+
     const yesValues = [];
     for (const [prop, value] of Object.entries(props)) {
       if (value === "Y") {
-        yesValues.push(prop);
+        const text = getDisplayText(`property.${prop}`);
+        if (text !== "") {
+          console.log(text);
+          yesValues.push(<Tag key={prop}>{text}</Tag>);
+        }
       }
     }
-    data.push(["Has Properties", yesValues.join(", ")]);
 
     const elements = data.map(([name, value]) => (
       <React.Fragment key={name}>
@@ -390,6 +206,10 @@ class CodepointPage extends React.Component<Props, State> {
         <h3>Properties</h3>
         <dl>
           {elements}
+          <dt>Tags</dt>
+          <dd>
+            <TagList>{yesValues}</TagList>
+          </dd>
           <dt>UTF-8</dt>
           <dd>
             {renderBoxes(
