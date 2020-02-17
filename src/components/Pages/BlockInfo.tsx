@@ -1,7 +1,7 @@
 import React from "react";
 import { fetchCompressedDatabase, ExtBlockData } from "../../Unicode";
 import { displayUnicode, decimalToHex, codepointString } from "../../Util";
-import { Link, RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
 import Table from "../Table";
 
 enum Status {

@@ -1,6 +1,6 @@
 import React from "react";
 import { fetchCompressedDatabase, Sequence } from "../../Unicode";
-import { displayUnicode, urlSlugNormalize, decimalToHex } from "../../Util";
+import { decimalToHex } from "../../Util";
 import Table from "../Table";
 import StringBlob, { Encoding } from "../../StringBlob";
 
