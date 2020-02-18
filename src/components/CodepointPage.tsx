@@ -116,7 +116,7 @@ export default function CodepointPage({ codepoint }: { codepoint: number }) {
       throw new Error("No data found in Unicode Character Database");
     }
     return data;
-  });
+  }, [codepoint]);
 
   if (result.status === Status.Loading) {
     return (

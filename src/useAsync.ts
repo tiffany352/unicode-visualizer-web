@@ -19,7 +19,10 @@ export type Result<T> =
       message: string;
     };
 
-export default function useAsync<T>(func: () => Promise<T>): Result<T> {
+export default function useAsync<T>(
+  func: () => Promise<T>,
+  dependencies: any[] = []
+): Result<T> {
   const [state, setState] = useState<Result<T>>({
     status: Status.Loading
   });
@@ -41,7 +44,7 @@ export default function useAsync<T>(func: () => Promise<T>): Result<T> {
 
     fetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, dependencies);
 
   return state;
 }
