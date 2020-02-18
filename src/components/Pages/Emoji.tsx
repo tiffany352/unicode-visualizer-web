@@ -42,7 +42,6 @@ export default function Emoji(props: {}) {
       sequence.specifier.codepoints.length > 1
     ) {
       const codepoints = sequence.specifier.codepoints;
-      console.log(codepoints);
       const text = String.fromCodePoint(...codepoints);
 
       sequences.push({

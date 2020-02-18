@@ -189,7 +189,6 @@ export default function CodepointPage({ codepoint }: { codepoint: number }) {
     if (value === "Y") {
       const text = getDisplayText(`property.${prop}`);
       if (text !== "") {
-        console.log(text);
         yesValues.push(<Tag key={prop}>{text}</Tag>);
       }
     }

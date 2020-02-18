@@ -39,7 +39,6 @@ export default function EmojiZwj(props: {}) {
   for (const sequence of result.data.zwjSequences) {
     if (sequence.specifier.type === "sequence") {
       const codepoints = sequence.specifier.codepoints;
-      console.log(codepoints);
       const text = String.fromCodePoint(...codepoints);
 
       sequences.push({
