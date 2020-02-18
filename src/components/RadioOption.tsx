@@ -3,7 +3,7 @@ import React from "react";
 export type Props = {
   value: string;
   checked?: boolean;
-  onClick?: (event: React.MouseEvent<HTMLInputElement, MouseEvent>) => void;
+  onClick?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   title?: string;
   children: React.ReactNode;
 };
@@ -16,7 +16,7 @@ export default function RadioOption(props: Props) {
         type="radio"
         value={props.value}
         checked={props.checked}
-        onClick={props.onClick}
+        onChange={props.onClick}
       />
       <label htmlFor={props.value} title={props.title}>
         {props.children}

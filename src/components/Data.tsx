@@ -30,7 +30,7 @@ export default class Data extends Component<Props> {
 
     const legends = ["", "Codeunit", "Codepoint", "Grapheme Cluster"];
     cells.push(
-      <React.Fragment>
+      <React.Fragment key={-1}>
         {legends.map((legend, index) => (
           <div
             className="Data-cell Data-heading"

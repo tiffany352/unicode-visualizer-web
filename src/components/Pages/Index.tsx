@@ -67,13 +67,13 @@ export default function Index(_props: {}) {
 
         <h3>Example queries</h3>
         <ul>
-          {examples.map(({ string, description }) => {
+          {examples.map(({ string, description }, index) => {
             const urlEncoded = StringBlob.stringDecode(
               Encoding.Utf16,
               string
             ).urlEncode();
             return (
-              <li>
+              <li key={index}>
                 {description}:{" "}
                 <Link to={`/inspect/${urlEncoded}`}>{string}</Link>
               </li>

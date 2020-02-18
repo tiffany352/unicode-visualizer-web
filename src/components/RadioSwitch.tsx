@@ -14,9 +14,10 @@ export default class RadioSwitch extends React.Component<Props> {
   render() {
     return (
       <div className="RadioSwitch">
-        {this.props.children.map(option => {
+        {this.props.children.map((option, index) => {
           if (React.isValidElement(option)) {
             return React.cloneElement(option, {
+              key: index,
               onClick: () => this.selectItem(option.props.value),
               checked:
                 option.props.checked || option.props.value === this.props.value
