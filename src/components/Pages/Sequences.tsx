@@ -2,7 +2,8 @@ import React from "react";
 import { decimalToHex } from "../../Util";
 import Table from "../Table";
 import StringBlob, { Encoding } from "../../StringBlob";
-import useUnicodeData, { Status } from "../../useUnicodeData";
+import useAsync, { Status } from "../../useAsync";
+import { fetchCompressedDatabase } from "../../Unicode";
 
 function createUrl(text: string) {
   const blob = StringBlob.stringDecode(Encoding.Utf16, text).urlEncode();
@@ -10,7 +11,10 @@ function createUrl(text: string) {
 }
 
 export default function Sequences(props: {}) {
-  const result = useUnicodeData(database => database.getSequenceInfo());
+  const result = useAsync(async () => {
+    const database = await fetchCompressedDatabase();
+    return database.getSequenceInfo();
+  });
 
   let content;
   switch (result.status) {

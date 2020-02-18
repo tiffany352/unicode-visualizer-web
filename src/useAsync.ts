@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Unicode, { fetchCompressedDatabase } from "./Unicode";
 
 export enum Status {
   Loading,
@@ -20,18 +19,14 @@ export type Result<T> =
       message: string;
     };
 
-export default function useUnicodeData<T>(
-  func: (database: Unicode) => T
-): Result<T> {
-  const initial: Result<T> = {
+export default function useAsync<T>(func: () => Promise<T>): Result<T> {
+  const [state, setState] = useState<Result<T>>({
     status: Status.Loading
-  };
-  const [state, setState]: [any, any] = useState(initial);
+  });
   useEffect(() => {
     async function fetch() {
       try {
-        const database = await fetchCompressedDatabase();
-        const data = func(database);
+        const data = await func();
         setState({
           status: Status.Loaded,
           data

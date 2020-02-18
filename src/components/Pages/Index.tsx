@@ -57,6 +57,12 @@ export default function Index(_props: {}) {
           <li>
             <Link to="/browse/sequences">Named sequences</Link>
           </li>
+          <li>
+            <Link to="/browse/emoji-sequences">Emoji Sequences</Link>
+          </li>
+          <li>
+            <Link to="/browse/emoji-zwj">Emoji ZWJ Sequences</Link>
+          </li>
         </ul>
 
         <h3>Example queries</h3>

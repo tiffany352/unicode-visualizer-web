@@ -2,14 +2,16 @@ import React from "react";
 import { displayUnicode, decimalToHex, codepointString } from "../../Util";
 import { RouteComponentProps } from "react-router-dom";
 import Table from "../Table";
-import useUnicodeData, { Status } from "../../useUnicodeData";
+import useAsync, { Status } from "../../useAsync";
+import { fetchCompressedDatabase } from "../../Unicode";
 
 type Props = {
   blockName: string;
 };
 
 function BlockInfo(props: Props) {
-  const result = useUnicodeData(database => {
+  const result = useAsync(async () => {
+    const database = await fetchCompressedDatabase();
     const block = database.getBlockInfo(props.blockName);
 
     if (!block) {

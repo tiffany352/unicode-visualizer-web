@@ -1,10 +1,14 @@
 import React from "react";
 import { displayUnicode, urlSlugNormalize } from "../../Util";
 import Table from "../Table";
-import useUnicodeData, { Status } from "../../useUnicodeData";
+import useAsync, { Status } from "../../useAsync";
+import { fetchCompressedDatabase } from "../../Unicode";
 
 export default function BlockList(props: {}) {
-  const result = useUnicodeData(database => database.getBlockList());
+  const result = useAsync(async () => {
+    const database = await fetchCompressedDatabase();
+    return database.getBlockList();
+  });
 
   let content;
   switch (result.status) {

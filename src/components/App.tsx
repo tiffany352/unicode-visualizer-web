@@ -18,6 +18,8 @@ import Codepoint from "./Pages/Codepoint";
 import BlockList from "./Pages/BlockList";
 import BlockInfo from "./Pages/BlockInfo";
 import Sequences from "./Pages/Sequences";
+import EmojiZwj from "./Pages/EmojiZwj";
+import Emoji from "./Pages/Emoji";
 
 function NotFound(props: RouteComponentProps) {
   return (
@@ -49,6 +51,8 @@ class App extends Component {
             <Route path="/codepoint/u+:code" component={Codepoint} />
             <Route path="/browse/blocks" component={BlockList} />
             <Route path="/browse/sequences" component={Sequences} />
+            <Route path="/browse/emoji-sequences" component={Emoji} />
+            <Route path="/browse/emoji-zwj" component={EmojiZwj} />
             <Route path="/block/:blockName" component={BlockInfo} />
             <Route component={NotFound} />
           </Switch>

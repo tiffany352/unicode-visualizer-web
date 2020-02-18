@@ -11,7 +11,8 @@ import { getDisplayText } from "../Strings";
 import { Tag, TagList } from "./Tag";
 import { Link } from "react-router-dom";
 import StringBlob, { Encoding } from "../StringBlob";
-import useUnicodeData, { Status } from "../useUnicodeData";
+import useAsync, { Status } from "../useAsync";
+import { fetchCompressedDatabase } from "../Unicode";
 
 function renderBoxes(data: Iterable<number>, padding: number) {
   const array = Array.from(data);
@@ -78,8 +79,38 @@ function normalForm(input: number, form: string) {
   return "";
 }
 
-function CodepointPageInner({ codepoint }: { codepoint: number }) {
-  const result = useUnicodeData(database => {
+export default function CodepointPage({ codepoint }: { codepoint: number }) {
+  const result = useAsync(async () => {
+    let error = null;
+    if (codepoint < 0) {
+      error = "Negative values are not valid Unicode codepoints";
+    } else if (codepoint > 0x10ffff) {
+      error = "Values above U+10FFFF are not valid Unicode codepoints";
+    } else if (codepoint >= 0xe000 && codepoint <= 0xf8ff) {
+      error =
+        "Codepoint belongs to the Private Use Area (Basic Multilingual Plane)";
+    } else if (codepoint >= 0xf0000 && codepoint <= 0xffffd) {
+      error = "Codepoint belongs to Supplementary Private Use Area-A";
+    } else if (codepoint >= 0x100000 && codepoint <= 0x10fffd) {
+      error = "Codepoint belongs to Supplementary Private Use Area-B";
+    } else if (
+      codepoint % 0x10000 === 0xfffe ||
+      codepoint % 0x10000 === 0xffff ||
+      (codepoint >= 0xfdd0 && codepoint <= 0xfdef)
+    ) {
+      error =
+        'Codepoint is "permanently reserved for internal use" according to Corrigendum #9';
+    } else if (codepoint >= 0xd800 && codepoint <= 0xdbff) {
+      error = "UTF-16 high surrogate value, not a valid Unicode codepoint";
+    } else if (codepoint >= 0xdc00 && codepoint <= 0xdfff) {
+      error = "UTF-16 low surrogate value, not a valid Unicode codepoint";
+    }
+
+    if (error) {
+      throw new Error(error);
+    }
+
+    const database = await fetchCompressedDatabase();
     const data = database.getCodepoint(codepoint);
     if (!data) {
       throw new Error("No data found in Unicode Character Database");
@@ -191,43 +222,4 @@ function CodepointPageInner({ codepoint }: { codepoint: number }) {
       </dl>
     </div>
   );
-}
-
-export default function CodepointPage({ codepoint }: { codepoint: number }) {
-  let error = null;
-  if (codepoint < 0) {
-    error = "Negative values are not valid Unicode codepoints";
-  } else if (codepoint > 0x10ffff) {
-    error = "Values above U+10FFFF are not valid Unicode codepoints";
-  } else if (codepoint >= 0xe000 && codepoint <= 0xf8ff) {
-    error =
-      "Codepoint belongs to the Private Use Area (Basic Multilingual Plane)";
-  } else if (codepoint >= 0xf0000 && codepoint <= 0xffffd) {
-    error = "Codepoint belongs to Supplementary Private Use Area-A";
-  } else if (codepoint >= 0x100000 && codepoint <= 0x10fffd) {
-    error = "Codepoint belongs to Supplementary Private Use Area-B";
-  } else if (
-    codepoint % 0x10000 === 0xfffe ||
-    codepoint % 0x10000 === 0xffff ||
-    (codepoint >= 0xfdd0 && codepoint <= 0xfdef)
-  ) {
-    error =
-      'Codepoint is "permanently reserved for internal use" according to Corrigendum #9';
-  } else if (codepoint >= 0xd800 && codepoint <= 0xdbff) {
-    error = "UTF-16 high surrogate value, not a valid Unicode codepoint";
-  } else if (codepoint >= 0xdc00 && codepoint <= 0xdfff) {
-    error = "UTF-16 low surrogate value, not a valid Unicode codepoint";
-  }
-
-  if (error) {
-    return (
-      <div className="CodepointPage-container">
-        <h1>U+{decimalToHex(codepoint, 4)}</h1>
-        <p className="CodepointPage-display">{codepointString(codepoint)}</p>
-        <h1>{error}</h1>
-      </div>
-    );
-  }
-
-  return <CodepointPageInner codepoint={codepoint} />;
 }
