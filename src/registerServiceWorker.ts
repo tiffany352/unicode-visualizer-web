@@ -18,14 +18,27 @@ const isLocalhost = Boolean(
     )
 );
 
+export enum Status {
+  Ready,
+  Registered,
+  Installing,
+  UpdateReady,
+  AvailableOffline,
+  Error
+}
+
+export let currentStatus = Status.Ready;
+export const statusUpdated = new EventTarget();
+
 export default function register() {
   if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
     // The URL constructor is available in all browsers that support SW.
-    const publicUrl = new URL(process.env.PUBLIC_URL, window.location);
+    const publicUrl = new URL(process.env.PUBLIC_URL, window.location + "");
     if (publicUrl.origin !== window.location.origin) {
       // Our service worker won't work if PUBLIC_URL is on a different origin
       // from what our page is served on. This might happen if a CDN is used to
       // serve assets; see https://github.com/facebookincubator/create-react-app/issues/2374
+      console.log("Origin mismatch");
       return;
     }
 
@@ -33,6 +46,7 @@ export default function register() {
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
 
       if (isLocalhost) {
+        console.log("Running on localhost");
         // This is running on localhost. Lets check if a service worker still exists or not.
         checkValidServiceWorker(swUrl);
 
@@ -49,46 +63,81 @@ export default function register() {
         registerValidSW(swUrl);
       }
     });
+  } else {
+    console.log("Not registering service worker");
   }
 }
 
-function registerValidSW(swUrl) {
+const statusMap = {
+  installing: Status.Installing,
+  installed: Status.Registered,
+  activating: Status.Registered,
+  activated: Status.Registered,
+  redundant: Status.Error
+};
+
+function registerValidSW(swUrl: string) {
+  console.log("registerValidSW", swUrl);
   navigator.serviceWorker
     .register(swUrl)
     .then(registration => {
+      currentStatus = Status.Registered;
+      statusUpdated.dispatchEvent(new Event("StatusUpdated"));
+      console.log("Registered new service worker");
+
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
-        installingWorker.onstatechange = () => {
-          if (installingWorker.state === "installed") {
-            if (navigator.serviceWorker.controller) {
-              // At this point, the old content will have been purged and
-              // the fresh content will have been added to the cache.
-              // It's the perfect time to display a "New content is
-              // available; please refresh." message in your web app.
-              console.log("New content is available; please refresh.");
-            } else {
-              // At this point, everything has been precached.
-              // It's the perfect time to display a
-              // "Content is cached for offline use." message.
-              console.log("Content is cached for offline use.");
+        if (installingWorker !== null) {
+          currentStatus = statusMap[installingWorker.state];
+          statusUpdated.dispatchEvent(new Event("StatusUpdated"));
+
+          installingWorker.onstatechange = () => {
+            currentStatus = statusMap[installingWorker.state];
+            statusUpdated.dispatchEvent(new Event("StatusUpdated"));
+            console.log(
+              "installingWorker changed state",
+              installingWorker.state
+            );
+
+            if (installingWorker.state === "installed") {
+              if (navigator.serviceWorker.controller) {
+                // At this point, the old content will have been purged and
+                // the fresh content will have been added to the cache.
+                // It's the perfect time to display a "New content is
+                // available; please refresh." message in your web app.
+                currentStatus = Status.UpdateReady;
+                statusUpdated.dispatchEvent(new Event("StatusUpdated"));
+                console.log("New content is available; please refresh.");
+              } else {
+                // At this point, everything has been precached.
+                // It's the perfect time to display a
+                // "Content is cached for offline use." message.
+                currentStatus = Status.AvailableOffline;
+                statusUpdated.dispatchEvent(new Event("StatusUpdated"));
+                console.log("Content is cached for offline use.");
+              }
             }
-          }
-        };
+          };
+        }
       };
     })
     .catch(error => {
+      currentStatus = Status.Error;
+      statusUpdated.dispatchEvent(new Event("StatusUpdated"));
       console.error("Error during service worker registration:", error);
     });
 }
 
-function checkValidServiceWorker(swUrl) {
+function checkValidServiceWorker(swUrl: string) {
   // Check if the service worker can be found. If it can't reload the page.
   fetch(swUrl)
     .then(response => {
       // Ensure service worker exists, and that we really are getting a JS file.
+      const contentType = response.headers.get("content-type");
       if (
         response.status === 404 ||
-        response.headers.get("content-type").indexOf("javascript") === -1
+        contentType === null ||
+        contentType.indexOf("javascript") === -1
       ) {
         // No service worker found. Probably a different app. Reload the page.
         navigator.serviceWorker.ready.then(registration => {

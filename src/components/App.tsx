@@ -20,6 +20,7 @@ import BlockInfo from "./Pages/BlockInfo";
 import Sequences from "./Pages/Sequences";
 import EmojiZwj from "./Pages/EmojiZwj";
 import Emoji from "./Pages/Emoji";
+import ServiceWorkerStatus from "./ServiceWorkerStatus";
 
 function NotFound(props: RouteComponentProps) {
   return (
@@ -44,6 +45,7 @@ class App extends Component {
               Home
             </Link>
             <Input />
+            <ServiceWorkerStatus />
           </div>
           <Switch>
             <Route path="/" exact component={Index} />
