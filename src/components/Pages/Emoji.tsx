@@ -48,22 +48,23 @@ export default function Emoji(props: {}) {
         link: createUrl(text),
         contents: [
           text,
-          sequence.fields[1],
-          <code>
-            {codepoints.map(code => decimalToHex(code, 4)).join(" ")}
-          </code>,
-          sequence.fields[0].replace(/_/g, " ")
+          <>
+            {sequence.fields[1]}
+            <br />
+            <sub>{sequence.fields[0].replace(/_/g, " ")}</sub>
+          </>,
+          <code>{codepoints.map(code => decimalToHex(code, 4)).join(" ")}</code>
         ]
       });
     }
   }
 
-  const headings = ["Text", "Name", "Codepoints", "Type"];
+  const headings = ["Text", "Name", "Codepoints"];
   return (
     <div className="App-content">
       <div className="App-contentContainer">
         <h2>Browse Emoji Sequences</h2>
-        <Table columns="6em 3fr 1fr 1fr" headings={headings} rows={sequences} />
+        <Table columns="1fr 8fr 2fr" headings={headings} rows={sequences} />
       </div>
     </div>
   );

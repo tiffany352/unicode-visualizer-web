@@ -37,7 +37,7 @@ export default function Sequences(props: {}) {
       }));
       const headings = ["Text", "Name", "Codepoints"];
       content = (
-        <Table columns="6em 3fr 1fr" headings={headings} rows={sequences} />
+        <Table columns="1fr 8fr 2fr" headings={headings} rows={sequences} />
       );
       break;
     }

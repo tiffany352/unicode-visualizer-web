@@ -1,4 +1,5 @@
 .Table {
+  width: 100%;
   display: grid;
   background-color: rgb(153, 153, 153);
   padding: 1px;
@@ -30,4 +31,10 @@ a.Table-row:hover > .Table-cell {
 .Table-cell {
   padding: 10px;
   background-color: white;
+}
+
+@media (max-width: 800px) {
+  .Table-cell {
+    padding: 5px;
+  }
 }

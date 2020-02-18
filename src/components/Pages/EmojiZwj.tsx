@@ -57,7 +57,7 @@ export default function EmojiZwj(props: {}) {
     <div className="App-content">
       <div className="App-contentContainer">
         <h2>Browse Emoji ZWJ Sequences</h2>
-        <Table columns="6em 3fr 1fr" headings={headings} rows={sequences} />
+        <Table columns="1fr 8fr 3fr" headings={headings} rows={sequences} />
       </div>
     </div>
   );

@@ -29,7 +29,7 @@ export default function BlockList(props: {}) {
       }));
       const headings = ["Name", "Start", "End"];
       content = (
-        <Table columns="1fr 8em 8em" headings={headings} rows={blocks} />
+        <Table columns="8fr 1fr 1fr" headings={headings} rows={blocks} />
       );
       break;
     }

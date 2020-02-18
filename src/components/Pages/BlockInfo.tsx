@@ -44,7 +44,7 @@ function BlockInfo(props: Props) {
       if (codepoints.length > 0) {
         const headings = ["Codepoint", "Char", "Name"];
         list = (
-          <Table columns="8em 5em 1fr" headings={headings} rows={codepoints} />
+          <Table columns="1fr 1fr 8fr" headings={headings} rows={codepoints} />
         );
       } else {
         list = <h3>No codepoints found in this block.</h3>;
