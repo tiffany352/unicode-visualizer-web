@@ -31,7 +31,7 @@ export default function Table<L extends number>(props: TableProps<L>) {
         ));
         if (row.link) {
           return (
-            <Link to={row.link} className="Table-row">
+            <Link key={index} to={row.link} className="Table-row">
               {cells}
             </Link>
           );
