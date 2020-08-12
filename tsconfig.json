@@ -7,6 +7,7 @@
 		"target": "es6",
 		"lib": ["es5", "es6", "dom"],
 		"allowSyntheticDefaultImports": true,
+		"baseUrl": "src",
 		"strict": true
 	},
 	"include": ["./src/**/*.ts"]
