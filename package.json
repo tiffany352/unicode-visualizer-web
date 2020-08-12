@@ -8,7 +8,7 @@
     "utf-8",
     "tool"
   ],
-  "homepage": "https://tiffnix.com/unicode/",
+  "homepage": "https://unicode.link/",
   "license": "MPL-2.0",
   "repository": "github:tiffany352/unicode-visualizer-web",
   "dependencies": {
