@@ -1,0 +1,7 @@
+[*.{js,ts,svelte,json,html,css,svg}]
+indent_size = 2
+indent_style = tab
+
+[.prettierrc]
+indent_size = 2
+indent_style = tab
