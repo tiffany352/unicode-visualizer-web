@@ -8,22 +8,32 @@
 	}
 
 	function codepoint(value: number): string {
-		return (value || 0).toString(16).padStart(4, "0").toUpperCase();
+		return "U+" + (value || 0).toString(16).padStart(4, "0").toUpperCase();
 	}
 </script>
 
 <script lang="typescript">
-	export let blocks: Block[];
+	export let blocks: BlockInfo[];
 </script>
+
+<style>
+	.table {
+		grid-template-columns: 1fr min-content min-content;
+	}
+</style>
 
 <h1>Browse Unicode Blocks</h1>
 
-<ul>
+<div class="table">
 	{#each blocks as block}
-		<li>
-			<a href="browse/block/{block.slug}">
-				{block.name} ({codepoint(block.first)}..{codepoint(block.last)})
-			</a>
-		</li>
+		<a href="browse/block/{block.slug}">
+			<div>{block.name}</div>
+			<div>
+				<code>{codepoint(block.first)}</code>
+			</div>
+			<div>
+				<code>{codepoint(block.last)}</code>
+			</div>
+		</a>
 	{/each}
-</ul>
+</div>

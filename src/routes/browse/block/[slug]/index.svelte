@@ -3,6 +3,7 @@
 		BlockInfo,
 		CodepointListing,
 	} from "../../../../server/UnicodeXml";
+	import { getDisplayText } from "../../../../strings/index.ts";
 
 	export async function preload(this: any, page: any, session: any) {
 		const { slug } = page.params;
@@ -22,16 +23,39 @@
 	export let block: BlockInfo & CodepointListing;
 </script>
 
+<style>
+	.table {
+		grid-template-columns: 3em min-content 1fr;
+	}
+
+	.char {
+		font-size: 1.2em;
+		text-align: center;
+	}
+</style>
+
 <h1>{block.name}</h1>
 
-<ul>
+<div class="table">
 	{#each block.codepoints as char}
-		<li>
-			{#if char.type == 'char'}
-				<a href="browse/codepoint/{char.slug}">
-					{char.text} U+{char.codepointStr} {char.name}
-				</a>
-			{:else}Invalid: {char.reason}{/if}
-		</li>
+		{#if char.type == 'char'}
+			<a href="browse/codepoint/{char.slug}">
+				<div class="char">
+					<span>{char.text}</span>
+				</div>
+				<div>
+					<code>U+{char.codepointStr}</code>
+				</div>
+				<div>
+					<span>{char.name}</span>
+				</div>
+			</a>
+		{:else}
+			<div>N/A</div>
+			<div>
+				<code>0x{char.codepoint}</code>
+			</div>
+			<div>{getDisplayText(char.reason)}</div>
+		{/if}
 	{/each}
-</ul>
+</div>

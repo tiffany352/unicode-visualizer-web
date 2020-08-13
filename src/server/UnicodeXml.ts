@@ -23,17 +23,18 @@ export interface Char {
 }
 
 export type InvalidReason =
-	| "negative"
-	| "too-large"
-	| "private-use"
-	| "private-use-sup-a"
-	| "private-use-sup-b"
-	| "reserved"
-	| "surrogate-high"
-	| "surrogate-low";
+	| "invalidCodepoint.negative"
+	| "invalidCodepoint.too-large"
+	| "invalidCodepoint.private-use"
+	| "invalidCodepoint.private-use-sup-a"
+	| "invalidCodepoint.private-use-sup-b"
+	| "invalidCodepoint.reserved"
+	| "invalidCodepoint.surrogate-high"
+	| "invalidCodepoint.surrogate-low";
 
 export interface InvalidChar {
 	type: "invalid";
+	codepoint: number;
 	reason: InvalidReason;
 }
 
@@ -89,10 +90,12 @@ export function getDescription(): string {
 function parseEntry(entry: CharSet, codepoint: number): Char {
 	const attrs = { ...entry.group, ...entry.attrs };
 	const age = attrs["age"] || "undefined";
-	const name = (attrs["na1"] || attrs["na"] || "").replace(
-		"#",
-		codepoint.toString(16).padStart(4, "0")
-	);
+	const name = (attrs["na1"] || attrs["na"] || "")
+		.replace("#", codepoint.toString(16).padStart(4, "0"))
+		.replace(
+			/([A-Z])([A-Z]+)/g,
+			(group, first, rest) => first + rest.toLowerCase()
+		);
 	const aliases = entry.aliases || [];
 	const category = attrs["gc"] || "None";
 	const codepointStr = codepoint.toString(16).toUpperCase().padStart(4, "0");
@@ -125,30 +128,31 @@ function parseEntry(entry: CharSet, codepoint: number): Char {
 export function lookupChar(codepoint: number): Char | InvalidChar | null {
 	let reason: InvalidReason | null = null;
 	if (codepoint < 0) {
-		reason = "negative";
+		reason = "invalidCodepoint.negative";
 	} else if (codepoint > 0x10ffff) {
-		reason = "too-large";
+		reason = "invalidCodepoint.too-large";
 	} else if (codepoint >= 0xe000 && codepoint <= 0xf8ff) {
-		reason = "private-use";
+		reason = "invalidCodepoint.private-use";
 	} else if (codepoint >= 0xf0000 && codepoint <= 0xffffd) {
-		reason = "private-use-sup-a";
+		reason = "invalidCodepoint.private-use-sup-a";
 	} else if (codepoint >= 0x100000 && codepoint <= 0x10fffd) {
-		reason = "private-use-sup-b";
+		reason = "invalidCodepoint.private-use-sup-b";
 	} else if (
 		codepoint % 0x10000 === 0xfffe ||
 		codepoint % 0x10000 === 0xffff ||
 		(codepoint >= 0xfdd0 && codepoint <= 0xfdef)
 	) {
-		reason = "reserved";
+		reason = "invalidCodepoint.reserved";
 	} else if (codepoint >= 0xd800 && codepoint <= 0xdbff) {
-		reason = "surrogate-high";
+		reason = "invalidCodepoint.surrogate-high";
 	} else if (codepoint >= 0xdc00 && codepoint <= 0xdfff) {
-		reason = "surrogate-low";
+		reason = "invalidCodepoint.surrogate-low";
 	}
 
 	if (reason) {
 		return {
 			type: "invalid",
+			codepoint,
 			reason,
 		};
 	}
