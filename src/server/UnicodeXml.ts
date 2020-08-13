@@ -7,22 +7,75 @@ import {
 	NameAlias,
 } from "./UnicodeParser";
 
-const file = fs.readFileSync("data/ucd.all.grouped.xml");
+// Types
 
 export interface Char {
 	type: "char";
 	codepoint: number;
+	codepointStr: string;
+	text: string;
 	age: string;
 	name: string;
+	slug: string;
 	aliases: NameAlias[];
 	block: string;
 	category: string;
 }
 
+export type InvalidReason =
+	| "negative"
+	| "too-large"
+	| "private-use"
+	| "private-use-sup-a"
+	| "private-use-sup-b"
+	| "reserved"
+	| "surrogate-high"
+	| "surrogate-low";
+
+export interface InvalidChar {
+	type: "invalid";
+	reason: InvalidReason;
+}
+
+export type CharInfo = Char | InvalidChar;
+
+export interface BlockInfo extends Block {
+	slug: string;
+}
+
+// Data processing
+
+const file = fs.readFileSync("data/ucd.all.grouped.xml");
 const result = UnicodeParser.parse(file);
 
-export function getBlocks(): Block[] {
-	return result.blocks;
+const blocks = result.blocks.map((block) => ({
+	...block,
+	slug: block.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+}));
+
+// Getters
+
+export function getBlocks(): BlockInfo[] {
+	return blocks;
+}
+
+export function getBlockFromSlug(slug: string): BlockInfo | null {
+	return blocks.find((block) => block.slug === slug) || null;
+}
+
+export interface CodepointListing {
+	codepoints: CharInfo[];
+}
+
+export function getCodepointsInBlock(block: Block): CodepointListing {
+	const codepoints = [];
+	for (let i = block.first; i <= block.last; i++) {
+		const result = lookupChar(i);
+		if (result) {
+			codepoints.push(result);
+		}
+	}
+	return { codepoints };
 }
 
 export function getSequences(): NamedSequence[] {
@@ -42,6 +95,10 @@ function parseEntry(entry: CharSet, codepoint: number): Char {
 	);
 	const aliases = entry.aliases || [];
 	const category = attrs["gc"] || "None";
+	const codepointStr = codepoint.toString(16).toUpperCase().padStart(4, "0");
+	const slugName = name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+	const slug = `${codepointStr}-${slugName}`;
+	const text = String.fromCodePoint(codepoint);
 
 	let block = attrs["blk"] || "None";
 	for (const blockEntry of result.blocks) {
@@ -51,22 +108,18 @@ function parseEntry(entry: CharSet, codepoint: number): Char {
 		}
 	}
 
-	return { type: "char", codepoint, age, name, aliases, block, category };
-}
-
-export type InvalidReason =
-	| "negative"
-	| "too-large"
-	| "private-use"
-	| "private-use-sup-a"
-	| "private-use-sup-b"
-	| "reserved"
-	| "surrogate-high"
-	| "surrogate-low";
-
-export interface InvalidChar {
-	type: "invalid";
-	reason: InvalidReason;
+	return {
+		type: "char",
+		codepoint,
+		age,
+		name,
+		aliases,
+		block,
+		category,
+		codepointStr,
+		slug,
+		text,
+	};
 }
 
 export function lookupChar(codepoint: number): Char | InvalidChar | null {

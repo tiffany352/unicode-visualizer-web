@@ -1,14 +1,10 @@
 <script lang="typescript" context="module">
-	import type { Block } from "../../server/UnicodeParser";
+	import type { BlockInfo } from "../../server/UnicodeXml";
 
 	export async function preload(this: any, page: any, session: any) {
 		const response: Response = await this.fetch("browse/blocks.json");
-		const blocks: Block[] = await response.json();
+		const blocks: BlockInfo[] = await response.json();
 		return { blocks };
-	}
-
-	function createSlug(name: string) {
-		return name.replace(" ", "-").toLowerCase();
 	}
 
 	function codepoint(value: number): string {
@@ -25,7 +21,7 @@
 <ul>
 	{#each blocks as block}
 		<li>
-			<a href="browse/block/{createSlug(block.name)}">
+			<a href="browse/block/{block.slug}">
 				{block.name} ({codepoint(block.first)}..{codepoint(block.last)})
 			</a>
 		</li>
