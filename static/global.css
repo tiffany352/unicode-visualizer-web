@@ -39,6 +39,10 @@ code {
 	border-radius: 4px;
 }
 
+.mono {
+	font-family: var(--mono-font);
+}
+
 .table {
 	display: grid;
 	border-left: 1px solid rgb(200, 200, 200);

@@ -35,6 +35,7 @@ export type InvalidReason =
 export interface InvalidChar {
 	type: "invalid";
 	codepoint: number;
+	codepointStr: string;
 	reason: InvalidReason;
 }
 
@@ -150,9 +151,11 @@ export function lookupChar(codepoint: number): Char | InvalidChar | null {
 	}
 
 	if (reason) {
+		const codepointStr = codepoint.toString(16).toUpperCase().padStart(4, "0");
 		return {
 			type: "invalid",
 			codepoint,
+			codepointStr,
 			reason,
 		};
 	}

@@ -1,15 +1,10 @@
 <script lang="typescript" context="module">
-	import type {
-		BlockInfo,
-		CodepointListing,
-	} from "../../../server/UnicodeXml";
+	import type { BlockInfo, CodepointListing } from "../../../server/UnicodeXml";
 	import { getDisplayText } from "../../../strings/index.ts";
 
 	export async function preload(this: any, page: any, session: any) {
 		const { slug } = page.params;
-		const response: Response = await this.fetch(
-			`blocks/${slug}/data.json`
-		);
+		const response: Response = await this.fetch(`blocks/${slug}/data.json`);
 		if (response.status == 200) {
 			const block: BlockInfo & CodepointListing = await response.json();
 			return { block };
@@ -39,7 +34,7 @@
 <div class="table">
 	{#each block.codepoints as char}
 		{#if char.type == 'char'}
-			<a href="browse/codepoint/{char.slug}">
+			<a href="codepoint/{char.slug}">
 				<div class="char">
 					<span>{char.text}</span>
 				</div>
@@ -53,7 +48,7 @@
 		{:else}
 			<div>N/A</div>
 			<div>
-				<code>0x{char.codepoint}</code>
+				<code>0x{char.codepointStr}</code>
 			</div>
 			<div>{getDisplayText(char.reason)}</div>
 		{/if}
