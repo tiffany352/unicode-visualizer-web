@@ -63,8 +63,8 @@
 			</a>
 		</li>
 		<li>
-			<a aria-current={segment === 'browse' ? 'page' : undefined} href="browse">
-				Browse
+			<a aria-current={segment === 'blocks' ? 'page' : undefined} href="blocks">
+				Blocks
 			</a>
 		</li>
 	</ul>
