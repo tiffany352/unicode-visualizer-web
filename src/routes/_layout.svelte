@@ -1,7 +1,21 @@
-<script>
-	import Nav from '../components/Nav.svelte';
+<script lang="typescript" context="module">
+	export async function preload(this: any, page: any, session: any) {
+		const response: Response = await this.fetch(`version.json`);
+		if (response.status == 200) {
+			const json = await response.json();
+			const version = json.version;
+			return { version };
+		} else {
+			this.error(500, "Unable to fetch version string");
+		}
+	}
+</script>
 
-	export let segment;
+<script lang="typescript">
+	import Nav from "../components/Nav.svelte";
+
+	export let segment: string;
+	export let version: string;
 </script>
 
 <style>
@@ -13,10 +27,19 @@
 		margin: 0 auto;
 		box-sizing: border-box;
 	}
+
+	hr {
+		border: none;
+		border-bottom: 1px solid rgb(200, 200, 200);
+	}
 </style>
 
-<Nav {segment}/>
+<Nav {segment} />
 
 <main>
-	<slot></slot>
+	<slot />
+
+	<hr />
+
+	<span>Data sourced from {version}.</span>
 </main>

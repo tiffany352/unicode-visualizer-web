@@ -1,5 +1,5 @@
-<script>
-	export let segment;
+<script lang="typescript">
+	export let segment: string;
 </script>
 
 <style>
