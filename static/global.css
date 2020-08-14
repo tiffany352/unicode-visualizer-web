@@ -59,3 +59,9 @@ code {
 	border-bottom: 1px solid rgb(200, 200, 200);
 	padding: 0.3em;
 }
+
+.table ul {
+	margin: 0;
+	padding: 0;
+	list-style: inside circle;
+}

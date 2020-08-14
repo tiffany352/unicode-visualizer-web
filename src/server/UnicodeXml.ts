@@ -88,20 +88,33 @@ export function getDescription(): string {
 	return result.description;
 }
 
+function findBestAlias(aliases: NameAlias[]): string {
+	if (!aliases || aliases.length < 1) {
+		return "";
+	}
+	const first = aliases.find((alias) => alias.type != "abbreviation");
+	if (first) {
+		return first.alias;
+	}
+	return aliases[0].alias;
+}
+
 function parseEntry(entry: CharSet, codepoint: number): Char {
 	const attrs = { ...entry.group, ...entry.attrs };
 	const age = attrs["age"] || "undefined";
-	const name = (attrs["na1"] || attrs["na"] || "")
+	const aliases = entry.aliases || [];
+	const bestAlias = findBestAlias(aliases);
+	const initName = attrs["na1"] || attrs["na"] || bestAlias || "";
+	const name = initName
 		.replace("#", codepoint.toString(16).padStart(4, "0"))
 		.replace(
 			/([A-Z])([A-Z]+)/g,
 			(group, first, rest) => first + rest.toLowerCase()
 		);
-	const aliases = entry.aliases || [];
 	const category = attrs["gc"] || "None";
 	const codepointStr = codepoint.toString(16).toUpperCase().padStart(4, "0");
 	const slugName = name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-	const slug = `${codepointStr}-${slugName}`;
+	const slug = `${codepointStr}-${slugName || "unicode"}`;
 	const text = String.fromCodePoint(codepoint);
 
 	let block = attrs["blk"] || "None";

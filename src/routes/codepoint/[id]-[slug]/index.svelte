@@ -59,7 +59,11 @@
 		<div>Aliases</div>
 		<div>
 			{#if char.type == 'char' && char.aliases && char.aliases.length > 0}
-				{#each char.aliases as alias}{alias.alias} ({alias.type}){/each}
+				<ul>
+					{#each char.aliases as alias}
+						<li>{alias.alias} ({alias.type})</li>
+					{/each}
+				</ul>
 			{:else}None{/if}
 		</div>
 		<div>Block</div>
