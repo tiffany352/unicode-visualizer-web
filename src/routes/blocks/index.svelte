@@ -2,9 +2,13 @@
 	import type { BlockInfo } from "../../server/UnicodeXml";
 
 	export async function preload(this: any, page: any, session: any) {
-		const response: Response = await this.fetch("browse/blocks.json");
-		const blocks: BlockInfo[] = await response.json();
-		return { blocks };
+		const response: Response = await this.fetch("blocks.json");
+		if (response.status == 200) {
+			const blocks: BlockInfo[] = await response.json();
+			return { blocks };
+		} else {
+			this.error(404, "Couldn't load list of blocks");
+		}
 	}
 
 	function codepoint(value: number): string {
@@ -26,7 +30,7 @@
 
 <div class="table">
 	{#each blocks as block}
-		<a href="browse/block/{block.slug}">
+		<a href="blocks/{block.slug}">
 			<div>{block.name}</div>
 			<div>
 				<code>{codepoint(block.first)}</code>

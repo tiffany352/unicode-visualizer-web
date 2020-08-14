@@ -62,7 +62,7 @@
 <h2>Browse</h2>
 <ul>
 	<li>
-		<a href="browse/blocks">Codepoints by block</a>
+		<a href="blocks">Codepoints by block</a>
 	</li>
 	<li>
 		<a href="browse/sequences">Named sequences</a>
