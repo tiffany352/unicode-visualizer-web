@@ -41,6 +41,10 @@ export interface InvalidChar {
 
 export type CharInfo = Char | InvalidChar;
 
+export type CharMap = {
+	[key: string]: CharInfo;
+};
+
 export interface BlockInfo extends Block {
 	slug: string;
 }
@@ -55,6 +59,17 @@ const blocks = result.blocks.map((block) => ({
 	...block,
 	slug: block.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
 }));
+
+const sequenceList = result.sequences.map((seq) => ({
+	sequence: seq.sequence,
+	name: seq.name.replace(
+		/([A-Z])([A-Z]+)/g,
+		(group, first, rest) => first + rest.toLowerCase()
+	),
+}));
+
+const sequences = new Map(sequenceList.map((value) => [value.sequence, value]));
+
 console.log("Done.");
 
 // Getters
@@ -83,7 +98,11 @@ export function getCodepointsInBlock(block: Block): CodepointListing {
 }
 
 export function getSequences(): NamedSequence[] {
-	return result.sequences;
+	return sequenceList;
+}
+
+export function lookupSequence(text: string): NamedSequence | null {
+	return sequences.get(text) || null;
 }
 
 export function getDescription(): string {

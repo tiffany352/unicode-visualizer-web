@@ -88,7 +88,7 @@ export class UnicodeParser {
 	parseCodeList(input: string | undefined): string {
 		return (input || "")
 			.split(" ")
-			.map((str) => parseInt(str, 16))
+			.map((str) => String.fromCodePoint(parseInt(str, 16)))
 			.join("");
 	}
 

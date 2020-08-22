@@ -28,6 +28,12 @@
 		box-sizing: border-box;
 	}
 
+	@media screen and (max-width: 500px) {
+		main {
+			padding: 0.25em;
+		}
+	}
+
 	hr {
 		border: none;
 		border-bottom: 1px solid rgb(200, 200, 200);
