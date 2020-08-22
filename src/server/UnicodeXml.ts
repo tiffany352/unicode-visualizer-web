@@ -49,6 +49,10 @@ export interface BlockInfo extends Block {
 	slug: string;
 }
 
+export interface SequenceInfo extends NamedSequence {
+	slug: string;
+}
+
 // Data processing
 
 console.log("Parsing UCD XML");
@@ -60,12 +64,13 @@ const blocks = result.blocks.map((block) => ({
 	slug: block.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
 }));
 
-const sequenceList = result.sequences.map((seq) => ({
+const sequenceList: SequenceInfo[] = result.sequences.map((seq) => ({
 	sequence: seq.sequence,
 	name: seq.name.replace(
 		/([A-Z])([A-Z]+)/g,
 		(group, first, rest) => first + rest.toLowerCase()
 	),
+	slug: seq.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
 }));
 
 const sequences = new Map(sequenceList.map((value) => [value.sequence, value]));
@@ -97,12 +102,16 @@ export function getCodepointsInBlock(block: Block): CodepointListing {
 	return { codepoints };
 }
 
-export function getSequences(): NamedSequence[] {
+export function getSequences(): SequenceInfo[] {
 	return sequenceList;
 }
 
-export function lookupSequence(text: string): NamedSequence | null {
+export function lookupSequence(text: string): SequenceInfo | null {
 	return sequences.get(text) || null;
+}
+
+export function lookupSequenceSlug(slug: string): SequenceInfo | null {
+	return sequenceList.find((seq) => seq.slug == slug) || null;
 }
 
 export function getDescription(): string {

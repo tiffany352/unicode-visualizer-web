@@ -70,7 +70,7 @@
 		<a href="blocks">Codepoints by block</a>
 	</li>
 	<li>
-		<a href="browse/sequences">Named sequences</a>
+		<a href="sequences">Named sequences</a>
 	</li>
 	<li>
 		<a href="browse/emoji-sequences">Emoji Sequences</a>

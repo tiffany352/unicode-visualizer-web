@@ -1,8 +1,8 @@
 <script lang="typescript" context="module">
 	export async function preload(this: any, page: any, session: any) {
-		const { input } = page.params;
+		const { slug } = page.params;
 
-		const response: Response = await this.fetch(`inspect/${input}/info.json`, {
+		const response: Response = await this.fetch(`sequences/${slug}/info.json`, {
 			headers: {
 				Accept: "application/json",
 			},
@@ -10,40 +10,43 @@
 
 		if (response.status == 200) {
 			const json = await response.json();
+			const sequence: SequenceInfo = json.sequence;
 			const chars: CharMap = json.codepoints;
 			const sequences: NamedSequence[] = json.sequences;
 			const extra = { chars, sequences };
-			return { input, extra };
+			return { sequence, extra };
+		} else {
+			this.error(response.status, response.statusText);
 		}
-
-		return { input };
 	}
 </script>
 
 <script lang="typescript">
 	import type { NamedSequence } from "server/UnicodeParser";
-	import type { CharMap } from "server/UnicodeXml";
+	import type { CharMap, SequenceInfo } from "server/UnicodeXml";
 	import OpenGraph from "../../../components/OpenGraph.svelte";
 	import Inspector from "../../../components/Inspector/index.svelte";
-	import StringBlob from "model/StringBlob";
+	import StringBlob, { Encoding } from "model/StringBlob";
 
 	interface Extra {
 		chars: CharMap;
 		sequences: NamedSequence[];
 	}
 
-	export let input: string;
-	export let extra: Extra | null = null;
+	export let sequence: SequenceInfo;
+	export let extra: Extra;
 
-	$: string = StringBlob.urlDecode(input);
+	$: string = StringBlob.stringDecode(Encoding.Utf8, sequence.sequence);
 </script>
 
 <svelte:head>
+	<!-- prettier-ignore -->
 	<OpenGraph
-		title="Unicode Visualizer - Inspect String"
-		description="Shows a breakdown of the contents of a given string." />
+		title="{sequence.name} - Sequences - Unicode Visualizer"
+		description="View the breakdown of the {sequence.name} Unicode named sequence."
+		url="/sequences/{sequence.slug}" />
 </svelte:head>
 
-<h1>Inspect</h1>
+<h1>{sequence.name}</h1>
 
 <Inspector {string} {extra} />
