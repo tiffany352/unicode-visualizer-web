@@ -26,6 +26,7 @@
 	import Grapheme from "./_grapheme.svelte";
 	import type { NamedSequence } from "server/UnicodeParser";
 	import type { CharMap } from "server/UnicodeXml";
+	import OpenGraph from "../../../components/OpenGraph.svelte";
 
 	interface Extra {
 		chars: CharMap;
@@ -93,6 +94,12 @@
 		padding: 0.5em;
 	}
 </style>
+
+<svelte:head>
+	<OpenGraph
+		title="Unicode Visualizer - Inspect String"
+		description="Shows a breakdown of the contents of a given string." />
+</svelte:head>
 
 <h1>Inspect</h1>
 

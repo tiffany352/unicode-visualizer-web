@@ -1,5 +1,6 @@
 <script lang="typescript">
 	import StringBlob, { Encoding } from "model/StringBlob";
+	import OpenGraph from "../components/OpenGraph.svelte";
 
 	interface Example {
 		string: string;
@@ -52,6 +53,10 @@
 
 <svelte:head>
 	<title>Unicode Visualizer</title>
+
+	<OpenGraph
+		title="Unicoee Visualizer"
+		description="A tool for working with Unicode" />
 </svelte:head>
 
 <p>

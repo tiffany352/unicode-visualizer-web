@@ -15,6 +15,8 @@
 </script>
 
 <script lang="typescript">
+	import OpenGraph from "../../../components/OpenGraph.svelte";
+
 	export let block: BlockInfo & CodepointListing;
 </script>
 
@@ -28,6 +30,12 @@
 		text-align: center;
 	}
 </style>
+
+<svelte:head>
+	<OpenGraph
+		title="{block.name} - Blocks - Unicode Visualizer"
+		description="View codepoints in the {block.name} Unicode block." />
+</svelte:head>
 
 <h1>{block.name}</h1>
 

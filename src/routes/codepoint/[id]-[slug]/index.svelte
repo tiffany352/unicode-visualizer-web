@@ -1,6 +1,5 @@
 <script lang="typescript" context="module">
 	import type { CharInfo } from "server/UnicodeXml";
-	import { getDisplayText } from "strings";
 
 	export async function preload(this: any, page: any, session: any) {
 		const { id, slug } = page.params;
@@ -20,6 +19,9 @@
 </script>
 
 <script lang="typescript">
+	import OpenGraph from "../../../components/OpenGraph.svelte";
+	import { getDisplayText } from "strings";
+
 	export let char: CharInfo;
 </script>
 
@@ -42,6 +44,22 @@
 		grid-template-columns: min-content 1fr;
 	}
 </style>
+
+<svelte:head>
+	{#if char.type == 'char'}
+		<!-- prettier-ignore -->
+		<OpenGraph
+			title="U+{char.codepointStr} {char.name} - Unicode Visualizer"
+			description="View the properties of U+{char.codepointStr} {char.name}."
+			url="/codepoint/{char.slug}" />
+	{:else}
+		<!-- prettier-ignore -->
+		<OpenGraph
+			title="Invalid codepoint"
+			description="U+{char.codepointStr} does not refer to a valid Unicode codepoint. {getDisplayText(char.reason)}"
+			url="/codepoint/{char.codepointStr}-invalid" />
+	{/if}
+</svelte:head>
 
 {#if char.type == 'char'}
 	<h1>

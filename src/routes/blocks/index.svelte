@@ -17,6 +17,8 @@
 </script>
 
 <script lang="typescript">
+	import OpenGraph from "../../components/OpenGraph.svelte";
+
 	export let blocks: BlockInfo[];
 </script>
 
@@ -25,6 +27,12 @@
 		grid-template-columns: 1fr min-content min-content;
 	}
 </style>
+
+<svelte:head>
+	<OpenGraph
+		title="Blocks - Unicode Visualizer"
+		description="Browse the blocks in Unicode." />
+</svelte:head>
 
 <h1>Browse Unicode Blocks</h1>
 
