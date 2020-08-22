@@ -3,7 +3,7 @@ import replace from "@rollup/plugin-replace";
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import svelte from "rollup-plugin-svelte";
-import typescript from "rollup-plugin-typescript2";
+import typescript from "@rollup/plugin-typescript";
 import preprocess from "svelte-preprocess";
 import { terser } from "rollup-plugin-terser";
 import config from "sapper/config/rollup.js";
@@ -34,14 +34,14 @@ export default {
 				emitCss: true,
 				preprocess: preprocess(),
 			}),
-			json(),
-			typescript(),
 			resolve({
 				preferBuiltins: false,
 				browser: true,
 				dedupe: ["svelte"],
 			}),
 			commonjs(),
+			typescript(),
+			json(),
 
 			!dev &&
 				terser({
@@ -67,13 +67,13 @@ export default {
 				dev,
 				preprocess: preprocess(),
 			}),
-			json(),
-			typescript(),
 			resolve({
 				preferBuiltins: false,
 				dedupe: ["svelte"],
 			}),
 			commonjs(),
+			typescript(),
+			json(),
 		],
 		external: Object.keys(pkg.dependencies).concat(
 			require("module").builtinModules

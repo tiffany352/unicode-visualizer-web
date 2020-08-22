@@ -47,6 +47,7 @@ export interface BlockInfo extends Block {
 
 // Data processing
 
+console.log("Parsing UCD XML");
 const file = fs.readFileSync("data/ucd.all.grouped.xml");
 const result = UnicodeParser.parse(file);
 
@@ -54,6 +55,7 @@ const blocks = result.blocks.map((block) => ({
 	...block,
 	slug: block.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
 }));
+console.log("Done.");
 
 // Getters
 
@@ -104,7 +106,7 @@ function parseEntry(entry: CharSet, codepoint: number): Char {
 	const age = attrs["age"] || "undefined";
 	const aliases = entry.aliases || [];
 	const bestAlias = findBestAlias(aliases);
-	const initName = attrs["na1"] || attrs["na"] || bestAlias || "";
+	const initName: string = attrs["na1"] || attrs["na"] || bestAlias || "";
 	const name = initName
 		.replace("#", codepoint.toString(16).padStart(4, "0"))
 		.replace(

@@ -1,16 +1,10 @@
 {
+	"extends": "@tsconfig/svelte/tsconfig.json",
+
 	"compilerOptions": {
-		"outDir": "./build/",
-		"sourceMap": true,
-		"noImplicitAny": true,
-		"module": "es2015",
-		"target": "es6",
-		"lib": ["es5", "es6", "dom"],
-		"allowSyntheticDefaultImports": true,
 		"baseUrl": "src",
-		"moduleResolution": "node",
 		"resolveJsonModule": true,
 		"strict": true
 	},
-	"include": ["./src/**/*.ts"]
+	"include": ["./src/**/*"]
 }

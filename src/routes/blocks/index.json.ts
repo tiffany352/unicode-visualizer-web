@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { getBlocks } from "../../server/UnicodeXml";
 
 export function get(req: Request, res: Response) {
