@@ -1,6 +1,6 @@
 <script lang="typescript" context="module">
-	import type { BlockInfo, CodepointListing } from "../../../server/UnicodeXml";
-	import { getDisplayText } from "../../../strings/index.ts";
+	import type { BlockInfo, CodepointListing } from "server/UnicodeXml";
+	import { getDisplayText } from "strings";
 
 	export async function preload(this: any, page: any, session: any) {
 		const { slug } = page.params;

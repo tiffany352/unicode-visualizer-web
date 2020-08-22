@@ -1,6 +1,6 @@
 <script lang="typescript" context="module">
-	import type { CharInfo } from "../../../server/UnicodeXml";
-	import { getDisplayText } from "../../../strings/index.ts";
+	import type { CharInfo } from "server/UnicodeXml";
+	import { getDisplayText } from "strings";
 
 	export async function preload(this: any, page: any, session: any) {
 		const { id, slug } = page.params;

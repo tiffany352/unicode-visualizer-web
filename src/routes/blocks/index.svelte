@@ -1,5 +1,5 @@
 <script lang="typescript" context="module">
-	import type { BlockInfo } from "../../server/UnicodeXml";
+	import type { BlockInfo } from "server/UnicodeXml";
 
 	export async function preload(this: any, page: any, session: any) {
 		const response: Response = await this.fetch("blocks.json");

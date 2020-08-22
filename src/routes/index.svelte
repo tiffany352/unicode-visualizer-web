@@ -1,5 +1,5 @@
 <script lang="typescript">
-	import StringBlob, { Encoding } from "../model/StringBlob.ts";
+	import StringBlob, { Encoding } from "model/StringBlob";
 
 	interface Example {
 		string: string;
