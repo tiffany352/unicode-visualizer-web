@@ -51,7 +51,7 @@
 	.inspect {
 		display: grid;
 		grid-template-rows: min-content min-content min-content;
-		overflow-x: scroll;
+		overflow-x: auto;
 		text-align: center;
 		background-color: white;
 	}
@@ -103,7 +103,7 @@
 		class="inspect"
 		style="grid-template-columns: repeat({codeunits.length}, fit-content)">
 		{#each codeunits as codeunit}
-			<div class="codeunit">{codeunit.text}</div>
+			<div class="codeunit" title={codeunit.class}>{codeunit.text}</div>
 		{/each}
 		{#each codepoints as codepoint}
 			<div
