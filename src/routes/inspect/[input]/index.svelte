@@ -68,7 +68,6 @@
 		grid-row: 2;
 		border-left: 1px solid rgb(200, 200, 200);
 		border-right: 1px solid rgb(200, 200, 200);
-		padding: 0.25em;
 	}
 
 	.codepoint[data-invalid="true"] {
