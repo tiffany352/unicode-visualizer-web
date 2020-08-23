@@ -18,7 +18,7 @@ export interface Char {
 	name: string;
 	slug: string;
 	aliases: NameAlias[];
-	block: string;
+	block: BlockInfo;
 	category: string;
 }
 
@@ -292,8 +292,11 @@ function parseEntry(entry: CharEntry, codepoint: number): Char {
 	const slug = `${codepointStr}-${slugName || "unicode"}`;
 	const text = String.fromCodePoint(codepoint);
 
-	const blockEntry = blockTree.get(codepoint);
-	const block = blockEntry ? blockEntry.name : "None";
+	const block = blockTree.get(codepoint) || {
+		name: "None",
+		slug: "",
+		range: new Range(0, 0),
+	};
 	const category = entry.General_Category || "None";
 
 	return {
@@ -355,4 +358,14 @@ export function lookupChar(codepoint: number): Char | InvalidChar | null {
 	}
 
 	return null;
+}
+
+export function getAllNotableChars(): Char[] {
+	const list = [];
+	for (const entry of charList) {
+		if (entry.Codepoint != null && entry.Name.text) {
+			list.push(parseEntry(entry, entry.Codepoint));
+		}
+	}
+	return list;
 }

@@ -20,6 +20,7 @@
 	import type { CharInfo } from "server/Unicode";
 	import OpenGraph from "../../../components/OpenGraph.svelte";
 	import { getDisplayText } from "strings";
+	import type { blocks } from "server/Data";
 
 	export let char: CharInfo;
 </script>
@@ -84,7 +85,9 @@
 			{:else}None{/if}
 		</div>
 		<div>Block</div>
-		<div>{char.block}</div>
+		<div>
+			<a href="blocks/{char.block.slug}">{char.block.name}</a>
+		</div>
 		<div>Category</div>
 		<div>{getDisplayText(`generalCategory.${char.category}`)}</div>
 	</div>

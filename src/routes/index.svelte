@@ -1,6 +1,7 @@
 <script lang="typescript">
 	import StringBlob, { Encoding } from "model/StringBlob";
 	import OpenGraph from "../components/OpenGraph.svelte";
+	import Searchbar from "../components/Searchbar.svelte";
 
 	interface Example {
 		string: string;
@@ -63,6 +64,9 @@
 	This a web tool for inspecting Unicode strings. A naughty string causing a bug
 	in your code? Paste it here and it might help you find out why.
 </p>
+
+<h2>Search</h2>
+<Searchbar />
 
 <h2>Browse</h2>
 <ul>
