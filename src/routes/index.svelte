@@ -53,10 +53,8 @@
 </script>
 
 <svelte:head>
-	<title>Unicode Visualizer</title>
-
 	<OpenGraph
-		title="Unicoee Visualizer"
+		title="Unicode Visualizer"
 		description="A tool for working with Unicode" />
 </svelte:head>
 
