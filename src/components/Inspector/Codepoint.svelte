@@ -1,15 +1,12 @@
 <script lang="typescript">
 	import type { CodepointInfo } from "model/StringBlob";
-	import type { CharMap, CharInfo, SequenceInfo } from "server/Unicode";
+	import type { CharInfo } from "server/Unicode";
 	import { getDisplayText } from "strings";
-
-	interface Extra {
-		chars: CharMap;
-		sequences: SequenceInfo[];
-	}
+	import type { Extra } from "./extra";
 
 	export let codepoint: CodepointInfo;
 	export let extra: Extra | null = null;
+	export let wide: boolean = false;
 
 	function getChar(value: number | null) {
 		if (extra && value) {
@@ -60,6 +57,7 @@
 
 	$: char = getChar(codepoint.value);
 	$: alias = aliasOf(char);
+	$: name = (wide && char && char.name) || null;
 	$: url = createUrl(char);
 	$: tooltip = tooltipOf(char);
 </script>
@@ -82,11 +80,27 @@
 
 	.cell {
 		padding: 0.25em;
+		height: 100%;
+	}
+
+	.wide {
+		padding: 0.25em 0.5em;
+	}
+
+	.wide > .preview {
+		width: 1.8em;
+	}
+
+	.wide > div {
+		display: inline-block;
 	}
 
 	a {
 		text-decoration: none;
 		display: block;
+		width: 100%;
+		height: 100%;
+		box-sizing: border-box;
 	}
 
 	a:hover,
@@ -96,7 +110,7 @@
 </style>
 
 {#if codepoint.value}
-	<a href={url} class="cell" title={tooltip}>
+	<a href={url} class="cell" title={tooltip} class:wide>
 		<div class="preview">
 			{#if alias}
 				<span class="alias">{alias}</span>
@@ -104,10 +118,11 @@
 		</div>
 		<div class="scalar">
 			U+{codepoint.value.toString(16).padStart(4, '0').toUpperCase()}
+			{#if name}{name}{/if}
 		</div>
 	</a>
 {:else}
-	<div class="cell" title={tooltip}>
+	<div class="cell" title={tooltip} class:wide>
 		<div class="preview">�</div>
 		<div class="scalar">Invalid</div>
 	</div>

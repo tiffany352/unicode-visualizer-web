@@ -70,7 +70,7 @@ export type CodepointInfo = {
 	last: number;
 };
 
-export interface Grapheme {
+export interface GraphemeInfo {
 	text: string;
 	first: number;
 	last: number;
@@ -161,7 +161,7 @@ export default class StringBlob {
 		return this.data.getCodepoints();
 	}
 
-	getGraphemes(): Grapheme[] {
+	getGraphemes(): GraphemeInfo[] {
 		const splitter = new GraphemeSplitter();
 		const codepoints = this.getCodepoints();
 

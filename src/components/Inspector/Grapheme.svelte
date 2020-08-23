@@ -1,13 +1,8 @@
 <script lang="typescript">
-	import type { Grapheme } from "model/StringBlob";
-	import type { SequenceInfo, CharMap } from "server/Unicode";
+	import type { GraphemeInfo } from "model/StringBlob";
+	import type { Extra } from "./extra";
 
-	interface Extra {
-		chars: CharMap;
-		sequences: SequenceInfo[];
-	}
-
-	export let grapheme: Grapheme;
+	export let grapheme: GraphemeInfo;
 	export let extra: Extra | null = null;
 
 	function findSequence() {

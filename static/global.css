@@ -65,3 +65,57 @@ code {
 	padding: 0;
 	list-style: inside circle;
 }
+
+.radio {
+	padding: 0.25em;
+	width: min-content;
+	display: flex;
+	border: none;
+}
+
+.radio label {
+	display: flex;
+}
+
+.radio label {
+	border: 1px solid rgb(100, 100, 100);
+	border-right: none;
+	padding: 0.2em 0.5em;
+}
+
+.radio input {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	width: 0;
+	height: 0;
+	margin: 0;
+	padding: 0;
+}
+
+.radio label:hover,
+.radio label:focus {
+	background-color: rgb(232, 232, 255);
+}
+
+.radio label:active {
+	background-color: rgb(196, 196, 255);
+}
+
+.radio input:checked + label {
+	box-shadow: inset 3px 3px 5px 0px rgba(0, 0, 0, 0.17);
+	background-color: rgb(93, 163, 255);
+	color: white;
+}
+
+.radio label:first-of-type {
+	margin-left: 0;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+.radio label:last-of-type {
+	border-right: 1px solid rgb(100, 100, 100);
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
