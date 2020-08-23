@@ -67,5 +67,17 @@
 				Blocks
 			</a>
 		</li>
+		<li>
+			<a
+				aria-current={segment === 'sequences' ? 'page' : undefined}
+				href="sequences">
+				Sequences
+			</a>
+		</li>
+		<li>
+			<a aria-current={segment === 'search' ? 'page' : undefined} href="search">
+				Search
+			</a>
+		</li>
 	</ul>
 </nav>
