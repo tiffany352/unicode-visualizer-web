@@ -2,12 +2,11 @@
 	import StringBlob from "model/StringBlob";
 	import Codepoint from "./Codepoint.svelte";
 	import Grapheme from "./Grapheme.svelte";
-	import type { NamedSequence } from "server/UnicodeParser";
-	import type { CharMap } from "server/UnicodeXml";
+	import type { SequenceInfo, CharMap } from "server/Unicode";
 
 	interface Extra {
 		chars: CharMap;
-		sequences: NamedSequence[];
+		sequences: SequenceInfo[];
 	}
 
 	export let string: StringBlob;

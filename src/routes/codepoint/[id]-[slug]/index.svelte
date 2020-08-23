@@ -1,6 +1,4 @@
 <script lang="typescript" context="module">
-	import type { CharInfo } from "server/UnicodeXml";
-
 	export async function preload(this: any, page: any, session: any) {
 		const { id, slug } = page.params;
 		const response: Response = await this.fetch(
@@ -19,6 +17,7 @@
 </script>
 
 <script lang="typescript">
+	import type { CharInfo } from "server/Unicode";
 	import OpenGraph from "../../../components/OpenGraph.svelte";
 	import { getDisplayText } from "strings";
 
@@ -79,7 +78,7 @@
 			{#if char.type == 'char' && char.aliases && char.aliases.length > 0}
 				<ul>
 					{#each char.aliases as alias}
-						<li>{alias.alias} ({alias.type})</li>
+						<li>{alias.text} ({alias.type})</li>
 					{/each}
 				</ul>
 			{:else}None{/if}

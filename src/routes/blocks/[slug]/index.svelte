@@ -1,7 +1,4 @@
 <script lang="typescript" context="module">
-	import type { BlockInfo, CodepointListing } from "server/UnicodeXml";
-	import { getDisplayText } from "strings";
-
 	export async function preload(this: any, page: any, session: any) {
 		const { slug } = page.params;
 		const response: Response = await this.fetch(`blocks/${slug}/data.json`);
@@ -15,6 +12,8 @@
 </script>
 
 <script lang="typescript">
+	import type { BlockInfo, CodepointListing } from "server/Unicode";
+	import { getDisplayText } from "strings";
 	import OpenGraph from "../../../components/OpenGraph.svelte";
 
 	export let block: BlockInfo & CodepointListing;

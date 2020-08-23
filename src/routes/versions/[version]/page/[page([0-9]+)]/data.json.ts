@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { getCodepointsInVersion } from "server/UnicodeXml";
+import { getCodepointsInVersion } from "server/Unicode";
 
 const pageSize = 250;
 

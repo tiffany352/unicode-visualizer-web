@@ -11,7 +11,7 @@
 		if (response.status == 200) {
 			const json = await response.json();
 			const chars: CharMap = json.codepoints;
-			const sequences: NamedSequence[] = json.sequences;
+			const sequences: SequenceInfo[] = json.sequences;
 			const extra = { chars, sequences };
 			return { input, extra };
 		}
@@ -21,15 +21,14 @@
 </script>
 
 <script lang="typescript">
-	import type { NamedSequence } from "server/UnicodeParser";
-	import type { CharMap } from "server/UnicodeXml";
+	import type { CharMap, SequenceInfo } from "server/Unicode";
 	import OpenGraph from "../../../components/OpenGraph.svelte";
 	import Inspector from "../../../components/Inspector/index.svelte";
 	import StringBlob from "model/StringBlob";
 
 	interface Extra {
 		chars: CharMap;
-		sequences: NamedSequence[];
+		sequences: SequenceInfo[];
 	}
 
 	export let input: string;

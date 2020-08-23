@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { lookupChar } from "server/UnicodeXml";
+import { lookupChar } from "server/Unicode";
 
 export function get(req: Request, res: Response, next: NextFunction) {
 	const { id, slug } = req.params;

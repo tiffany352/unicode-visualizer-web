@@ -1,12 +1,11 @@
 <script lang="typescript">
 	import type { CodepointInfo } from "model/StringBlob";
-	import type { CharMap, CharInfo } from "server/UnicodeXml";
-	import type { NamedSequence } from "server/UnicodeParser";
+	import type { CharMap, CharInfo, SequenceInfo } from "server/Unicode";
 	import { getDisplayText } from "strings";
 
 	interface Extra {
 		chars: CharMap;
-		sequences: NamedSequence[];
+		sequences: SequenceInfo[];
 	}
 
 	export let codepoint: CodepointInfo;

@@ -1,53 +1,11 @@
 <script lang="typescript">
+	import Range from "util/Range";
+
 	export let pages: number;
 	export let current: number;
 	export let createUrl: (page: number) => string;
 
 	const maxPages = 5;
-
-	class Range {
-		first: number;
-		last: number;
-
-		constructor(first: number, last: number) {
-			this.first = first;
-			this.last = last;
-		}
-
-		overlaps(other: Range): boolean {
-			return this.first <= other.last && this.last <= other.first;
-		}
-
-		union(other: Range): Range {
-			return new Range(
-				Math.min(this.first, other.first),
-				Math.max(this.last, other.last)
-			);
-		}
-
-		intersect(other: Range): Range {
-			return new Range(
-				Math.max(this.first, other.first),
-				Math.min(this.last, other.last)
-			);
-		}
-
-		gap(other: Range): Range {
-			return new Range(this.last + 1, other.first - 1);
-		}
-
-		count(): number {
-			return this.last - this.first + 1;
-		}
-
-		toList(): number[] {
-			return Array.from(Array(this.count), (_, i) => this.first + i);
-		}
-
-		contains(value: number): boolean {
-			return this.count() > 0 && value >= this.first && value <= this.last;
-		}
-	}
 
 	function createPageList(current: number, pageCount: number) {
 		const all = new Range(1, pageCount);

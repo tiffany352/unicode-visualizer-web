@@ -1,6 +1,4 @@
 <script lang="typescript" context="module">
-	import type { BlockInfo } from "server/UnicodeXml";
-
 	export async function preload(this: any, page: any, session: any) {
 		const response: Response = await this.fetch("blocks.json");
 		if (response.status == 200) {
@@ -18,6 +16,7 @@
 
 <script lang="typescript">
 	import OpenGraph from "../../components/OpenGraph.svelte";
+	import type { BlockInfo } from "server/Unicode";
 
 	export let blocks: BlockInfo[];
 </script>
@@ -41,10 +40,10 @@
 		<a href="blocks/{block.slug}">
 			<div>{block.name}</div>
 			<div>
-				<code>{codepoint(block.first)}</code>
+				<code>{codepoint(block.range.first)}</code>
 			</div>
 			<div>
-				<code>{codepoint(block.last)}</code>
+				<code>{codepoint(block.range.last)}</code>
 			</div>
 		</a>
 	{/each}

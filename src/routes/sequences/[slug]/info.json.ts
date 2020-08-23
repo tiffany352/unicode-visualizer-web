@@ -5,8 +5,8 @@ import {
 	lookupSequence,
 	CharMap,
 	lookupSequenceSlug,
-} from "server/UnicodeXml";
-import type { NamedSequence } from "server/UnicodeParser";
+} from "server/Unicode";
+import type { SequenceInfo } from "server/Unicode";
 
 export async function get(req: Request, res: Response, next: NextFunction) {
 	const { slug } = req.params;
@@ -16,7 +16,7 @@ export async function get(req: Request, res: Response, next: NextFunction) {
 		return next();
 	}
 
-	const string = StringBlob.stringDecode(Encoding.Utf8, sequence.sequence);
+	const string = StringBlob.stringDecode(Encoding.Utf8, sequence.text);
 	const codepoints: CharMap = {};
 
 	for (const codepoint of string.getCodepoints()) {
@@ -28,7 +28,7 @@ export async function get(req: Request, res: Response, next: NextFunction) {
 		}
 	}
 
-	const sequences: NamedSequence[] = [];
+	const sequences: SequenceInfo[] = [];
 
 	for (const grapheme of string.getGraphemes()) {
 		const sequence = lookupSequence(grapheme.text);

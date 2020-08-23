@@ -1,11 +1,10 @@
 <script lang="typescript">
 	import type { Grapheme } from "model/StringBlob";
-	import type { CharMap } from "server/UnicodeXml";
-	import type { NamedSequence } from "server/UnicodeParser";
+	import type { SequenceInfo, CharMap } from "server/Unicode";
 
 	interface Extra {
 		chars: CharMap;
-		sequences: NamedSequence[];
+		sequences: SequenceInfo[];
 	}
 
 	export let grapheme: Grapheme;
@@ -16,9 +15,7 @@
 			return null;
 		}
 
-		const sequence = extra.sequences.find(
-			(seq) => seq.sequence == grapheme.text
-		);
+		const sequence = extra.sequences.find((seq) => seq.text == grapheme.text);
 
 		if (!sequence) {
 			return null;

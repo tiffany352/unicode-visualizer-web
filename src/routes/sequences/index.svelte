@@ -16,13 +16,13 @@
 
 <script lang="typescript">
 	import OpenGraph from "../../components/OpenGraph.svelte";
-	import type { SequenceInfo } from "server/UnicodeXml";
+	import type { SequenceInfo } from "server/Unicode";
 	import StringBlob, { Encoding } from "model/StringBlob";
 
 	export let sequences: SequenceInfo[];
 
 	function createUrl(seq: SequenceInfo) {
-		const string = StringBlob.stringDecode(Encoding.Utf8, seq.sequence);
+		const string = StringBlob.stringDecode(Encoding.Utf8, seq.text);
 		return `inspect/${string.urlEncode()}`;
 	}
 </script>
@@ -46,7 +46,7 @@
 		<a href="sequences/{sequence.slug}">
 			<div>{sequence.name}</div>
 			<div>
-				<code>{sequence.sequence}</code>
+				<code>{sequence.text}</code>
 			</div>
 		</a>
 	{/each}

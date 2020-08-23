@@ -12,7 +12,7 @@
 			const json = await response.json();
 			const sequence: SequenceInfo = json.sequence;
 			const chars: CharMap = json.codepoints;
-			const sequences: NamedSequence[] = json.sequences;
+			const sequences: SequenceInfo[] = json.sequences;
 			const extra = { chars, sequences };
 			return { sequence, extra };
 		} else {
@@ -22,21 +22,20 @@
 </script>
 
 <script lang="typescript">
-	import type { NamedSequence } from "server/UnicodeParser";
-	import type { CharMap, SequenceInfo } from "server/UnicodeXml";
+	import type { SequenceInfo, CharMap, CharInfo } from "server/Unicode";
 	import OpenGraph from "../../../components/OpenGraph.svelte";
 	import Inspector from "../../../components/Inspector/index.svelte";
 	import StringBlob, { Encoding } from "model/StringBlob";
 
 	interface Extra {
 		chars: CharMap;
-		sequences: NamedSequence[];
+		sequences: SequenceInfo[];
 	}
 
 	export let sequence: SequenceInfo;
 	export let extra: Extra;
 
-	$: string = StringBlob.stringDecode(Encoding.Utf8, sequence.sequence);
+	$: string = StringBlob.stringDecode(Encoding.Utf8, sequence.text);
 </script>
 
 <svelte:head>

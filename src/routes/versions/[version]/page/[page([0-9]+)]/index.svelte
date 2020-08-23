@@ -1,11 +1,4 @@
 <script lang="typescript" context="module">
-	import type {
-		BlockInfo,
-		CodepointListing,
-		CharInfo,
-	} from "server/UnicodeXml";
-	import { getDisplayText } from "strings";
-
 	export async function preload(this: any, pageObj: any, session: any) {
 		const { version, page } = pageObj.params;
 		const response: Response = await this.fetch(
@@ -24,6 +17,8 @@
 </script>
 
 <script lang="typescript">
+	import type { CharInfo } from "server/Unicode";
+	import { getDisplayText } from "strings";
 	import OpenGraph from "../../../../../components/OpenGraph.svelte";
 	import Paginate from "../../../../../components/Paginate.svelte";
 
