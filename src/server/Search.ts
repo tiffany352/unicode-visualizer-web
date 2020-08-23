@@ -50,6 +50,12 @@ for (const char of getAllNotableChars()) {
 			},
 		],
 	};
+	if (char.tags.indexOf("Emoji_Presentation") != -1) {
+		page.links?.push({
+			text: "Emoji",
+			url: `emoji`,
+		});
+	}
 	index.add(page);
 }
 

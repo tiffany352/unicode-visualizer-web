@@ -386,3 +386,30 @@ export function getAllNotableChars(): Char[] {
 	}
 	return list;
 }
+
+let cachedEmoji: Char[] | null = null;
+export function getEmoji(): Char[] {
+	if (cachedEmoji) {
+		return cachedEmoji;
+	}
+
+	const list = [];
+	for (const entry of charList) {
+		if (entry.Codepoint != null) {
+			const char = parseEntry(entry, entry.Codepoint);
+			if (char.tags.indexOf("Emoji_Presentation") != -1) {
+				list.push(char);
+			}
+		} else {
+			for (let i = entry.range.first; i <= entry.range.last; i++) {
+				const char = parseEntry(entry, i);
+				if (char.tags.indexOf("Emoji_Presentation") != -1) {
+					list.push(char);
+				}
+			}
+		}
+	}
+
+	cachedEmoji = list;
+	return list;
+}

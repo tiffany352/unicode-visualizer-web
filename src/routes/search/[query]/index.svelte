@@ -140,6 +140,7 @@
 			{#if result.links && result.links.length > 0}
 				<span class="extra-links">
 					{#each result.links as { url, text }, i}
+						{#if i > 0}&nbsp;•{/if}
 						<a href={url}>{text}</a>
 					{/each}
 				</span>
