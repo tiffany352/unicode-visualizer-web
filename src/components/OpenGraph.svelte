@@ -23,4 +23,5 @@
 	<meta property="og:image" content="https://{$page.host}{image}" />
 	<meta property="og:description" content={description} />
 	<meta property="og:site_name" content="Unicode Visualizer" />
+	<meta name="twitter:card" content="summary" />
 </svelte:head>

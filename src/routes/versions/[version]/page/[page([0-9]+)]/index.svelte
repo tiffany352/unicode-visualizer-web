@@ -39,11 +39,9 @@
 	}
 </style>
 
-<svelte:head>
-	<OpenGraph
-		title="Unicode {version} - Unicode Visualizer"
-		description="View codepoints that were added in Unicode {version}." />
-</svelte:head>
+<OpenGraph
+	title="Unicode {version} - Unicode Visualizer"
+	description="View codepoints that were added in Unicode {version}." />
 
 <h1>Unicode {version}</h1>
 

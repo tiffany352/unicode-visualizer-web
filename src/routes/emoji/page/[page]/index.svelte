@@ -34,11 +34,9 @@
 	}
 </style>
 
-<svelte:head>
-	<OpenGraph
-		title="Sequences - Unicode Visualizer"
-		description="Browse the named sequences in Unicode." />
-</svelte:head>
+<OpenGraph
+	title="Sequences - Unicode Visualizer"
+	description="Browse the named sequences in Unicode." />
 
 <h1>Browse Emoji</h1>
 

@@ -38,13 +38,11 @@
 	$: string = StringBlob.stringDecode(Encoding.Utf8, sequence.text);
 </script>
 
-<svelte:head>
-	<!-- prettier-ignore -->
-	<OpenGraph
+<!-- prettier-ignore -->
+<OpenGraph
 		title="{sequence.name} - Sequences - Unicode Visualizer"
 		description="View the breakdown of the {sequence.name} Unicode named sequence."
 		url="/sequences/{sequence.slug}" />
-</svelte:head>
 
 <h1>{sequence.name}</h1>
 

@@ -113,11 +113,9 @@
 	}
 </style>
 
-<svelte:head>
-	<OpenGraph
-		title="{query} - Search - Unicode Visualizer"
-		description="Search results for {query}." />
-</svelte:head>
+<OpenGraph
+	title="{query} - Search - Unicode Visualizer"
+	description="Search results for {query}." />
 
 <h1>Search Results</h1>
 

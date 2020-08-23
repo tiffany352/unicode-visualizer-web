@@ -37,11 +37,9 @@
 	$: string = StringBlob.urlDecode(input);
 </script>
 
-<svelte:head>
-	<OpenGraph
-		title="Unicode Visualizer - Inspect String"
-		description="Shows a breakdown of the contents of a given string." />
-</svelte:head>
+<OpenGraph
+	title="Unicode Visualizer - Inspect String"
+	description="Shows a breakdown of the contents of a given string." />
 
 <h1>Inspect</h1>
 

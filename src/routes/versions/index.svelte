@@ -16,11 +16,9 @@
 	export let versions: string[];
 </script>
 
-<svelte:head>
-	<OpenGraph
-		title="Versions - Unicode Visualizer"
-		description="Browse the list of Unicode releases." />
-</svelte:head>
+<OpenGraph
+	title="Versions - Unicode Visualizer"
+	description="Browse the list of Unicode releases." />
 
 <h1>Unicode Versions</h1>
 

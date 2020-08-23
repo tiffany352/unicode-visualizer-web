@@ -30,11 +30,9 @@
 	}
 </style>
 
-<svelte:head>
-	<OpenGraph
-		title="{block.name} - Blocks - Unicode Visualizer"
-		description="View codepoints in the {block.name} Unicode block." />
-</svelte:head>
+<OpenGraph
+	title="{block.name} - Blocks - Unicode Visualizer"
+	description="View codepoints in the {block.name} Unicode block." />
 
 <h1>{block.name}</h1>
 

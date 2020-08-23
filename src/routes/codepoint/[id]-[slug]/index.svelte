@@ -51,21 +51,19 @@
 	}
 </style>
 
-<svelte:head>
-	{#if char.type == 'char'}
-		<!-- prettier-ignore -->
-		<OpenGraph
+{#if char.type == 'char'}
+	<!-- prettier-ignore -->
+	<OpenGraph
 			title="U+{char.codepointStr} {char.name} - Unicode Visualizer"
 			description="View the properties of U+{char.codepointStr} {char.name}."
 			url="/codepoint/{char.slug}" />
-	{:else}
-		<!-- prettier-ignore -->
-		<OpenGraph
+{:else}
+	<!-- prettier-ignore -->
+	<OpenGraph
 			title="Invalid codepoint"
 			description="U+{char.codepointStr} does not refer to a valid Unicode codepoint. {getDisplayText(char.reason)}"
 			url="/codepoint/{char.codepointStr}-invalid" />
-	{/if}
-</svelte:head>
+{/if}
 
 {#if char.type == 'char'}
 	<h1>

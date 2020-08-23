@@ -52,11 +52,9 @@
 	}
 </script>
 
-<svelte:head>
-	<OpenGraph
-		title="Unicode Visualizer"
-		description="A tool for working with Unicode" />
-</svelte:head>
+<OpenGraph
+	title="Unicode Visualizer"
+	description="A tool for working with Unicode" />
 
 <p>
 	This a web tool for inspecting Unicode strings. A naughty string causing a bug
