@@ -3,44 +3,66 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 export function urlSlugNormalize(input: string): string {
-  input = input.replace(/\s+/g, "-");
-  return input.toLocaleLowerCase();
+	input = input.replace(/\s+/g, "-");
+	return input.toLocaleLowerCase();
 }
 
 export function codepointString(codepoint: number) {
-  if (codepoint > 0 && codepoint <= 0x10ffff) {
-    return String.fromCodePoint(codepoint);
-  }
-  return "";
+	if (codepoint > 0 && codepoint <= 0x10ffff) {
+		return String.fromCodePoint(codepoint);
+	}
+	return "";
 }
 
 export function displayUnicode(code: number) {
-  return `U+${decimalToHex(code, 4)}`;
+	return `U+${decimalToHex(code, 4)}`;
 }
 
 export function decimalToHex(d: number, padding: number) {
-  return Number(d)
-    .toString(16)
-    .padStart(padding, "0");
+	return Number(d).toString(16).padStart(padding, "0");
 }
 
 export function hexEncode(
-  array: ArrayLike<number> | Iterable<number>,
-  padding: number
+	array: ArrayLike<number> | Iterable<number>,
+	padding: number
 ) {
-  return Array.from(array)
-    .map(byte => byte.toString(16).padStart(padding, "0"))
-    .join(".");
+	return Array.from(array)
+		.map((byte) => byte.toString(16).padStart(padding, "0"))
+		.join(".");
 }
 
 export function hexDecode(string: string, padding: number) {
-  string = string.replace(/[^a-fA-F0-9]/g, "");
-  const array = [];
+	string = string.replace(/[^a-fA-F0-9]/g, "");
+	const array = [];
 
-  for (let i = 0; i < string.length; i += padding) {
-    const slice = string.substring(i, i + padding);
-    array.push(parseInt(slice, 16));
-  }
+	for (let i = 0; i < string.length; i += padding) {
+		const slice = string.substring(i, i + padding);
+		array.push(parseInt(slice, 16));
+	}
 
-  return array;
+	return array;
+}
+
+export function copyMemory(
+	destRaw: ArrayLike<number> | ArrayBuffer,
+	sourceRaw: ArrayLike<number> | ArrayBuffer
+) {
+	const dest = new Uint8Array(destRaw);
+	const source = new Uint8Array(sourceRaw);
+
+	for (let i = 0; i < source.length; i++) {
+		dest[i] = source[i];
+	}
+	return destRaw;
+}
+
+export function alignMemory(target: ArrayBuffer, align: number): ArrayBuffer {
+	if (target.byteLength % align != 0) {
+		const dest = new ArrayBuffer(
+			target.byteLength + (align - (target.byteLength % align))
+		);
+		copyMemory(dest, target);
+		return dest;
+	}
+	return target;
 }

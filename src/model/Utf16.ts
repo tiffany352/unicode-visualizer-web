@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import { decimalToHex, hexEncode, hexDecode } from "./Util";
+import { decimalToHex, hexEncode, hexDecode, alignMemory } from "./Util";
 import type { EncodedString } from "./StringBlob";
 
 function makePair(high: number, low: number) {
@@ -24,6 +24,7 @@ export function urlDecode(str: string) {
 }
 
 export function reinterpret(data: ArrayBuffer) {
+	data = alignMemory(data, 2);
 	return new Utf16String(data);
 }
 

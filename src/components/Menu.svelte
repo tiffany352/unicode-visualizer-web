@@ -1,0 +1,74 @@
+<script lang="typescript">
+	import Icon from "./Icon.svelte";
+
+	export let title: string = "";
+</script>
+
+<style>
+	nav {
+		position: relative;
+		color: black;
+	}
+
+	ul {
+		visibility: hidden;
+		position: absolute;
+		left: 0;
+		background-color: white;
+		box-shadow: 3px 3px 12px 4px rgba(0, 0, 0, 0.2);
+		border-radius: 10px;
+		padding: 0;
+		margin: 0;
+		list-style: none;
+		width: 10em;
+		overflow: hidden;
+	}
+
+	nav:focus > ul,
+	nav:focus-within > ul {
+		visibility: visible;
+	}
+
+	ul :global(li > *) {
+		font-family: inherit;
+		font-size: inherit;
+		font-weight: normal;
+		display: block;
+		text-decoration: none;
+		padding: 0.5em;
+		border: none;
+		border-bottom: 1px solid rgb(177, 177, 177);
+		color: inherit;
+		border-radius: inherit;
+		background-color: inherit;
+		width: 100%;
+	}
+
+	ul :global(li > .disabled) {
+		color: rgb(100, 100, 100);
+	}
+
+	ul :global(a):hover,
+	ul :global(a):focus,
+	ul :global(button):hover,
+	ul :global(button):focus {
+		background-color: rgb(247, 247, 247);
+		color: inherit;
+	}
+
+	ul :global(li:last-child a),
+	ul :global(li:last-child button) {
+		border-bottom: none;
+	}
+</style>
+
+<nav>
+	<button {title} class="button">
+		<slot name="button">
+			<Icon icon="menu" />
+		</slot>
+	</button>
+	<ul tabindex="-1">
+		<slot />
+	</ul>
+</nav>

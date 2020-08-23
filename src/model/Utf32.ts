@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import { hexEncode, hexDecode } from "./Util";
+import { hexEncode, hexDecode, alignMemory } from "./Util";
 import type { EncodedString } from "./StringBlob";
 
 export function stringDecode(str: string) {
@@ -18,6 +18,7 @@ export function urlDecode(str: string) {
 }
 
 export function reinterpret(data: ArrayBuffer) {
+	data = alignMemory(data, 4);
 	return new Utf32String(data);
 }
 

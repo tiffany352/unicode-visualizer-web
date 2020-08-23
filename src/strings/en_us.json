@@ -346,5 +346,26 @@
 		"Dep": "Deprecated",
 		"VS": "Variation selector",
 		"NChar": "Non-character codepoint"
+	},
+
+	"encoding": {
+		"utf8": "UTF-8",
+		"utf16": "UTF-16",
+		"utf32": "UTF-32",
+		"windows1252": "Windows-1252"
+	},
+
+	"normalForm": {
+		"NFC": "Normal Form C",
+		"NFD": "Normal Form D",
+		"NFKC": "Normal Form KC",
+		"NFKD": "Normal Form KD"
+	},
+
+	"normalFormTooltip": {
+		"NFC": "Canonical composition\n\nMerges combining modifiers into a single character when possible.",
+		"NFD": "Canonical decomposition\n\nSplits up characters into their component parts and combining modifiers.",
+		"NFKC": "Compatibility composition\n\nMaps compatibility characters into simpler forms.",
+		"NFKD": "Compatibility decomposition\n\nMaps compatibility characters into simpler forms, and then breaks them into their components."
 	}
 }

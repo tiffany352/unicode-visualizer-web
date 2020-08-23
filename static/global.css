@@ -81,6 +81,8 @@ code {
 	border: 1px solid rgb(100, 100, 100);
 	border-right: none;
 	padding: 0.2em 0.5em;
+	position: relative;
+	overflow: hidden;
 }
 
 .radio input {
@@ -93,9 +95,13 @@ code {
 	padding: 0;
 }
 
-.radio label:hover,
-.radio label:focus {
+.radio label:hover {
 	background-color: rgb(232, 232, 255);
+}
+
+.radio input:focus + label {
+	background-color: rgb(232, 232, 255);
+	border-color: rgb(113, 179, 255);
 }
 
 .radio label:active {
@@ -108,6 +114,10 @@ code {
 	color: white;
 }
 
+.radio input:focus {
+	outline: none;
+}
+
 .radio label:first-of-type {
 	margin-left: 0;
 	border-top-left-radius: 5px;
@@ -118,4 +128,87 @@ code {
 	border-right: 1px solid rgb(100, 100, 100);
 	border-top-right-radius: 5px;
 	border-bottom-right-radius: 5px;
+}
+
+.radio label::after {
+	display: none;
+	content: "";
+	position: absolute;
+	border-radius: 50%;
+	background-color: rgba(255, 255, 255, 0.3);
+
+	width: 100px;
+	height: 100px;
+	margin-top: -50px;
+	margin-left: -50px;
+
+	/* Center the ripple */
+	top: 50%;
+	left: 50%;
+
+	animation: ripple 1s;
+	opacity: 0;
+}
+
+.radio input:focus:not(:active) + label::after {
+	display: block;
+}
+
+.button {
+	padding: 0.2em 0.5em;
+	margin: 0.25em;
+	background-color: white;
+	border: 1px solid rgb(100, 100, 100);
+	border-radius: 5px;
+	color: rgb(60, 60, 60);
+	font: var(--header-font);
+	font-size: 1rem;
+	position: relative;
+	overflow: hidden;
+}
+
+.button:hover {
+	background-color: rgb(93, 163, 255);
+	border-color: rgb(30, 91, 170);
+	color: white;
+}
+
+.button:focus {
+	border-color: rgb(113, 179, 255);
+	outline: none;
+}
+
+.button::after {
+	display: none;
+	content: "";
+	position: absolute;
+	border-radius: 50%;
+	background-color: rgba(255, 255, 255, 0.3);
+
+	width: 100px;
+	height: 100px;
+	margin-top: -50px;
+	margin-left: -50px;
+
+	/* Center the ripple */
+	top: 50%;
+	left: 50%;
+
+	animation: ripple 1s;
+	opacity: 0;
+}
+
+.button:focus:not(:active)::after {
+	display: block;
+}
+
+@keyframes ripple {
+	from {
+		opacity: 1;
+		transform: scale(0);
+	}
+	to {
+		opacity: 0;
+		transform: scale(10);
+	}
 }

@@ -11,6 +11,10 @@ export enum Encoding {
 	Windows1252,
 }
 
+export function getEncodings(): Encoding[] {
+	return [Encoding.Utf8, Encoding.Utf16, Encoding.Utf32, Encoding.Windows1252];
+}
+
 export function encodingFromTag(tag: string): Encoding {
 	switch (tag) {
 		case "utf8":
@@ -118,6 +122,12 @@ export default class StringBlob {
 		const oldStr = this.stringEncode();
 		const newStr = oldStr.normalize(mode);
 		return StringBlob.stringDecode(this.encoding, newStr);
+	}
+
+	equal(other: StringBlob) {
+		const thisStr = this.stringEncode();
+		const otherStr = other.stringEncode();
+		return thisStr == otherStr;
 	}
 
 	static stringDecode(encoding: Encoding, string: string) {
