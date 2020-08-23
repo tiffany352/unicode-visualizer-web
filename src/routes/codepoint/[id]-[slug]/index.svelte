@@ -98,7 +98,7 @@
 		<div>
 			{#each char.tags as tag}
 				<span class="tag">{tag}</span>
-			{/each}
+			{:else}None{/each}
 		</div>
 	</div>
 {:else}

@@ -28,6 +28,15 @@
 		font-size: 1.2em;
 		text-align: center;
 	}
+
+	a {
+		text-decoration: none;
+	}
+
+	a:hover,
+	a:focus {
+		text-decoration: underline;
+	}
 </style>
 
 <OpenGraph
