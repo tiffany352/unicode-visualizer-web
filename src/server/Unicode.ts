@@ -286,9 +286,9 @@ function findName(
 	}
 	const first = aliases.find((alias) => alias.type != "abbreviation");
 	if (first) {
-		return first.text;
+		return toTitleCase(first.text);
 	}
-	return aliases[0].text;
+	return toTitleCase(aliases[0].text);
 }
 
 function parseEntry(entry: CharEntry, codepoint: number): Char {
