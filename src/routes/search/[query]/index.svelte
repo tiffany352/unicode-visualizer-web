@@ -20,6 +20,7 @@
 	import type { Page } from "server/Search";
 	import Searchbar from "../../../components/Searchbar.svelte";
 	import OpenGraph from "../../../components/OpenGraph.svelte";
+	import StringBlob, { Encoding } from "model/StringBlob";
 
 	export let results: Page[];
 	export let requestTime: number;
@@ -60,6 +61,10 @@
 			text = text.replace(new RegExp(word, "gi"), "<strong>$&</strong>");
 		}
 		return text;
+	}
+
+	function createInspectLink(query: string): string {
+		return StringBlob.stringDecode(Encoding.Utf8, query).urlEncode();
 	}
 </script>
 
@@ -146,5 +151,11 @@
 				</span>
 			{/if}
 		</div>
+	{:else}
+		<p>
+			Did you mean to
+			<a href="inspect/{createInspectLink(query)}">inspect a string</a>
+			instead?
+		</p>
 	{/each}
 </div>
