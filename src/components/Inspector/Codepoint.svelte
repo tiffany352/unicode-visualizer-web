@@ -27,7 +27,7 @@
 		if (char && char.type == "char") {
 			const alias = char.aliases.find((alias) => alias.type == "abbreviation");
 			if (alias) {
-				return alias.alias;
+				return alias.text;
 			}
 		}
 

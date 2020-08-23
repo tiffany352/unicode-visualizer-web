@@ -22,11 +22,15 @@
 		padding: 0.5em;
 		margin: 0 -0.25em;
 		background-color: rgb(153, 153, 153);
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
 	}
 
 	.inspect {
 		display: grid;
 		grid-template-rows: min-content min-content min-content;
+		width: min-content;
 		overflow-x: auto;
 		text-align: center;
 		background-color: white;
