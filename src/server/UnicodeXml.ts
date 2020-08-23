@@ -118,6 +118,52 @@ export function getDescription(): string {
 	return result.description;
 }
 
+function versionCompare(a: string, b: string): number {
+	const [leftMaj, leftMin] = a.split(".");
+	const [rightMaj, rightMin] = b.split(".");
+
+	const major = parseInt(leftMaj) - parseInt(rightMaj);
+	if (major != 0) {
+		return major;
+	}
+	return parseInt(leftMin) - parseInt(rightMin);
+}
+
+export function getVersions(): string[] {
+	const set: Set<string> = new Set();
+	for (const char of result.chars) {
+		const age = char.attrs["age"] || (char.group && char.group["age"]);
+		if (age) {
+			set.add(age);
+		}
+	}
+	const versions = new Array(...set.values());
+	versions.sort(versionCompare);
+	versions.reverse();
+	return versions;
+}
+
+const cachedVersions = new Map();
+export function getCodepointsInVersion(version: string): CharInfo[] {
+	const cached = cachedVersions.get(version);
+	if (cached) {
+		return cached;
+	}
+
+	const chars = [];
+	for (const char of result.chars) {
+		const age = char.attrs["age"] || (char.group && char.group["age"]);
+		if (age == version) {
+			const result = parseEntry(char, char.first);
+			chars.push(result);
+		}
+	}
+
+	cachedVersions.set(version, chars);
+
+	return chars;
+}
+
 function findBestAlias(aliases: NameAlias[]): string {
 	if (!aliases || aliases.length < 1) {
 		return "";
