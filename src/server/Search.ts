@@ -15,6 +15,7 @@ export interface Page {
 	url: string;
 	title: string;
 	description: string;
+	tags?: string;
 	links?: Link[];
 }
 
@@ -23,7 +24,7 @@ const index: Index<Page> = FlexSearch.create({
 	async: true,
 	doc: {
 		id: "url",
-		field: ["title", "description"],
+		field: ["title", "description", "tags"],
 	},
 });
 
@@ -38,6 +39,10 @@ for (const char of getAllNotableChars()) {
 		url: `codepoint/${char.slug}`,
 		title: `${char.text} U+${char.codepointStr} ${char.name}`,
 		description: `Properties of U+${char.codepointStr} ${char.name}, a character in the ${char.block.name} block.`,
+		tags: char.tags
+			.filter((tag) => tag != "Emoji" && tag != "Emoji_Component")
+			.map((tag) => tag.replace("_", " "))
+			.join(", "),
 		links: [
 			{
 				text: char.block.name,

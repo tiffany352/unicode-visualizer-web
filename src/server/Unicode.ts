@@ -19,6 +19,7 @@ export interface Char {
 	slug: string;
 	aliases: NameAlias[];
 	block: BlockInfo;
+	tags: string[];
 	category: string;
 }
 
@@ -157,6 +158,14 @@ for (const row of aliasList) {
 	aliasMap.set(row.codepoint, list);
 
 	list.push(row);
+}
+
+const emojiProps = new Map<string, IntervalTree<true>>();
+for (const row of Data.emojiData) {
+	const props = emojiProps.get(row.Type) || new IntervalTree();
+	emojiProps.set(row.Type, props);
+
+	props.add(row.Range, true);
 }
 
 console.log("Done.");
@@ -299,6 +308,13 @@ function parseEntry(entry: CharEntry, codepoint: number): Char {
 	};
 	const category = entry.General_Category || "None";
 
+	const tags: string[] = [];
+	for (const [type, tree] of emojiProps.entries()) {
+		if (tree.get(codepoint)) {
+			tags.push(type);
+		}
+	}
+
 	return {
 		type: "char",
 		codepoint,
@@ -307,6 +323,7 @@ function parseEntry(entry: CharEntry, codepoint: number): Char {
 		aliases,
 		block,
 		category,
+		tags,
 		codepointStr,
 		slug,
 		text,

@@ -20,7 +20,6 @@
 	import type { CharInfo } from "server/Unicode";
 	import OpenGraph from "../../../components/OpenGraph.svelte";
 	import { getDisplayText } from "strings";
-	import type { blocks } from "server/Data";
 
 	export let char: CharInfo;
 </script>
@@ -42,6 +41,13 @@
 
 	.table {
 		grid-template-columns: min-content 1fr;
+	}
+
+	.tag {
+		border: 1px solid rgb(150, 150, 150);
+		border-radius: 5px;
+		padding: 0 4px;
+		margin: 0 4px;
 	}
 </style>
 
@@ -90,6 +96,12 @@
 		</div>
 		<div>Category</div>
 		<div>{getDisplayText(`generalCategory.${char.category}`)}</div>
+		<div>Tags</div>
+		<div>
+			{#each char.tags as tag}
+				<span class="tag">{tag}</span>
+			{/each}
+		</div>
 	</div>
 {:else}
 	<h1>0x{char.codepointStr} Invalid Unicode</h1>

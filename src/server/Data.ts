@@ -69,4 +69,18 @@ export const derivedName = parse(read("extracted/DerivedName"), (input) => ({
 	Name: input[1],
 }));
 
+const emojiType = t.enumeration([
+	"Extended_Pictographic",
+	"Emoji_Component",
+	"Emoji_Modifier_Base",
+	"Emoji_Presentation",
+	"Emoji_Modifier",
+	"Emoji",
+]);
+
+export const emojiData = parse(read("emoji/emoji-data"), (input) => ({
+	Range: t.codepointOrRange(input[0]),
+	Type: emojiType(input[1]),
+}));
+
 console.log("Done.");
