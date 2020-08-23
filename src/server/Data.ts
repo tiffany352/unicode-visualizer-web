@@ -64,4 +64,9 @@ export const derivedAge = parse(read("DerivedAge"), (input) => ({
 	Version: input[1],
 }));
 
+export const derivedName = parse(read("extracted/DerivedName"), (input) => ({
+	Range: t.codepointOrRange(input[0]),
+	Name: input[1],
+}));
+
 console.log("Done.");

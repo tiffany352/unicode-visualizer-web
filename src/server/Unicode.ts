@@ -126,6 +126,10 @@ const ageTree = new IntervalTree(
 	Data.derivedAge.map((row) => [row.Range, row.Version])
 );
 
+const nameTree = new IntervalTree(
+	Data.derivedName.map((row) => [row.Range, row.Name])
+);
+
 for (const row of Data.derivedAge) {
 	for (let i = row.Range.first; i <= row.Range.last; i++) {
 		const result = ageTree.get(i);
@@ -244,7 +248,30 @@ export function getCodepointsInVersion(version: string): CharInfo[] {
 	return chars;
 }
 
-function findBestAlias(aliases: NameAlias[]): string {
+function codepointToString(codepoint: number): string {
+	return codepoint.toString(16).toUpperCase().padStart(4, "0");
+}
+
+function findName(
+	entry: CharEntry,
+	aliases: NameAlias[],
+	codepoint: number
+): string {
+	if (entry.Name.type == "name") {
+		return toTitleCase(entry.Name.text);
+	}
+	let result = nameTree.get(codepoint);
+	if (result) {
+		result = result.replace("*", codepointToString(codepoint));
+		if (result.startsWith("HANGUL SYLLABLE")) {
+			result = result.replace("HANGUL SYLLABLE", "Hangul Syllable");
+		} else {
+			result = toTitleCase(result);
+		}
+		result = result.replace("Cjk", "CJK");
+		return result;
+	}
+
 	if (!aliases || aliases.length < 1) {
 		return "";
 	}
@@ -258,11 +285,8 @@ function findBestAlias(aliases: NameAlias[]): string {
 function parseEntry(entry: CharEntry, codepoint: number): Char {
 	const age = ageTree.get(codepoint) || "undefined";
 	const aliases = aliasMap.get(codepoint) || [];
-	const bestAlias = findBestAlias(aliases);
-	const initName: string =
-		entry.Name.type == "name" ? entry.Name.text : bestAlias;
-	const name = toTitleCase(initName);
-	const codepointStr = codepoint.toString(16).toUpperCase().padStart(4, "0");
+	const name = findName(entry, aliases, codepoint);
+	const codepointStr = codepointToString(codepoint);
 
 	const slugName = toSlug(name);
 	const slug = `${codepointStr}-${slugName || "unicode"}`;
