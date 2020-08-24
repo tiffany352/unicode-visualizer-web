@@ -28,17 +28,6 @@
 </script>
 
 <style>
-	pre {
-		border: 1px solid rgb(153, 197, 255);
-		background-color: rgb(249, 252, 255);
-		border-radius: 3px;
-		font-size: unset;
-		font-family: var(--mono-font);
-		white-space: pre-line;
-		overflow-x: auto;
-		padding: 0.5em;
-	}
-
 	nav {
 		display: flex;
 		flex-direction: row;
@@ -103,7 +92,7 @@
 
 </nav>
 
-<pre>{string.stringEncode()}</pre>
+<pre class="text-preview">{string.stringEncode()}</pre>
 
 {#if direction == Direction.Row}
 	<DataRow {codeunits} {codepoints} {graphemes} {extra} />

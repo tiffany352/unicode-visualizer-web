@@ -67,8 +67,8 @@
 	<ul>
 		<NavLink {segment} {closeMenu} href=".">Home</NavLink>
 		<NavLink {segment} {closeMenu} href="search">Search</NavLink>
-		<hr />
 		<NavLink {segment} {closeMenu} href="inspect">Inspect</NavLink>
+		<hr />
 		<NavLink {segment} {closeMenu} href="blocks">Blocks</NavLink>
 		<NavLink {segment} {closeMenu} href="sequences">Sequences</NavLink>
 		<NavLink {segment} {closeMenu} href="versions">Versions</NavLink>

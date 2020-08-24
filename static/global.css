@@ -214,3 +214,14 @@ code {
 		transform: scale(10);
 	}
 }
+
+.text-preview {
+	border: 1px solid rgb(153, 197, 255);
+	background-color: rgb(249, 252, 255);
+	border-radius: 3px;
+	font-size: unset;
+	font-family: var(--mono-font);
+	white-space: pre-wrap;
+	overflow-x: auto;
+	padding: 0.5em;
+}

@@ -11,8 +11,18 @@ export enum Encoding {
 	Windows1252,
 }
 
+export enum DataType {
+	Plain = "plain",
+	Base16 = "base16",
+	Base64 = "base64",
+}
+
 export function getEncodings(): Encoding[] {
 	return [Encoding.Utf8, Encoding.Utf16, Encoding.Utf32, Encoding.Windows1252];
+}
+
+export function getDataTypes(): DataType[] {
+	return [DataType.Plain, DataType.Base16, DataType.Base64];
 }
 
 export function encodingFromTag(tag: string): Encoding {
@@ -134,6 +144,32 @@ export default class StringBlob {
 		const encoder = getEncoder(encoding);
 
 		return new StringBlob(encoding, encoder, encoder.stringDecode(string));
+	}
+
+	static dataDecode(dataType: DataType, encoding: Encoding, data: string) {
+		switch (dataType) {
+			case DataType.Plain:
+				return StringBlob.stringDecode(encoding, data);
+			case DataType.Base16:
+				return StringBlob.rawDecode(encoding, data);
+			case DataType.Base64:
+				return StringBlob.base64Decode(encoding, data);
+		}
+	}
+
+	static base64Decode(encoding: Encoding, data: string) {
+		data = data.replace(/[^+=/\w]/g, "");
+		// Base64 decode. This returns a "byte string", a string full of
+		// values from 0-0xFF.
+		data = atob(data);
+		const array = new ArrayBuffer(data.length);
+		const uint8 = new Uint8Array(array);
+		for (let i = 0; i < data.length; i++) {
+			uint8[i] = data.charCodeAt(i);
+		}
+		const encoder = getEncoder(encoding);
+		const string = encoder.reinterpret(array);
+		return new StringBlob(encoding, encoder, string);
 	}
 
 	stringEncode() {

@@ -5,8 +5,6 @@
 
 	$: current =
 		(href == "." ? segment === undefined : segment == href) || undefined;
-
-	console.log({ segment, href });
 </script>
 
 <style>

@@ -367,5 +367,11 @@
 		"NFD": "Canonical decomposition\n\nSplits up characters into their component parts and combining modifiers.",
 		"NFKC": "Compatibility composition\n\nMaps compatibility characters into simpler forms.",
 		"NFKD": "Compatibility decomposition\n\nMaps compatibility characters into simpler forms, and then breaks them into their components."
+	},
+
+	"dataType": {
+		"plain": "Text",
+		"base16": "Base-16",
+		"base64": "Base-64"
 	}
 }
