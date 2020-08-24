@@ -17,14 +17,16 @@
 	$: string = StringBlob.dataDecode(dataType, currentEncoding, data);
 
 	function updateSize(event: Event & { target: HTMLTextAreaElement }) {
-		const lines = event.target.value
-			.split("\n")
-			.reduce(
-				(acc, line) => (acc += Math.ceil(line.length / event.target.cols)),
-				0
-			);
+		const lines = Math.max(
+			10,
+			event.target.value
+				.split("\n")
+				.reduce(
+					(acc, line) => (acc += Math.ceil(line.length / event.target.cols)),
+					0
+				)
+		);
 		event.target.rows = lines;
-		console.log({ lines });
 	}
 
 	function onSubmit() {
@@ -37,6 +39,7 @@
 		display: flex;
 		flex-direction: row;
 		align-items: flex-end;
+		flex-wrap: wrap;
 		margin-bottom: 1em;
 	}
 
@@ -44,6 +47,7 @@
 		font-size: 1rem;
 		font-family: var(--mono-font);
 		width: 100%;
+		box-sizing: border-box;
 		white-space: pre-wrap;
 	}
 </style>
@@ -84,7 +88,7 @@
 		</fieldset>
 	</div>
 
-	<textarea bind:value={data} on:input={updateSize} cols={80} />
+	<textarea bind:value={data} on:input={updateSize} cols={80} rows="10" />
 
 	<button class="button" type="submit">Submit</button>
 </form>
