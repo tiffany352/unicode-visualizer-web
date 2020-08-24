@@ -222,6 +222,7 @@ code {
 	font-size: unset;
 	font-family: var(--mono-font);
 	white-space: pre-wrap;
+	overflow-wrap: break-word;
 	overflow-x: auto;
 	padding: 0.5em;
 }

@@ -24,11 +24,12 @@ export function decimalToHex(d: number, padding: number) {
 
 export function hexEncode(
 	array: ArrayLike<number> | Iterable<number>,
-	padding: number
+	padding: number,
+	useSep: boolean = true
 ) {
 	return Array.from(array)
 		.map((byte) => byte.toString(16).padStart(padding, "0"))
-		.join(".");
+		.join(useSep ? "." : "");
 }
 
 export function hexDecode(string: string, padding: number) {

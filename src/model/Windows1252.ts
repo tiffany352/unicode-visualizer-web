@@ -35,8 +35,8 @@ export default class Windows1252String implements EncodedString {
 		return this.data.buffer;
 	}
 
-	urlEncode() {
-		return hexEncode(this.data, 2);
+	urlEncode(useSep: boolean) {
+		return hexEncode(this.data, 2, useSep);
 	}
 
 	stringEncode() {

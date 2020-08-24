@@ -43,8 +43,8 @@ export default class Utf16String implements EncodedString {
 		return this.data.buffer;
 	}
 
-	urlEncode() {
-		return hexEncode(this.data, 4);
+	urlEncode(useSep: boolean) {
+		return hexEncode(this.data, 4, useSep);
 	}
 
 	stringEncode() {

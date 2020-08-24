@@ -91,7 +91,7 @@ export interface GraphemeInfo {
 }
 
 export interface EncodedString {
-	urlEncode(): string;
+	urlEncode(useSep: boolean): string;
 	stringEncode(): string;
 	getCodeunits(): CodeunitInfo[];
 	getCodepoints(): CodepointInfo[];
@@ -176,9 +176,31 @@ export default class StringBlob {
 		return this.data.stringEncode();
 	}
 
+	dataEncode(dataType: DataType, useSep: boolean = true) {
+		switch (dataType) {
+			case DataType.Plain:
+				return this.stringEncode();
+			case DataType.Base16:
+				return this.data.urlEncode(useSep);
+			case DataType.Base64:
+				return this.base64Encode(useSep);
+		}
+	}
+
+	base64Encode(useSep: boolean = true) {
+		const array = this.data.getArrayBuffer();
+		const u8 = new Uint8Array(array);
+		const byteString = String.fromCharCode(...u8);
+		const base64 = btoa(byteString);
+		if (useSep) {
+			return base64.replace(/(.{6})/g, "$&.").replace(/\.$/, "");
+		}
+		return base64;
+	}
+
 	urlEncode() {
 		const proto = encodingToTag(this.encoding);
-		const payload = this.data.urlEncode();
+		const payload = this.data.urlEncode(true);
 
 		return `${proto}:${payload}`;
 	}

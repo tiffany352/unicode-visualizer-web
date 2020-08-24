@@ -3,12 +3,14 @@
 		Encoding,
 		getEncodings,
 		encodingToTag,
+		DataType,
 	} from "model/StringBlob";
 	import type { Extra } from "./extra";
+	import { getDisplayText } from "strings";
 	import DataRow from "./DataRow.svelte";
 	import DataCol from "./DataCol.svelte";
 	import Menu from "../Menu.svelte";
-	import { getDisplayText } from "strings";
+	import ExportModal from "./ExportModal.svelte";
 
 	enum Direction {
 		Row,
@@ -19,6 +21,7 @@
 	export let extra: Extra | null = null;
 
 	let direction: Direction = Direction.Row;
+	let exportType: DataType | null = null;
 
 	$: codeunits = string.getCodeunits();
 	$: codepoints = string.getCodepoints();
@@ -91,6 +94,17 @@
 		{/each}
 	</Menu>
 
+	<Menu title="Export">
+		<span slot="button">Export...</span>
+
+		<li>
+			<button on:click={() => (exportType = DataType.Base16)}>Base-16</button>
+		</li>
+		<li>
+			<button on:click={() => (exportType = DataType.Base64)}>Base-64</button>
+		</li>
+	</Menu>
+
 </nav>
 
 <pre class="text-preview">{string.stringEncode()}</pre>
@@ -99,4 +113,8 @@
 	<DataRow {codeunits} {codepoints} {graphemes} {extra} />
 {:else}
 	<DataCol {codeunits} {codepoints} {graphemes} {extra} />
+{/if}
+
+{#if exportType}
+	<ExportModal {string} {exportType} on:close={() => (exportType = null)} />
 {/if}

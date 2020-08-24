@@ -37,8 +37,8 @@ export default class Utf32String implements EncodedString {
 		return this.data.buffer;
 	}
 
-	urlEncode() {
-		return hexEncode(this.data, 8);
+	urlEncode(useSep: boolean) {
+		return hexEncode(this.data, 8, useSep);
 	}
 
 	stringEncode() {
