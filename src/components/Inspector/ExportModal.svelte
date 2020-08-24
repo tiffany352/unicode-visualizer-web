@@ -1,6 +1,5 @@
 <script lang="typescript">
-	import StringBlob, { encodingToTag } from "model/StringBlob";
-	import type { DataType } from "model/StringBlob";
+	import StringBlob, { encodingToTag, DataType } from "model/StringBlob";
 	import { getDisplayText } from "strings";
 	import { createEventDispatcher, onMount } from "svelte";
 	import Modal from "../Modal.svelte";
@@ -70,7 +69,11 @@
 </style>
 
 <Modal on:close={close}>
-	<p>Exported as {dataType}-encoded {encoding}.</p>
+	{#if exportType == DataType.Codepoints}
+		<p>Exported as list of codepoints.</p>
+	{:else}
+		<p>Exported as {dataType}-encoded {encoding}.</p>
+	{/if}
 
 	<input id="sep" type="checkbox" bind:checked={useSep} />
 	<label for="sep">Use separator</label>

@@ -152,7 +152,11 @@ export default class StringBlob {
 		return new StringBlob(encoding, encoder, encoder.stringDecode(string));
 	}
 
-	static dataDecode(dataType: DataType, encoding: Encoding, data: string) {
+	static dataDecode(
+		dataType: DataType,
+		encoding: Encoding,
+		data: string
+	): StringBlob {
 		switch (dataType) {
 			case DataType.Plain:
 				return StringBlob.stringDecode(encoding, data);
@@ -195,7 +199,7 @@ export default class StringBlob {
 		return this.data.stringEncode();
 	}
 
-	dataEncode(dataType: DataType, useSep: boolean = true) {
+	dataEncode(dataType: DataType, useSep: boolean = true): string {
 		switch (dataType) {
 			case DataType.Plain:
 				return this.stringEncode();
@@ -203,6 +207,8 @@ export default class StringBlob {
 				return this.data.urlEncode(useSep);
 			case DataType.Base64:
 				return this.base64Encode(useSep);
+			case DataType.Codepoints:
+				return this.codepointsEncode(useSep);
 		}
 	}
 
@@ -215,6 +221,13 @@ export default class StringBlob {
 			return base64.replace(/(.{6})/g, "$&.").replace(/\.$/, "");
 		}
 		return base64;
+	}
+
+	codepointsEncode(useSep: boolean = true) {
+		return this.data
+			.getCodepoints()
+			.map((codepoint) => (codepoint.value || 0).toString(16).padStart(4, "0"))
+			.join(useSep ? ", " : " ");
 	}
 
 	urlEncode() {

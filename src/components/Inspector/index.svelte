@@ -4,6 +4,7 @@
 		getEncodings,
 		encodingToTag,
 		DataType,
+		getDataTypes,
 	} from "model/StringBlob";
 	import type { Extra } from "./extra";
 	import { getDisplayText } from "strings";
@@ -97,12 +98,15 @@
 	<Menu title="Export">
 		<span slot="button">Export...</span>
 
-		<li>
-			<button on:click={() => (exportType = DataType.Base16)}>Base-16</button>
-		</li>
-		<li>
-			<button on:click={() => (exportType = DataType.Base64)}>Base-64</button>
-		</li>
+		{#each getDataTypes() as type}
+			{#if type != DataType.Plain}
+				<li>
+					<button on:click={() => (exportType = type)}>
+						{getDisplayText(`dataType.${type}`)}
+					</button>
+				</li>
+			{/if}
+		{/each}
 	</Menu>
 
 </nav>
