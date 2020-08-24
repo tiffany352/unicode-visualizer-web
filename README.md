@@ -17,7 +17,7 @@ To update to the latest Unicode Character Database version, download the
 .zip from https://www.unicode.org/Public/UCD/latest/ucd/UCD.zip and
 unpack it into the `data/` directory.
 
-Make sure any new JS/CSS files you add have the license boilerplate:
+Make sure any new files you add have the license boilerplate:
 
 ```js
 /* This Source Code Form is subject to the terms of the Mozilla Public
@@ -27,7 +27,7 @@ Make sure any new JS/CSS files you add have the license boilerplate:
 
 ## License
 
-Licensed under the Mozilla Public License, version 2.
+Licensed under the [Mozilla Public License, version 2](./LICENSE.txt).
 
 The files in `data/` are under the Unicode License and is copyright to
 the Unicode Consortium. The full license can be found here:
