@@ -184,6 +184,17 @@ export default class StringBlob {
 		return new StringBlob(encoding, encoder, string);
 	}
 
+	static fromArray(encoding: Encoding, buffer: ArrayBuffer) {
+		const string = Utf32.reinterpret(buffer);
+		return new StringBlob(Encoding.Utf32, Utf32, string).convert(encoding);
+	}
+
+	static fromCodepoint(encoding: Encoding, codepoint: number) {
+		const array = new Uint32Array(1);
+		array[0] = codepoint;
+		return StringBlob.fromArray(encoding, array);
+	}
+
 	static codepointsDecode(encoding: Encoding, data: string) {
 		const codepoints = [];
 		for (const word of data.match(/[a-fA-F0-9]+/g) || []) {
@@ -191,8 +202,7 @@ export default class StringBlob {
 			codepoints.push(value);
 		}
 		const array = new Uint32Array(codepoints);
-		const string = Utf32.reinterpret(array.buffer);
-		return new StringBlob(Encoding.Utf32, Utf32, string).convert(encoding);
+		return StringBlob.fromArray(encoding, array);
 	}
 
 	stringEncode() {

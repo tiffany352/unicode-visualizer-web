@@ -18,8 +18,10 @@
 
 <script lang="typescript">
 	import type { CharInfo } from "server/Unicode";
-	import OpenGraph from "../../../components/OpenGraph.svelte";
 	import { getDisplayText } from "strings";
+	import OpenGraph from "../../../components/OpenGraph.svelte";
+	import Repr from "./_repr.svelte";
+	import { Encoding } from "model/StringBlob";
 
 	export let char: CharInfo;
 </script>
@@ -103,6 +105,14 @@
 			{#each char.tags as tag}
 				<span class="tag">{tag}</span>
 			{:else}None{/each}
+		</div>
+		<div>UTF-8</div>
+		<div>
+			<Repr codepoint={char.codepoint} encoding={Encoding.Utf8} />
+		</div>
+		<div>UTF-16</div>
+		<div>
+			<Repr codepoint={char.codepoint} encoding={Encoding.Utf16} />
 		</div>
 	</div>
 {:else}
