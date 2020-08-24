@@ -165,6 +165,8 @@ code {
 	font-size: 1rem;
 	position: relative;
 	overflow: hidden;
+	display: inline-block;
+	text-decoration: none;
 }
 
 .button:hover {

@@ -13,24 +13,100 @@
 
 <script lang="typescript">
 	import Nav from "../components/Nav.svelte";
+	import Icon from "../components/Icon.svelte";
 
 	export let segment: string;
 	export let version: string;
+
+	let menuExpanded: boolean = false;
 </script>
 
 <style>
+	.outer {
+		display: grid;
+		grid-template-areas: "sidebar main";
+		grid-template-columns: min-content 1fr;
+	}
+
+	.scroll {
+		grid-area: main;
+		overflow-y: auto;
+		height: 100vh;
+	}
+
 	main {
 		position: relative;
 		max-width: 56em;
 		background-color: white;
 		padding: 2em;
-		margin: 0 auto;
 		box-sizing: border-box;
+	}
+
+	.menu {
+		display: none;
+	}
+
+	header {
+		grid-area: sidebar;
+		height: 100%;
+		max-width: 15em;
+	}
+
+	.backdrop {
+		display: none;
 	}
 
 	@media screen and (max-width: 500px) {
 		main {
 			padding: 0.25em;
+		}
+
+		.menu {
+			display: inline-block;
+		}
+
+		header {
+			position: absolute;
+			/* display: none; */
+			left: -500px;
+			top: 0;
+			height: 100%;
+			overflow-y: scroll;
+			overflow-x: visible;
+			transition: left 0.3s ease, box-shadow 0.3s ease;
+			z-index: 999;
+			display: flex;
+			flex-direction: row;
+		}
+
+		header:target,
+		header[aria-expanded="true"] {
+			display: flex;
+			left: 0;
+			outline: none;
+			-moz-box-shadow: 3px 0 12px rgba(0, 0, 0, 0.25);
+			-webkit-box-shadow: 3px 0 12px rgba(0, 0, 0, 0.25);
+			box-shadow: 3px 0 12px rgba(0, 0, 0, 0.25);
+		}
+
+		header:target + .backdrop,
+		header[aria-expanded="true"] + .backdrop {
+			pointer-events: all;
+			background-color: rgba(0, 0, 0, 0.25);
+		}
+
+		.backdrop {
+			display: block;
+			position: absolute;
+			z-index: 900;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+
+			transition: background-color 0.1s ease;
+			pointer-events: none;
+			background-color: rgba(0, 0, 0, 0);
 		}
 	}
 
@@ -40,12 +116,34 @@
 	}
 </style>
 
-<Nav {segment} />
+<div class="outer">
 
-<main>
-	<slot />
+	<header id="main-menu" aria-expanded={menuExpanded}>
+		<Nav {segment} closeMenu={() => (menuExpanded = false)} />
+	</header>
+	<a
+		href="#main-menu-toggle"
+		class="backdrop"
+		tabindex="-1"
+		aria-hidden="true"
+		on:click|preventDefault={() => (menuExpanded = false)} />
 
-	<hr />
+	<div class="scroll">
+		<main>
+			<a
+				id="main-menu-toggle"
+				href="#main-menu"
+				class="menu button"
+				on:click|preventDefault={() => (menuExpanded = true)}>
+				<Icon icon="menu" />
+				Menu
+			</a>
 
-	<span>Data sourced from {version}.</span>
-</main>
+			<slot />
+
+			<hr />
+
+			<span>Data sourced from Unicode {version}.</span>
+		</main>
+	</div>
+</div>

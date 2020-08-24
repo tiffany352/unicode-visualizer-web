@@ -1,83 +1,77 @@
 <script lang="typescript">
+	import Icon from "./Icon.svelte";
+	import NavLink from "./NavLink.svelte";
+
 	export let segment: string;
+	export let closeMenu: () => void;
 </script>
 
 <style>
 	nav {
-		border-bottom: 1px solid rgba(255, 62, 0, 0.1);
+		border-right: 1px solid rgba(112, 47, 25, 0.562);
 		font-weight: 300;
-		padding: 0 1em;
+		padding: 2em 2em;
+		box-sizing: border-box;
+		height: 100%;
+		background-color: white;
 	}
 
 	ul {
 		margin: 0;
 		padding: 0;
+		display: flex;
+		flex-direction: column;
+		justify-content: stretch;
+		list-style: none;
 	}
 
-	/* clearfix */
-	ul::after {
-		content: "";
-		display: block;
-		clear: both;
+	hr {
+		width: 100%;
+		border: none;
+		border-bottom: 1px dotted rgba(112, 47, 25, 0.562);
 	}
 
-	li {
-		display: block;
-		float: left;
+	.sr-only {
+		display: none;
 	}
 
-	[aria-current] {
-		position: relative;
-		display: inline-block;
+	.menu-close {
+		display: none;
+		float: right;
 	}
 
-	[aria-current]::after {
-		position: absolute;
-		content: "";
-		width: calc(100% - 1em);
-		height: 2px;
-		background-color: rgb(255, 62, 0);
-		display: block;
-		bottom: -1px;
+	.spacer {
+		flex-grow: 1;
 	}
 
-	a {
-		text-decoration: none;
-		padding: 1em 0.5em;
-		display: block;
+	@media screen and (max-width: 500px) {
+		.menu-close {
+			display: block;
+		}
 	}
 </style>
 
 <nav>
+	<h1>Unicode Visualizer</h1>
+
+	<a
+		href="#main-menu-toggle"
+		id="main-menu-close"
+		class="menu-close"
+		aria-label="Close main menu"
+		on:click|preventDefault={closeMenu}>
+		<span class="sr-only">Close main menu</span>
+		<Icon icon="x" />
+	</a>
+
 	<ul>
-		<li>
-			<a aria-current={segment === undefined ? 'page' : undefined} href=".">
-				Home
-			</a>
-		</li>
-		<li>
-			<a
-				aria-current={segment === 'inspect' ? 'page' : undefined}
-				href="inspect">
-				Inspect
-			</a>
-		</li>
-		<li>
-			<a aria-current={segment === 'blocks' ? 'page' : undefined} href="blocks">
-				Blocks
-			</a>
-		</li>
-		<li>
-			<a
-				aria-current={segment === 'sequences' ? 'page' : undefined}
-				href="sequences">
-				Sequences
-			</a>
-		</li>
-		<li>
-			<a aria-current={segment === 'search' ? 'page' : undefined} href="search">
-				Search
-			</a>
-		</li>
+		<NavLink {segment} {closeMenu} href=".">Home</NavLink>
+		<NavLink {segment} {closeMenu} href="search">Search</NavLink>
+		<hr />
+		<NavLink {segment} {closeMenu} href="inspect">Inspect</NavLink>
+		<NavLink {segment} {closeMenu} href="blocks">Blocks</NavLink>
+		<NavLink {segment} {closeMenu} href="sequences">Sequences</NavLink>
+		<NavLink {segment} {closeMenu} href="versions">Versions</NavLink>
 	</ul>
+	<div class="spacer" />
 </nav>
