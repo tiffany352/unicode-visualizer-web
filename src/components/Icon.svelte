@@ -5,6 +5,7 @@
 <style>
 	svg {
 		stroke: currentColor;
+		stroke-width: 2px;
 		fill: none;
 		vertical-align: bottom;
 	}

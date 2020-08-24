@@ -44,6 +44,10 @@
 		flex-grow: 1;
 	}
 
+	h2 {
+		font-size: 1rem;
+	}
+
 	@media screen and (max-width: 500px) {
 		.menu-close {
 			display: block;
@@ -69,6 +73,7 @@
 		<NavLink {segment} {closeMenu} href="search">Search</NavLink>
 		<NavLink {segment} {closeMenu} href="inspect">Inspect</NavLink>
 		<hr />
+		<h2>Browse</h2>
 		<NavLink {segment} {closeMenu} href="blocks">Blocks</NavLink>
 		<NavLink {segment} {closeMenu} href="sequences">Sequences</NavLink>
 		<NavLink {segment} {closeMenu} href="versions">Versions</NavLink>

@@ -2,6 +2,8 @@
 	import StringBlob, { Encoding } from "model/StringBlob";
 	import OpenGraph from "../components/OpenGraph.svelte";
 	import Searchbar from "../components/Searchbar.svelte";
+	import Icon from "../components/Icon.svelte";
+	import InspectBar from "../components/InspectBar.svelte";
 
 	interface Example {
 		string: string;
@@ -52,35 +54,64 @@
 	}
 </script>
 
+<style>
+	h1 {
+		text-align: center;
+		font-weight: 300;
+	}
+
+	nav {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+	}
+
+	nav a {
+		text-decoration: none;
+		font-size: 1.2em;
+		color: rgb(60, 60, 60);
+	}
+
+	nav a:hover,
+	nav a:focus {
+		text-decoration: underline;
+	}
+</style>
+
 <OpenGraph
 	title="Unicode Visualizer"
 	description="A tool for working with Unicode" />
 
+<h1>Unicode Visualizer</h1>
+
+<nav>
+	<a href="https://github.com/tiffany352/unicode-visualizer-web">
+		<Icon icon="github" />
+		GitHub
+	</a>
+</nav>
+
 <p>
-	This a web tool for inspecting Unicode strings. A naughty string causing a bug
-	in your code? Paste it here and it might help you find out why.
+	Unicode Visualizer is a website with information from the Unicode Character
+	Database. It also offers a tool that lets you inspect strings and view the
+	breakdown of their codepoints and graphemes.
+</p>
+
+<p>
+	The
+	<a href="inspect">inspect page</a>
+	lets you paste in any string and learn what it has in it. It can help diagnose
+	issues with encodings, Unicode handling in apps, text filter bypasses, and
+	other Unicode-related tasks.
 </p>
 
 <h2>Search</h2>
 <Searchbar />
 
-<h2>Browse</h2>
-<ul>
-	<li>
-		<a href="blocks">Codepoints by block</a>
-	</li>
-	<li>
-		<a href="sequences">Named sequences</a>
-	</li>
-	<li>
-		<a href="browse/emoji-sequences">Emoji Sequences</a>
-	</li>
-	<li>
-		<a href="browse/emoji-zwj">Emoji ZWJ Sequences</a>
-	</li>
-</ul>
+<h2>Quick Inspect</h2>
+<InspectBar />
 
-<h2>Example queries</h2>
+<h2>Examples</h2>
 <ul>
 	{#each examples as example}
 		<li>
@@ -89,27 +120,9 @@
 		</li>
 	{/each}
 
+	<!-- prettier-ignore -->
 	<li>
 		Have more? Submit them as issues on{' '}
-		<a href="https://github.com/tiffany352/unicode-visualizer-web">GitHub</a>
-		!
+		<a href="https://github.com/tiffany352/unicode-visualizer-web">GitHub</a>!
 	</li>
 </ul>
-
-<h2>Data Entry</h2>
-<p>
-	The search bar at the top allows you to conveniently paste in text, but it has
-	some limitations. Typically, invalid Unicode gets replaced with
-	<code>U+FFFD</code>
-	, newlines are stripped out, and the text is converted to UTF-16. These
-	widgets let you enter data directly, avoiding any conversion losses.
-</p>
-<h3>Base-16 Entry</h3>
-<p>
-	Insert base-16 encoded text in the relevant format. All non-hex characters are
-	ignored.
-</p>
-<!--DataEntry /-->
-<h3>Codepoint List Entry</h3>
-<p>Insert a list of codepoints. Non-hex characters are used as delimiters.</p>
-<!--CodepointEntry /-->
