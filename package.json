@@ -16,7 +16,6 @@
 		"express": "^4.17.1",
 		"flexsearch": "^0.6.32",
 		"grapheme-splitter": "^1.0.4",
-		"saxophone": "^0.6.1",
 		"sirv": "^1.0.0"
 	},
 	"devDependencies": {
