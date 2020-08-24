@@ -103,6 +103,12 @@
 		<div>{char.script.name}</div>
 		<div>East-Asian Width</div>
 		<div>{getDisplayText(`eastAsianWidth.${char.eastAsianWidth}`)}</div>
+		<div>Numeric Value</div>
+		<div>
+			{#if char.type == 'char' && char.numeric}
+				{char.numeric.value}
+			{:else}Not numeric.{/if}
+		</div>
 		{#if char.type == 'char' && char.lowercaseForm}
 			<div>Lowercase</div>
 			<div>

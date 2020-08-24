@@ -33,6 +33,13 @@ export type CaseMapping = CaseMappingSimple | CaseMappingFull | null;
 
 export type EastAsianWidth = "A" | "F" | "H" | "Na" | "W" | "N";
 
+export type NumericType = "Decimal" | "Digit" | "Numeric";
+
+export interface Numeric {
+	type: NumericType;
+	value: string;
+}
+
 export interface Char {
 	type: "char";
 	codepoint: number;
@@ -48,6 +55,7 @@ export interface Char {
 	uppercaseForm: CaseMapping;
 	titlecaseForm: CaseMapping;
 	eastAsianWidth: EastAsianWidth;
+	numeric: Numeric | null;
 	category: string;
 	script: ScriptInfo;
 }
@@ -217,6 +225,13 @@ const otherLowercase = props.get("Other_Lowercase") || new IntervalMap();
 
 const eastAsianWidthMap = new IntervalMap<EastAsianWidth>(
 	Data.eastAsianWidth.map((row) => [row.Range, row.Type])
+);
+
+const numericTypeMap = new IntervalMap(
+	Data.derivedNumericType.map((row) => [row.Range, row.Type])
+);
+const numericValueMap = new IntervalMap(
+	Data.derivedNumericValue.map((row) => [row.Range, row.Fraction])
 );
 
 console.log("Done.");
@@ -428,6 +443,18 @@ function parseEntry(entry: CharEntry, codepoint: number): Char {
 
 	const eastAsianWidth = eastAsianWidthMap.get(codepoint) || "N";
 
+	const numericType = numericTypeMap.get(codepoint);
+	let numeric = null;
+	if (numericType) {
+		const value = numericValueMap.get(codepoint);
+		if (value) {
+			numeric = {
+				type: numericType,
+				value,
+			};
+		}
+	}
+
 	return {
 		type: "char",
 		codepoint,
@@ -443,6 +470,7 @@ function parseEntry(entry: CharEntry, codepoint: number): Char {
 		titlecaseForm,
 		codepointStr,
 		eastAsianWidth,
+		numeric,
 		slug,
 		text,
 	};

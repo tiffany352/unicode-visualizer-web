@@ -120,4 +120,23 @@ export const eastAsianWidth = parse(read("EastAsianWidth"), (input) => ({
 	Type: eastAsianWidthType(input[1]),
 }));
 
+export const numericType = t.enumeration(["Decimal", "Digit", "Numeric"]);
+
+export const derivedNumericType = parse(
+	read("extracted/DerivedNumericType"),
+	(input) => ({
+		Range: t.codepointOrRange(input[0]),
+		Type: numericType(input[1]),
+	})
+);
+
+export const derivedNumericValue = parse(
+	read("extracted/DerivedNumericValues"),
+	(input) => ({
+		Range: t.codepointOrRange(input[0]),
+		Numeric_Value: input[1],
+		Fraction: input[3],
+	})
+);
+
 console.log("Done.");
