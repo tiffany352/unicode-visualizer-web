@@ -23,7 +23,6 @@
 	import OpenGraph from "../../../components/OpenGraph.svelte";
 	import Repr from "./_repr.svelte";
 	import CaseMap from "./_caseMap.svelte";
-	import type About from "routes/about.svelte";
 
 	export let char: CharInfo;
 </script>
@@ -44,7 +43,7 @@
 	}
 
 	.table {
-		grid-template-columns: min-content 1fr;
+		grid-template-columns: 6em 1fr;
 	}
 
 	.tag {
@@ -102,12 +101,8 @@
 		</div>
 		<div>Script</div>
 		<div>{char.script.name}</div>
-		<div>Tags</div>
-		<div>
-			{#each char.tags as tag}
-				<span class="tag">{tag}</span>
-			{:else}None{/each}
-		</div>
+		<div>East-Asian Width</div>
+		<div>{getDisplayText(`eastAsianWidth.${char.eastAsianWidth}`)}</div>
 		{#if char.type == 'char' && char.lowercaseForm}
 			<div>Lowercase</div>
 			<div>
@@ -126,6 +121,12 @@
 				<CaseMap mapping={char.titlecaseForm} />
 			</div>
 		{/if}
+		<div>Tags</div>
+		<div>
+			{#each char.tags as tag}
+				<span class="tag">{tag}</span>
+			{:else}None{/each}
+		</div>
 		<div>UTF-8</div>
 		<div>
 			<Repr codepoint={char.codepoint} encoding={Encoding.Utf8} />

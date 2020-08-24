@@ -106,4 +106,18 @@ export const propList = parse(read("PropList"), (input) => ({
 	Prop: input[1],
 }));
 
+export const eastAsianWidthType = t.enumeration([
+	"A",
+	"F",
+	"H",
+	"Na",
+	"W",
+	"N",
+]);
+
+export const eastAsianWidth = parse(read("EastAsianWidth"), (input) => ({
+	Range: t.codepointOrRange(input[0]),
+	Type: eastAsianWidthType(input[1]),
+}));
+
 console.log("Done.");

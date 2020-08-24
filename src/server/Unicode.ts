@@ -31,6 +31,8 @@ export interface CaseMappingFull {
 
 export type CaseMapping = CaseMappingSimple | CaseMappingFull | null;
 
+export type EastAsianWidth = "A" | "F" | "H" | "Na" | "W" | "N";
+
 export interface Char {
 	type: "char";
 	codepoint: number;
@@ -45,6 +47,7 @@ export interface Char {
 	lowercaseForm: CaseMapping;
 	uppercaseForm: CaseMapping;
 	titlecaseForm: CaseMapping;
+	eastAsianWidth: EastAsianWidth;
 	category: string;
 	script: ScriptInfo;
 }
@@ -211,6 +214,10 @@ for (const row of Data.propList) {
 
 const otherUppercase = props.get("Other_Uppercase") || new IntervalMap();
 const otherLowercase = props.get("Other_Lowercase") || new IntervalMap();
+
+const eastAsianWidthMap = new IntervalMap<EastAsianWidth>(
+	Data.eastAsianWidth.map((row) => [row.Range, row.Type])
+);
 
 console.log("Done.");
 
@@ -419,6 +426,8 @@ function parseEntry(entry: CharEntry, codepoint: number): Char {
 		tags.push("Titlecase");
 	}
 
+	const eastAsianWidth = eastAsianWidthMap.get(codepoint) || "N";
+
 	return {
 		type: "char",
 		codepoint,
@@ -433,6 +442,7 @@ function parseEntry(entry: CharEntry, codepoint: number): Char {
 		uppercaseForm,
 		titlecaseForm,
 		codepointStr,
+		eastAsianWidth,
 		slug,
 		text,
 	};
