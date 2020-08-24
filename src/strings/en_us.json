@@ -372,6 +372,7 @@
 	"dataType": {
 		"plain": "Text",
 		"base16": "Base-16",
-		"base64": "Base-64"
+		"base64": "Base-64",
+		"codepoints": "Codepoints"
 	}
 }

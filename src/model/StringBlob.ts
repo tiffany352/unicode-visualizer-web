@@ -15,6 +15,7 @@ export enum DataType {
 	Plain = "plain",
 	Base16 = "base16",
 	Base64 = "base64",
+	Codepoints = "codepoints",
 }
 
 export function getEncodings(): Encoding[] {
@@ -22,7 +23,12 @@ export function getEncodings(): Encoding[] {
 }
 
 export function getDataTypes(): DataType[] {
-	return [DataType.Plain, DataType.Base16, DataType.Base64];
+	return [
+		DataType.Plain,
+		DataType.Base16,
+		DataType.Base64,
+		DataType.Codepoints,
+	];
 }
 
 export function encodingFromTag(tag: string): Encoding {
@@ -154,6 +160,8 @@ export default class StringBlob {
 				return StringBlob.rawDecode(encoding, data);
 			case DataType.Base64:
 				return StringBlob.base64Decode(encoding, data);
+			case DataType.Codepoints:
+				return StringBlob.codepointsDecode(encoding, data);
 		}
 	}
 
@@ -170,6 +178,17 @@ export default class StringBlob {
 		const encoder = getEncoder(encoding);
 		const string = encoder.reinterpret(array);
 		return new StringBlob(encoding, encoder, string);
+	}
+
+	static codepointsDecode(encoding: Encoding, data: string) {
+		const codepoints = [];
+		for (const word of data.match(/[a-fA-F0-9]+/g) || []) {
+			const value = parseInt(word, 16);
+			codepoints.push(value);
+		}
+		const array = new Uint32Array(codepoints);
+		const string = Utf32.reinterpret(array.buffer);
+		return new StringBlob(Encoding.Utf32, Utf32, string).convert(encoding);
 	}
 
 	stringEncode() {
