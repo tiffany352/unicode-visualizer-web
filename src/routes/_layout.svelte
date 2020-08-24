@@ -121,6 +121,8 @@
 	<header id="main-menu" aria-expanded={menuExpanded}>
 		<Nav {segment} closeMenu={() => (menuExpanded = false)} />
 	</header>
+
+	<!-- svelte-ignore a11y-missing-content -->
 	<a
 		href="#main-menu-toggle"
 		class="backdrop"
