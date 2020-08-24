@@ -7,10 +7,25 @@ class Node<T> {
 	value: T;
 	left: Node<T> | null = null;
 	right: Node<T> | null = null;
+	parent: Node<T> | null = null;
 
 	constructor(range: Range, value: T) {
 		this.range = range;
 		this.value = value;
+	}
+
+	setLeft(left: Node<T> | null) {
+		this.left = left;
+		if (left) {
+			left.parent = this;
+		}
+	}
+
+	setRight(right: Node<T> | null) {
+		this.right = right;
+		if (right) {
+			right.parent = right;
+		}
 	}
 
 	get(index: number): T | null {
@@ -60,8 +75,8 @@ export default class IntervalTree<T> {
 			const entry = ranges[pivot];
 
 			const node = new Node(entry[0], entry[1]);
-			node.left = recurse(start, pivot, Math.floor((start + pivot - 1) / 2));
-			node.right = recurse(pivot + 1, end, Math.floor((pivot + 1 + end) / 2));
+			node.setLeft(recurse(start, pivot, Math.floor((start + pivot - 1) / 2)));
+			node.setRight(recurse(pivot + 1, end, Math.floor((pivot + 1 + end) / 2)));
 
 			return node;
 		};
@@ -81,6 +96,42 @@ export default class IntervalTree<T> {
 			this.root.insert(range, value);
 		} else {
 			this.root = new Node(range, value);
+		}
+	}
+
+	[Symbol.iterator]() {
+		return new IntervalTreeIterator(this.root);
+	}
+}
+
+export class IntervalTreeIterator<T> implements Iterator<[Range, T]> {
+	current: Node<T> | null;
+
+	constructor(root: Node<T> | null) {
+		this.current = root;
+	}
+
+	next(): IteratorResult<[Range, T]> {
+		if (this.current) {
+			const value: [Range, T] = [this.current.range, this.current.value];
+			if (this.current.left) {
+				this.current = this.current.left;
+			} else if (this.current.right) {
+				this.current = this.current.right;
+			} else if (this.current.parent) {
+				this.current = this.current.parent.right;
+			} else {
+				this.current = null;
+			}
+			return {
+				done: false,
+				value,
+			};
+		} else {
+			return {
+				done: true,
+				value: undefined,
+			};
 		}
 	}
 }

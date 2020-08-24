@@ -83,4 +83,9 @@ export const emojiData = parse(read("emoji/emoji-data"), (input) => ({
 	Type: emojiType(input[1]),
 }));
 
+export const scripts = parse(read("Scripts"), (input) => ({
+	Range: t.codepointOrRange(input[0]),
+	Script: input[1],
+}));
+
 console.log("Done.");

@@ -1,12 +1,17 @@
 import * as Data from "./Data";
 import IntervalTree from "util/IntervalTree";
 import Range from "util/Range";
+import { IntervalMap } from "util/IntervalMap";
 
 // Types
 
 export interface NameAlias {
 	text: string;
 	type: "correction" | "control" | "alternate" | "figment" | "abbreviation";
+}
+
+export interface ScriptInfo {
+	name: string;
 }
 
 export interface Char {
@@ -21,6 +26,7 @@ export interface Char {
 	block: BlockInfo;
 	tags: string[];
 	category: string;
+	script: ScriptInfo;
 }
 
 export type InvalidReason =
@@ -113,15 +119,16 @@ for (let i = 0; i < Data.unicodeData.length; i++) {
 	}
 }
 
-const charSingleMap = new Map<number, CharEntrySingle>();
-const charRangeTree = new IntervalTree<CharEntryRange>();
+const charMap = new IntervalMap<CharEntry>();
 for (const entry of charList) {
-	if (entry.Codepoint != null) {
-		charSingleMap.set(entry.Codepoint, entry);
-	} else {
-		charRangeTree.add(entry.range, entry);
-	}
+	const range =
+		entry.Codepoint != null ? new Range(entry.Codepoint) : entry.range;
+	charMap.add(range, entry);
 }
+
+const scriptMap = new IntervalMap(
+	Data.scripts.map((row) => [row.Range, row.Script])
+);
 
 const ageTree = new IntervalTree(
 	Data.derivedAge.map((row) => [row.Range, row.Version])
@@ -308,6 +315,10 @@ function parseEntry(entry: CharEntry, codepoint: number): Char {
 	};
 	const category = entry.General_Category || "None";
 
+	const script = {
+		name: scriptMap.get(codepoint) || "Unknown",
+	};
+
 	const tags: string[] = [];
 	for (const [type, tree] of emojiProps.entries()) {
 		if (tree.get(codepoint)) {
@@ -323,6 +334,7 @@ function parseEntry(entry: CharEntry, codepoint: number): Char {
 		aliases,
 		block,
 		category,
+		script,
 		tags,
 		codepointStr,
 		slug,
@@ -364,14 +376,9 @@ export function lookupChar(codepoint: number): Char | InvalidChar | null {
 		};
 	}
 
-	const result = charSingleMap.get(codepoint);
+	const result = charMap.get(codepoint);
 	if (result) {
 		return parseEntry(result, codepoint);
-	}
-
-	const result2 = charRangeTree.get(codepoint);
-	if (result2) {
-		return parseEntry(result2, codepoint);
 	}
 
 	return null;

@@ -64,3 +64,29 @@ export default class Range {
 		return `Range(${this.first}..${this.last})`;
 	}
 }
+
+export class RangeIterator implements Iterator<number> {
+	current: number;
+	last: number;
+
+	constructor(range: Range) {
+		this.current = range.first;
+		this.last = range.last;
+	}
+
+	next(): IteratorResult<number> {
+		if (this.current < this.last) {
+			const value = this.current;
+			this.current += 1;
+			return {
+				done: false,
+				value,
+			};
+		} else {
+			return {
+				done: true,
+				value: undefined,
+			};
+		}
+	}
+}

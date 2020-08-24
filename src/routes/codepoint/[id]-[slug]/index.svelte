@@ -93,7 +93,11 @@
 			<a href="blocks/{char.block.slug}">{char.block.name}</a>
 		</div>
 		<div>Category</div>
-		<div>{getDisplayText(`generalCategory.${char.category}`)}</div>
+		<div>
+			{getDisplayText(`generalCategory.${char.category}`)} ({char.category})
+		</div>
+		<div>Script</div>
+		<div>{char.script.name}</div>
 		<div>Tags</div>
 		<div>
 			{#each char.tags as tag}
