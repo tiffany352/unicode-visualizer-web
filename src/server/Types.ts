@@ -49,6 +49,14 @@ export function name(input: string): Name {
 	};
 }
 
+export function optional<T>(input: string, parser: Parser<T>): T | null {
+	if (input == "") {
+		return null;
+	} else {
+		return parser(input);
+	}
+}
+
 export function binary(input: string): boolean {
 	switch (input) {
 		case "Y":

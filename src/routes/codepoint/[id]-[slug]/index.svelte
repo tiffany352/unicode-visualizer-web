@@ -19,9 +19,11 @@
 <script lang="typescript">
 	import type { CharInfo } from "server/Unicode";
 	import { getDisplayText } from "strings";
+	import { Encoding } from "model/StringBlob";
 	import OpenGraph from "../../../components/OpenGraph.svelte";
 	import Repr from "./_repr.svelte";
-	import { Encoding } from "model/StringBlob";
+	import CaseMap from "./_caseMap.svelte";
+	import type About from "routes/about.svelte";
 
 	export let char: CharInfo;
 </script>
@@ -106,6 +108,24 @@
 				<span class="tag">{tag}</span>
 			{:else}None{/each}
 		</div>
+		{#if char.type == 'char' && char.lowercaseForm}
+			<div>Lowercase</div>
+			<div>
+				<CaseMap mapping={char.lowercaseForm} />
+			</div>
+		{/if}
+		{#if char.type == 'char' && char.uppercaseForm}
+			<div>Uppercase</div>
+			<div>
+				<CaseMap mapping={char.uppercaseForm} />
+			</div>
+		{/if}
+		{#if char.type == 'char' && char.titlecaseForm}
+			<div>Titlecase</div>
+			<div>
+				<CaseMap mapping={char.titlecaseForm} />
+			</div>
+		{/if}
 		<div>UTF-8</div>
 		<div>
 			<Repr codepoint={char.codepoint} encoding={Encoding.Utf8} />

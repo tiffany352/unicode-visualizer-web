@@ -21,9 +21,9 @@ export const unicodeData = parse(read("UnicodeData"), (input) => ({
 	Bidi_Mirrored: t.binary(input[9]),
 	Unicode_1_Name: input[10], // Always empty
 	ISO_Comment: input[11], // Always empty
-	Simple_Uppercase_Mapping: input[12],
-	Simple_Lowercase_Mapping: input[13],
-	Simple_Titlecase_Mapping: input[14],
+	Simple_Uppercase_Mapping: t.optional(input[12], t.codepointList),
+	Simple_Lowercase_Mapping: t.optional(input[13], t.codepointList),
+	Simple_Titlecase_Mapping: t.optional(input[14], t.codepointList),
 }));
 
 export const blocks = parse(read("Blocks"), (input) => ({
@@ -86,6 +86,24 @@ export const emojiData = parse(read("emoji/emoji-data"), (input) => ({
 export const scripts = parse(read("Scripts"), (input) => ({
 	Range: t.codepointOrRange(input[0]),
 	Script: input[1],
+}));
+
+export const statusType = t.enumeration([
+	"C", // Common
+	"F", // Full
+	"S", // Simple
+	"T", // Turkish
+]);
+
+export const caseFolding = parse(read("CaseFolding"), (input) => ({
+	Codepoint: t.codepoint(input[0]),
+	Status: statusType(input[1]),
+	Mapping: t.codepointList(input[2]),
+}));
+
+export const propList = parse(read("PropList"), (input) => ({
+	Range: t.codepointOrRange(input[0]),
+	Prop: input[1],
 }));
 
 console.log("Done.");

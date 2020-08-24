@@ -14,6 +14,23 @@ export interface ScriptInfo {
 	name: string;
 }
 
+// Refers to a codepoint
+export interface CaseMappingSimple {
+	type: "simple";
+	text: string;
+	name: string;
+	codepointStr: string;
+	slug: string;
+}
+
+// Refers to a sequence
+export interface CaseMappingFull {
+	type: "full";
+	text: string;
+}
+
+export type CaseMapping = CaseMappingSimple | CaseMappingFull | null;
+
 export interface Char {
 	type: "char";
 	codepoint: number;
@@ -25,6 +42,9 @@ export interface Char {
 	aliases: NameAlias[];
 	block: BlockInfo;
 	tags: string[];
+	lowercaseForm: CaseMapping;
+	uppercaseForm: CaseMapping;
+	titlecaseForm: CaseMapping;
 	category: string;
 	script: ScriptInfo;
 }
@@ -175,9 +195,34 @@ for (const row of Data.emojiData) {
 	props.add(row.Range, true);
 }
 
+const caseMaps = new Map<number, number[]>(
+	Data.caseFolding
+		.filter((row) => row.Status == "C" || row.Status == "F")
+		.map((row) => [row.Codepoint, row.Mapping])
+);
+
+const props = new Map<string, IntervalMap<true>>();
+for (const row of Data.propList) {
+	const entry = props.get(row.Prop) || new IntervalMap();
+	props.set(row.Prop, entry);
+
+	entry.add(row.Range, true);
+}
+
+const otherUppercase = props.get("Other_Uppercase") || new IntervalMap();
+const otherLowercase = props.get("Other_Lowercase") || new IntervalMap();
+
 console.log("Done.");
 
 // Getters
+
+export function getProperty(prop: string, codepoint: number): boolean {
+	const entry = props.get(prop);
+	if (entry) {
+		return entry.get(codepoint) || false;
+	}
+	return false;
+}
 
 export function getBlocks(): BlockInfo[] {
 	return blocks;
@@ -298,6 +343,38 @@ function findName(
 	return toTitleCase(aliases[0].text);
 }
 
+function parseCaseMap(codepoints: number[] | null): CaseMapping {
+	if (!codepoints) {
+		return null;
+	}
+
+	if (codepoints.length > 1) {
+		return {
+			type: "full",
+			text: String.fromCodePoint(...codepoints),
+		};
+	} else {
+		const codepoint = codepoints[0];
+		const entry = charMap.get(codepoint);
+		if (entry) {
+			const aliases = aliasMap.get(codepoint) || [];
+			const name = findName(entry, aliases, codepoint);
+			const codepointStr = codepointToString(codepoint);
+			const slugName = toSlug(name);
+			const slug = `${codepointStr}-${slugName || "unicode"}`;
+			const text = String.fromCodePoint(codepoint);
+			return {
+				type: "simple",
+				codepointStr,
+				name,
+				text,
+				slug,
+			};
+		}
+	}
+	return null;
+}
+
 function parseEntry(entry: CharEntry, codepoint: number): Char {
 	const age = ageTree.get(codepoint) || "undefined";
 	const aliases = aliasMap.get(codepoint) || [];
@@ -319,11 +396,27 @@ function parseEntry(entry: CharEntry, codepoint: number): Char {
 		name: scriptMap.get(codepoint) || "Unknown",
 	};
 
+	//const caseMapping = caseMaps.get(codepoint) || null;
+	let uppercaseForm = parseCaseMap(entry.Simple_Uppercase_Mapping);
+	let lowercaseForm = parseCaseMap(entry.Simple_Lowercase_Mapping);
+	let titlecaseForm = parseCaseMap(entry.Simple_Titlecase_Mapping);
+
 	const tags: string[] = [];
 	for (const [type, tree] of emojiProps.entries()) {
 		if (tree.get(codepoint)) {
 			tags.push(type);
 		}
+	}
+
+	const lowercase = category == "Ll" || otherLowercase.get(codepoint) || false;
+	const uppercase = category == "Lu" || otherUppercase.get(codepoint) || false;
+	const titlecase = category == "Lt";
+	if (lowercase) {
+		tags.push("Lowercase");
+	} else if (uppercase) {
+		tags.push("Uppercase");
+	} else if (titlecase) {
+		tags.push("Titlecase");
 	}
 
 	return {
@@ -336,6 +429,9 @@ function parseEntry(entry: CharEntry, codepoint: number): Char {
 		category,
 		script,
 		tags,
+		lowercaseForm,
+		uppercaseForm,
+		titlecaseForm,
 		codepointStr,
 		slug,
 		text,
