@@ -123,7 +123,7 @@
 
 <h1>Search Results</h1>
 
-<Searchbar {query} />
+<Searchbar bind:query />
 
 <p>Found {results.length} results in {requestTime}ms.</p>
 

@@ -6,7 +6,7 @@
 	import { goto } from "@sapper/app";
 	import InputBar from "./InputBar.svelte";
 
-	let query: string = "";
+	export let query: string = "";
 
 	function onSubmit() {
 		goto(`search/${encodeURIComponent(query)}`);
