@@ -90,7 +90,9 @@
 
 	<div class="table">
 		<div>Appeared</div>
-		<div>Unicode {char.age}</div>
+		<div>
+			<a href="versions/{char.age}/page/1">Unicode {char.age}</a>
+		</div>
 		<div>Aliases</div>
 		<div>
 			{#if char.type == 'char' && char.aliases && char.aliases.length > 0}
