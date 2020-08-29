@@ -93,8 +93,18 @@ export interface BlockInfo {
 	slug: string;
 }
 
+export type SequenceType =
+	| "Named_Sequence"
+	| "Basic_Emoji"
+	| "Emoji_Keycap_Sequence"
+	| "RGI_Emoji_Flag_Sequence"
+	| "RGI_Emoji_Tag_Sequence"
+	| "RGI_Emoji_Modifier_Sequence"
+	| "RGI_Emoji_ZWJ_Sequence";
+
 export interface SequenceInfo {
 	name: string;
+	type: SequenceType;
 	text: string;
 	codepoints: number[];
 	slug: string;
@@ -106,13 +116,22 @@ console.log("Processing UCD.");
 
 function toTitleCase(input: string): string {
 	return input.replace(
-		/([A-Z])([A-Z]+)/g,
-		(group, first, rest) => first + rest.toLowerCase()
+		/(\w)(\w+)/g,
+		(group, first, rest) => first.toUpperCase() + rest.toLowerCase()
 	);
 }
 
+const slugs = new Map([
+	["*", "star"],
+	["#", "hash"],
+]);
+
 function toSlug(input: string): string {
-	return input.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+	input = input.toLowerCase();
+	for (const entry of slugs.entries()) {
+		input = input.replace(entry[0], entry[1]);
+	}
+	return input.replace(/[^a-z0-9]+/g, "-");
 }
 
 const blocks: BlockInfo[] = Data.blocks.map((block) => ({
@@ -122,10 +141,34 @@ const blocks: BlockInfo[] = Data.blocks.map((block) => ({
 }));
 const blockTree = new IntervalTree(blocks.map((block) => [block.range, block]));
 
-const sequenceList: SequenceInfo[] = Data.sequences.map((seq) => ({
+interface SequenceRaw {
+	Codepoints: number[];
+	Type:
+		| "Basic_Emoji"
+		| "Emoji_Keycap_Sequence"
+		| "RGI_Emoji_Flag_Sequence"
+		| "RGI_Emoji_Tag_Sequence"
+		| "RGI_Emoji_Modifier_Sequence";
+	Name: string;
+}
+
+function isNotRange(row: typeof Data.emojiSequences[0]): row is SequenceRaw {
+	return row.Codepoints instanceof Array;
+}
+
+const emojiSequencesSansRanges = Data.emojiSequences
+	.filter(isNotRange)
+	.filter((row) => row.Codepoints.length > 1);
+
+const sequenceList: SequenceInfo[] = [
+	...Data.sequences,
+	...emojiSequencesSansRanges,
+	...Data.emojiZwjSequences,
+].map((seq) => ({
 	codepoints: seq.Codepoints,
+	type: seq.Type,
 	text: String.fromCodePoint(...seq.Codepoints),
-	name: toTitleCase(seq.Name),
+	name: toTitleCase(unescape(seq.Name)),
 	slug: toSlug(seq.Name),
 }));
 

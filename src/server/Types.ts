@@ -61,6 +61,12 @@ export function optional<T>(input: string, parser: Parser<T>): T | null {
 	}
 }
 
+export function escapedString(input: string): string {
+	return input.replace(/\\x{([a-fA-F0-9]+)}/, (group, code) =>
+		String.fromCodePoint(parseInt(code, 16))
+	);
+}
+
 export function binary(input: string): boolean {
 	switch (input) {
 		case "Y":
@@ -73,7 +79,7 @@ export function binary(input: string): boolean {
 }
 
 export function codepoint(input: string): number {
-	if (/[a-zA-Z0-9]+/.test(input)) {
+	if (/^[a-zA-Z0-9]+$/.test(input)) {
 		return parseInt(input, 16);
 	} else {
 		throw new ValidationError("codepoint", input);
@@ -101,6 +107,14 @@ export function codepointOrRange(input: string): Range {
 
 export function codepointList(input: string): number[] {
 	return input.split(" ").map((str) => codepoint(str));
+}
+
+export function codepointListOrRange(input: string): number[] | Range {
+	if (input.indexOf("..") != -1) {
+		return codepointRange(input);
+	} else {
+		return codepointList(input);
+	}
 }
 
 export function enumeration<T extends string>(values: T[]): Parser<T> {

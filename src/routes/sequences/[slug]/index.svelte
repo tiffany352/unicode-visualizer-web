@@ -27,9 +27,10 @@
 
 <script lang="typescript">
 	import type { SequenceInfo, CharMap, CharInfo } from "server/Unicode";
+	import StringBlob, { Encoding } from "model/StringBlob";
+	import { getDisplayText } from "strings";
 	import OpenGraph from "../../../components/OpenGraph.svelte";
 	import Inspector from "../../../components/Inspector/index.svelte";
-	import StringBlob, { Encoding } from "model/StringBlob";
 
 	interface Extra {
 		chars: CharMap;
@@ -49,5 +50,6 @@
 		url="/sequences/{sequence.slug}" />
 
 <h1>{sequence.name}</h1>
+<h2>{getDisplayText(`sequenceType.${sequence.type}`)}</h2>
 
 <Inspector {string} {extra} />

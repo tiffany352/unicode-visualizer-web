@@ -374,5 +374,25 @@
 		"base16": "Base-16",
 		"base64": "Base-64",
 		"codepoints": "Codepoints"
+	},
+
+	"sequenceType": {
+		"Named_Sequence": "Named Sequence",
+		"Basic_Emoji": "Emoji Sequence",
+		"Emoji_Keycap_Sequence": "Emoji Keycap Sequence",
+		"RGI_Emoji_Flag_Sequence": "Emoji Flag Sequence",
+		"RGI_Emoji_Tag_Sequence": "Emoji Tag Sequence",
+		"RGI_Emoji_Modifier_Sequence": "Emoji Modifier Sequence",
+		"RGI_Emoji_ZWJ_Sequence": "Emoji ZWJ Sequence"
+	},
+
+	"sequenceTypeLower": {
+		"Named_Sequence": "named sequence",
+		"Basic_Emoji": "emoji sequence",
+		"Emoji_Keycap_Sequence": "emoji keycap sequence",
+		"RGI_Emoji_Flag_Sequence": "emoji flag sequence",
+		"RGI_Emoji_Tag_Sequence": "emoji tag sequence",
+		"RGI_Emoji_Modifier_Sequence": "emoji modifier sequence",
+		"RGI_Emoji_ZWJ_Sequence": "emoji ZWJ sequence"
 	}
 }

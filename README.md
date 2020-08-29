@@ -14,8 +14,12 @@ A web app for inspecting unicode strings.
 Run `npm install` and `npm run dev` and you should be good to go!
 
 To update to the latest Unicode Character Database version, download the
-.zip from https://www.unicode.org/Public/UCD/latest/ucd/UCD.zip and
-unpack it into the `data/` directory.
+.zip from [here][1] and unpack it into the `data/` directory. Then
+download emoji-sequences.txt and emoji-zwj-sequences.txt from [here][2]
+and put them in `data/emoji/`.
+
+[1]: https://www.unicode.org/Public/UCD/latest/ucd/UCD.zip
+[2]: https://www.unicode.org/Public/emoji/
 
 Make sure any new files you add have the license boilerplate:
 

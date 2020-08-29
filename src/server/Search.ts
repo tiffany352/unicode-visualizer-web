@@ -9,6 +9,7 @@ import {
 	getVersions,
 	getSequences,
 } from "./Unicode";
+import { getDisplayText } from "strings";
 
 export interface Link {
 	text: string;
@@ -82,11 +83,15 @@ for (const version of getVersions()) {
 }
 
 for (const seq of getSequences()) {
-	const page = {
+	const type = getDisplayText(`sequenceTypeLower.${seq.type}`);
+	const page: Page = {
 		url: `sequences/${seq.slug}`,
 		title: `${seq.text} ${seq.name}`,
-		description: `View the codepoint breakdown of the ${seq.name} sequence.`,
+		description: `View the codepoint breakdown of the ${seq.name} ${type}.`,
 	};
+	if (seq.type != "Named_Sequence") {
+		page.tags = "Emoji";
+	}
 	index.add(page);
 }
 

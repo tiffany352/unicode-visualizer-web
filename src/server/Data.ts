@@ -50,8 +50,11 @@ export const nameAliases = parse(read("NameAliases"), (input) => ({
 }));
 export type NameAlias = typeof nameAliases[0];
 
+type NamedSequence = "Named_Sequence";
+
 export const sequences = parse(read("NamedSequences"), (input) => ({
 	Name: input[0],
+	Type: "Named_Sequence" as NamedSequence,
 	Codepoints: t.codepointList(input[1]),
 }));
 
@@ -86,6 +89,31 @@ export const emojiData = parse(read("emoji/emoji-data"), (input) => ({
 	Range: t.codepointOrRange(input[0]),
 	Type: emojiType(input[1]),
 }));
+
+const emojiSequenceType = t.enumeration([
+	"Basic_Emoji",
+	"Emoji_Keycap_Sequence",
+	"RGI_Emoji_Flag_Sequence",
+	"RGI_Emoji_Tag_Sequence",
+	"RGI_Emoji_Modifier_Sequence",
+]);
+
+export const emojiSequences = parse(read("emoji/emoji-sequences"), (input) => ({
+	Codepoints: t.codepointListOrRange(input[0]),
+	Type: emojiSequenceType(input[1]),
+	Name: t.escapedString(input[2]),
+}));
+
+const emojiZwjSequenceType = t.enumeration(["RGI_Emoji_ZWJ_Sequence"]);
+
+export const emojiZwjSequences = parse(
+	read("emoji/emoji-zwj-sequences"),
+	(input) => ({
+		Codepoints: t.codepointList(input[0]),
+		Type: emojiZwjSequenceType(input[1]),
+		Name: t.escapedString(input[2]),
+	})
+);
 
 export const scripts = parse(read("Scripts"), (input) => ({
 	Range: t.codepointOrRange(input[0]),
