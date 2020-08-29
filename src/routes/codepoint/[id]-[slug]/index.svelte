@@ -54,7 +54,13 @@
 		border: 1px solid rgb(150, 150, 150);
 		border-radius: 5px;
 		padding: 0 4px;
-		margin: 0 4px;
+		margin: 2px 4px;
+	}
+
+	.flow {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
 	}
 </style>
 
@@ -132,17 +138,17 @@
 			</div>
 		{/if}
 		<div>Tags</div>
-		<div>
+		<div class="flow">
 			{#each char.tags as tag}
-				<span class="tag">{tag}</span>
+				<div class="tag">{tag}</div>
 			{:else}None{/each}
 		</div>
 		<div>UTF-8</div>
-		<div>
+		<div class="flow">
 			<Repr codepoint={char.codepoint} encoding={Encoding.Utf8} />
 		</div>
 		<div>UTF-16</div>
-		<div>
+		<div class="flow">
 			<Repr codepoint={char.codepoint} encoding={Encoding.Utf16} />
 		</div>
 	</div>
