@@ -7,6 +7,7 @@ import * as Utf8 from "./Utf8";
 import * as Utf16 from "./Utf16";
 import * as Utf32 from "./Utf32";
 import Windows1252String, * as Windows1252 from "./Windows1252";
+import { decodeSurrogate, stringFromCodePoint } from "./Util";
 
 export enum Encoding {
 	Utf8,
@@ -102,7 +103,7 @@ export interface GraphemeInfo {
 
 export interface EncodedString {
 	urlEncode(useSep: boolean): string;
-	stringEncode(): string;
+	codepointEncode(): number[];
 	getCodeunits(): CodeunitInfo[];
 	getCodepoints(): CodepointInfo[];
 	getArrayBuffer(): ArrayBuffer;
@@ -110,7 +111,7 @@ export interface EncodedString {
 
 interface Encoder {
 	urlDecode(data: string): EncodedString;
-	stringDecode(input: string): EncodedString;
+	codepointDecode(input: number[]): EncodedString;
 	reinterpret(data: ArrayBuffer): EncodedString;
 }
 
@@ -126,7 +127,17 @@ export default class StringBlob {
 	}
 
 	convert(encoding: Encoding) {
-		return StringBlob.stringDecode(encoding, this.stringEncode());
+		if (this.encoding == encoding) {
+			const array = this.data.getArrayBuffer();
+			return new StringBlob(
+				this.encoding,
+				this.encoder,
+				this.encoder.reinterpret(array)
+			);
+		}
+		const encoder = getEncoder(encoding);
+		const string = encoder.codepointDecode(this.data.codepointEncode());
+		return new StringBlob(encoding, encoder, string);
 	}
 
 	reinterpret(encoding: Encoding) {
@@ -153,7 +164,58 @@ export default class StringBlob {
 	static stringDecode(encoding: Encoding, string: string) {
 		const encoder = getEncoder(encoding);
 
-		return new StringBlob(encoding, encoder, encoder.stringDecode(string));
+		let highSurrogate: number | null = null;
+		let lowSurrogate: number | null = null;
+
+		const codepoints = [];
+
+		const writePair = (lowSurrogate: number, highSurrogate: number) => {
+			codepoints.push(decodeSurrogate(lowSurrogate, highSurrogate));
+		};
+
+		for (let i = 0; i < string.length; i++) {
+			const code = string.charCodeAt(i);
+			const isHigh = code >= 0xd800 && code <= 0xdbff;
+			const isLow = code >= 0xdc00 && code <= 0xdfff;
+
+			if (isHigh) {
+				if (highSurrogate) {
+					codepoints.push(code);
+					highSurrogate = null;
+				} else if (lowSurrogate) {
+					writePair(lowSurrogate, code);
+					lowSurrogate = null;
+				} else {
+					highSurrogate = code;
+				}
+			} else if (isLow) {
+				if (lowSurrogate) {
+					codepoints.push(lowSurrogate);
+					lowSurrogate = null;
+				} else if (highSurrogate) {
+					writePair(code, highSurrogate);
+					highSurrogate = null;
+				} else {
+					lowSurrogate = code;
+				}
+			} else {
+				// normal
+				if (highSurrogate) {
+					codepoints.push(highSurrogate);
+					highSurrogate = null;
+				} else if (lowSurrogate) {
+					codepoints.push(lowSurrogate);
+					lowSurrogate = null;
+				}
+				codepoints.push(code);
+			}
+		}
+
+		return new StringBlob(
+			encoding,
+			encoder,
+			encoder.codepointDecode(codepoints)
+		);
 	}
 
 	static dataDecode(
@@ -194,9 +256,9 @@ export default class StringBlob {
 	}
 
 	static fromCodepoint(encoding: Encoding, codepoint: number) {
-		const array = new Uint32Array(1);
-		array[0] = codepoint;
-		return StringBlob.fromArray(encoding, array);
+		const encoder = getEncoder(encoding);
+		const string = encoder.codepointDecode([codepoint]);
+		return new StringBlob(encoding, encoder, string);
 	}
 
 	static codepointsDecode(encoding: Encoding, data: string) {
@@ -210,7 +272,10 @@ export default class StringBlob {
 	}
 
 	stringEncode() {
-		return this.data.stringEncode();
+		const codepoints = this.data.codepointEncode();
+		return Array.from(codepoints)
+			.map((code) => stringFromCodePoint(code))
+			.join("");
 	}
 
 	dataEncode(dataType: DataType, useSep: boolean = true): string {
@@ -239,8 +304,8 @@ export default class StringBlob {
 
 	codepointsEncode(useSep: boolean = true) {
 		return this.data
-			.getCodepoints()
-			.map((codepoint) => (codepoint.value || 0).toString(16).padStart(4, "0"))
+			.codepointEncode()
+			.map((codepoint) => codepoint.toString(16).padStart(4, "0"))
 			.join(useSep ? ", " : " ");
 	}
 
@@ -285,7 +350,7 @@ export default class StringBlob {
 		for (let i = 0; i < codepoints.length; i++) {
 			const info = codepoints[i];
 			strFirstToIndex.set(string.length, info.first);
-			string += String.fromCodePoint(info.value || 0);
+			string += stringFromCodePoint(info.value || 0xfffd);
 			strLastToIndex.set(string.length - 1, info.last);
 		}
 

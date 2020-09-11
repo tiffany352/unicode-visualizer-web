@@ -93,66 +93,12 @@ function writeCodepoint(codepoint: number, accumulator: number[] = []) {
 	return accumulator;
 }
 
-export function stringDecode(str: string) {
-	const values: number[] = [];
-
-	const writeCode = (code: number) => writeCodepoint(code, values);
-
-	let highSurrogate: number | null = null;
-	let lowSurrogate: number | null = null;
-
-	const writePair = (lowSurrogate: number, highSurrogate: number) => {
-		const high = highSurrogate - 0xd800;
-		const low = lowSurrogate - 0xdc00;
-		const code = ((high << 10) | low) + 0x10000;
-		writeCode(code);
-	};
-
-	for (let i = 0; i < str.length; i++) {
-		const code = str.charCodeAt(i);
-		const isHigh = code >= 0xd800 && code <= 0xdbff;
-		const isLow = code >= 0xdc00 && code <= 0xdfff;
-
-		if (isHigh) {
-			if (highSurrogate) {
-				writeCode(highSurrogate);
-				highSurrogate = null;
-			} else if (lowSurrogate) {
-				writePair(lowSurrogate, code);
-				lowSurrogate = null;
-			} else {
-				highSurrogate = code;
-			}
-		} else if (isLow) {
-			if (lowSurrogate) {
-				writeCode(lowSurrogate);
-				lowSurrogate = null;
-			} else if (highSurrogate) {
-				writePair(code, highSurrogate);
-				highSurrogate = null;
-			} else {
-				lowSurrogate = code;
-			}
-		} else {
-			// normal
-			if (highSurrogate) {
-				writeCode(highSurrogate);
-				highSurrogate = null;
-			} else if (lowSurrogate) {
-				writeCode(lowSurrogate);
-				lowSurrogate = null;
-			}
-			writeCode(code);
-		}
+export function codepointDecode(input: number[]) {
+	const bytes: number[] = [];
+	for (const codepoint of input) {
+		writeCodepoint(codepoint, bytes);
 	}
-
-	if (highSurrogate) {
-		writeCode(highSurrogate);
-	} else if (lowSurrogate) {
-		writeCode(lowSurrogate);
-	}
-
-	return new Utf8String(values);
+	return new Utf8String(bytes);
 }
 
 export function urlDecode(str: string) {
@@ -170,12 +116,6 @@ export default class Utf8String implements EncodedString {
 		this.data = new Uint8Array(data);
 	}
 
-	static fromCodepoint(code: number) {
-		const values: number[] = [];
-		writeCodepoint(code, values);
-		return new Utf8String(values);
-	}
-
 	getArrayBuffer() {
 		return this.data.buffer;
 	}
@@ -184,14 +124,14 @@ export default class Utf8String implements EncodedString {
 		return hexEncode(this.data, 2, useSep);
 	}
 
-	stringEncode() {
+	codepointEncode() {
 		let result = [];
 		for (let i = 0; i < this.data.length; ) {
 			const { value, last } = readCodepoint(this.data, i);
-			result.push(String.fromCodePoint(value || 0));
+			result.push(value || 0xfffd);
 			i = last + 1;
 		}
-		return result.join("");
+		return result;
 	}
 
 	getCodepoints() {
@@ -199,19 +139,6 @@ export default class Utf8String implements EncodedString {
 
 		for (let i = 0; i < this.data.length; ) {
 			const result = readCodepoint(this.data, i);
-			const code = result.value;
-			if (code) {
-				const isHigh = code >= 0xd800 && code <= 0xdbff;
-				const isLow = code >= 0xdc00 && code <= 0xdfff;
-				if (isHigh) {
-					result.value = null;
-					result.text = "WTF-8 Orphan Surrogate High";
-				} else if (isLow) {
-					result.value = null;
-					result.text = "WTF-8 Orphan Surrogate Low";
-				}
-			}
-
 			codepoints.push(result);
 			i = result.last + 1;
 		}

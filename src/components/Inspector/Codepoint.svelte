@@ -4,6 +4,7 @@
 	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 	import type { CodepointInfo } from "model/StringBlob";
+	import { stringFromCodePoint } from "model/Util";
 	import type { CharInfo } from "server/Unicode";
 	import { getDisplayText } from "strings";
 	import type { Extra } from "./extra";
@@ -61,7 +62,7 @@
 
 	$: char = getChar(codepoint.value);
 	$: alias = aliasOf(char);
-	$: name = (wide && char && char.name) || null;
+	$: name = (wide && char && char.type == "char" && char.name) || null;
 	$: url = createUrl(char);
 	$: tooltip = tooltipOf(char);
 </script>
@@ -118,7 +119,7 @@
 		<div class="preview">
 			{#if alias}
 				<span class="alias">{alias}</span>
-			{:else}{String.fromCodePoint(codepoint.value || 0)}{/if}
+			{:else}{stringFromCodePoint(codepoint.value || 0)}{/if}
 		</div>
 		<div class="scalar">
 			U+{codepoint.value.toString(16).padStart(4, '0').toUpperCase()}

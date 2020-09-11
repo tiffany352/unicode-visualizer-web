@@ -6,10 +6,9 @@ import { decimalToHex, hexEncode, hexDecode } from "./Util";
 import charTable from "./Windows1252CharTable";
 import type { EncodedString } from "./StringBlob";
 
-export function stringDecode(str: string) {
+export function codepointDecode(input: number[]) {
 	const result = [];
-	for (const char of str) {
-		const codepoint = char.codePointAt(0);
+	for (const codepoint of input) {
 		const index = charTable.findIndex((entry) => entry.unicode === codepoint);
 		if (index !== -1) {
 			result.push(index);
@@ -43,12 +42,8 @@ export default class Windows1252String implements EncodedString {
 		return hexEncode(this.data, 2, useSep);
 	}
 
-	stringEncode() {
-		const result = [];
-		for (const byte of this.data) {
-			result.push(String.fromCodePoint(charTable[byte].unicode));
-		}
-		return result.join("");
+	codepointEncode(): number[] {
+		return Array.from(this.data).map((byte) => charTable[byte].unicode);
 	}
 
 	getCodeunits() {

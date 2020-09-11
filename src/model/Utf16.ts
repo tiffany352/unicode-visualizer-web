@@ -2,19 +2,28 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import { decimalToHex, hexEncode, hexDecode, alignMemory } from "./Util";
+import {
+	decimalToHex,
+	hexEncode,
+	hexDecode,
+	alignMemory,
+	decodeSurrogate,
+} from "./Util";
 import type { EncodedString } from "./StringBlob";
 
-function makePair(high: number, low: number) {
-	const highBits = high - 0xd800;
-	const lowBits = low - 0xdc00;
-	return (highBits << 10) + lowBits + 0x10000;
-}
-
-export function stringDecode(str: string) {
+export function codepointDecode(input: number[]) {
 	const result = [];
-	for (let i = 0; i < str.length; i++) {
-		result.push(str.charCodeAt(i));
+	for (const codepoint of input) {
+		if (codepoint > 0xffff) {
+			const value = codepoint - 0x10000;
+			const high = value >> 10;
+			const low = value & 0x3ff;
+			// Surrogate pair
+			result.push(0xd800 + high);
+			result.push(0xdc00 + low);
+		} else {
+			result.push(codepoint);
+		}
 	}
 	return new Utf16String(result);
 }
@@ -35,10 +44,6 @@ export default class Utf16String implements EncodedString {
 		this.data = new Uint16Array(data);
 	}
 
-	static fromCodepoint(code: number) {
-		return stringDecode(String.fromCodePoint(code));
-	}
-
 	getArrayBuffer() {
 		return this.data.buffer;
 	}
@@ -51,6 +56,12 @@ export default class Utf16String implements EncodedString {
 		return Array.from(this.data)
 			.map((code) => String.fromCharCode(code))
 			.join("");
+	}
+
+	codepointEncode(): number[] {
+		// Replacement character.
+		// Not the most efficient possible implementation.
+		return this.getCodepoints().map((cp) => cp.value || 0xfffd);
 	}
 
 	getCodeunits() {
@@ -93,7 +104,7 @@ export default class Utf16String implements EncodedString {
 					codepoints.push({
 						first: i - 1,
 						last: i,
-						value: makePair(code, lowSurrogate),
+						value: decodeSurrogate(lowSurrogate, code),
 					});
 					lowSurrogate = null;
 				} else if (highSurrogate) {
@@ -112,14 +123,14 @@ export default class Utf16String implements EncodedString {
 					codepoints.push({
 						first: i - 1,
 						last: i,
-						value: makePair(highSurrogate, code),
+						value: decodeSurrogate(code, highSurrogate),
 					});
 					highSurrogate = null;
 				} else if (lowSurrogate) {
 					codepoints.push({
 						first: i - 1,
 						last: i - 1,
-						value: null,
+						value: lowSurrogate,
 						text: "Orphan Surrogate Low",
 					});
 					lowSurrogate = code;
@@ -132,7 +143,7 @@ export default class Utf16String implements EncodedString {
 					codepoints.push({
 						first: i - 1,
 						last: i - 1,
-						value: null,
+						value: highSurrogate || lowSurrogate,
 						text: highSurrogate
 							? "Orphan Surrogate High"
 							: "Orphan Surrogate Low",
@@ -152,7 +163,7 @@ export default class Utf16String implements EncodedString {
 			codepoints.push({
 				first: this.data.length - 1,
 				last: this.data.length - 1,
-				value: null,
+				value: lowSurrogate || highSurrogate,
 				text: highSurrogate ? "Orphan Surrogate High" : "Orphan Surrogate Low",
 			});
 		}

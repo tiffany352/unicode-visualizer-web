@@ -5,12 +5,8 @@
 import { hexEncode, hexDecode, alignMemory } from "./Util";
 import type { EncodedString } from "./StringBlob";
 
-export function stringDecode(str: string) {
-	const codepoints = [];
-	for (const codepoint of str) {
-		codepoints.push(codepoint.codePointAt(0) as number);
-	}
-	return new Utf32String(codepoints);
+export function codepointDecode(input: number[]) {
+	return new Utf32String(input);
 }
 
 export function urlDecode(str: string) {
@@ -29,10 +25,6 @@ export default class Utf32String implements EncodedString {
 		this.data = new Uint32Array(data);
 	}
 
-	static fromCodepoint(code: number) {
-		return new Utf32String([code]);
-	}
-
 	getArrayBuffer() {
 		return this.data.buffer;
 	}
@@ -41,20 +33,29 @@ export default class Utf32String implements EncodedString {
 		return hexEncode(this.data, 8, useSep);
 	}
 
-	stringEncode() {
-		const array = Array.from(this.data);
-		return String.fromCodePoint(...array);
+	codepointEncode() {
+		return Array.from(this.data);
 	}
 
 	getCodepoints() {
 		const codepoints = [];
 
 		for (let i = 0; i < this.data.length; i++) {
-			codepoints.push({
-				value: this.data[i],
-				first: i,
-				last: i,
-			});
+			const value = this.data[i];
+			if (value > 0x10ffff) {
+				codepoints.push({
+					value: null,
+					text: "Outside of any Unicode plane (0..0x10FFFF)",
+					first: i,
+					last: i,
+				});
+			} else {
+				codepoints.push({
+					value,
+					first: i,
+					last: i,
+				});
+			}
 		}
 
 		return codepoints;
