@@ -53,22 +53,16 @@
 	{#each block.codepoints as char}
 		{#if char.type == 'char'}
 			<a href="codepoint/{char.slug}">
-				<div class="char">
-					<span>{char.text}</span>
-				</div>
-				<div>
-					<code>U+{char.codepointStr}</code>
-				</div>
-				<div>
-					<span>{char.name}</span>
-				</div>
+				<div class="char"><span>{char.text}</span></div>
+				<div><code>U+{char.codepointStr}</code></div>
+				<div><span>{char.name}</span></div>
 			</a>
 		{:else}
-			<div>N/A</div>
-			<div>
-				<code>0x{char.codepointStr}</code>
-			</div>
-			<div>{getDisplayText(char.reason)}</div>
+			<a href="codepoint/{char.slug}">
+				<div>N/A</div>
+				<div><code>0x{char.codepointStr}</code></div>
+				<div>{getDisplayText(char.reason)}</div>
+			</a>
 		{/if}
 	{/each}
 </div>

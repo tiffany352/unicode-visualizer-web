@@ -152,4 +152,15 @@
 	<h1>0x{char.codepointStr} Invalid Unicode</h1>
 
 	<p>{getDisplayText(char.reason)}</p>
+
+	<div class="table">
+		<div>UTF-8</div>
+		<div class="flow">
+			<Repr codepoint={char.codepoint} encoding={Encoding.Utf8} />
+		</div>
+		<div>UTF-16</div>
+		<div class="flow">
+			<Repr codepoint={char.codepoint} encoding={Encoding.Utf16} />
+		</div>
+	</div>
 {/if}

@@ -15,7 +15,7 @@
 	function getChar(value: number | null) {
 		if (extra && value) {
 			const char = extra.chars[value.toString(16)];
-			if (char && char.type == "char") {
+			if (char) {
 				return char;
 			}
 		}
@@ -36,7 +36,7 @@
 	}
 
 	function createUrl(char: CharInfo | null) {
-		if (char && char.type == "char") {
+		if (char) {
 			return `codepoint/${char.slug}`;
 		}
 		if (codepoint.value) {
