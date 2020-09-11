@@ -79,6 +79,7 @@ export interface InvalidChar {
 	codepoint: number;
 	codepointStr: string;
 	reason: InvalidReason;
+	slug: string;
 }
 
 export type CharInfo = Char | InvalidChar;
@@ -554,6 +555,7 @@ export function lookupChar(codepoint: number): Char | InvalidChar | null {
 			codepoint,
 			codepointStr,
 			reason,
+			slug: `${codepointStr}-${reason.substring("invalidCodepoint.".length)}`,
 		};
 	}
 

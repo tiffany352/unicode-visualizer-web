@@ -5,11 +5,12 @@
 
 	export async function preload(this: any, page: any, session: any) {
 		const { id, slug } = page.params;
-		const response: Response = await this.fetch(
-			`codepoint/${id}-${slug}/data.json`
-		);
+		const response: Response = await this.fetch(`codepoint/${id}.json`);
 		if (response.status == 200) {
 			const char: CharInfo = await response.json();
+			if (char.slug != `${id}-${slug}`) {
+				this.redirect(301, `codepoint/${char.slug}`);
+			}
 			return { char };
 		} else {
 			this.error(
@@ -24,7 +25,7 @@
 	import type { CharInfo } from "server/Unicode";
 	import { getDisplayText } from "strings";
 	import { Encoding } from "model/StringBlob";
-	import OpenGraph from "../../../components/OpenGraph.svelte";
+	import OpenGraph from "../../components/OpenGraph.svelte";
 	import Repr from "./_repr.svelte";
 	import CaseMap from "./_caseMap.svelte";
 
@@ -75,14 +76,11 @@
 	<OpenGraph
 			title="Invalid codepoint"
 			description="U+{char.codepointStr} does not refer to a valid Unicode codepoint. {getDisplayText(char.reason)}"
-			url="/codepoint/{char.codepointStr}-invalid" />
+			url="/codepoint/{char.slug}" />
 {/if}
 
 {#if char.type == 'char'}
-	<h1>
-		<span class="mono">U+{char.codepointStr}</span>
-		{char.name}
-	</h1>
+	<h1><span class="mono">U+{char.codepointStr}</span> {char.name}</h1>
 
 	<div class="preview">{char.text}</div>
 
@@ -90,9 +88,7 @@
 
 	<div class="table">
 		<div>Appeared</div>
-		<div>
-			<a href="versions/{char.age}/page/1">Unicode {char.age}</a>
-		</div>
+		<div><a href="versions/{char.age}/page/1">Unicode {char.age}</a></div>
 		<div>Aliases</div>
 		<div>
 			{#if char.type == 'char' && char.aliases && char.aliases.length > 0}
@@ -104,9 +100,7 @@
 			{:else}None{/if}
 		</div>
 		<div>Block</div>
-		<div>
-			<a href="blocks/{char.block.slug}">{char.block.name}</a>
-		</div>
+		<div><a href="blocks/{char.block.slug}">{char.block.name}</a></div>
 		<div>Category</div>
 		<div>
 			{getDisplayText(`generalCategory.${char.category}`)} ({char.category})
