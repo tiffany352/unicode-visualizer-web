@@ -63,13 +63,13 @@
 		transform: translate(-50%, -50%);
 		padding: 1em;
 		border-radius: 0.2em;
-		background: white;
+		background: var(--modal-bg);
 		box-shadow: 10px 10px 24px 0px rgba(0, 0, 0, 0.25);
 	}
 
 	hr {
 		border: none;
-		border-bottom: 1px solid rgb(200, 200, 200);
+		border-bottom: 1px solid var(--main-border);
 		margin: 0 -1em;
 	}
 

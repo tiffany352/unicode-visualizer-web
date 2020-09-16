@@ -81,12 +81,12 @@
 	}
 
 	.breadcrumbs {
-		color: rgb(99, 16, 16);
+		color: var(--breadcrumb-text);
 	}
 
 	a {
 		text-decoration: none;
-		color: rgb(32, 100, 163);
+		color: var(--link-text);
 	}
 
 	a:hover,
@@ -101,7 +101,7 @@
 	}
 
 	.link:visited {
-		color: rgb(51, 7, 77);
+		color: var(--link-visited);
 	}
 
 	.link :global(strong) {
@@ -155,9 +155,8 @@
 		</div>
 	{:else}
 		<p>
-			Did you mean to
-			<a href="inspect/{createInspectLink(query)}">inspect a string</a>
-			instead?
+			Did you mean to <a href="inspect/{createInspectLink(query)}">inspect a
+				string</a> instead?
 		</p>
 	{/each}
 </div>

@@ -2,13 +2,64 @@ body {
 	margin: 0;
 	font-family: var(--font);
 	line-height: 1.5;
-	color: #333;
+	color: var(--main-text);
+	background-color: var(--main-bg);
 
 	--font: Roboto, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen, Ubuntu,
 		Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 	--header-font: Segoe UI, -apple-system, BlinkMacSystemFont, Ubuntu, Robot,
 		Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 	--mono-font: Cascadia Mono, Consolas, Monaco, Menlo, monospace;
+
+	--main-text: rgb(51, 51, 51);
+	--main-bg: white;
+	--main-border: rgb(200, 200, 200);
+	--main-hover: rgb(247, 247, 247);
+
+	--dim-text: rgb(60, 60, 60);
+	--dim-bg: white;
+	--dim-border: rgb(100, 100, 100);
+
+	--panel-bg: rgb(153, 153, 153);
+	--modal-bg: white;
+
+	--input-bg: white;
+	--input-border: rgb(100, 100, 100);
+	--code-text: rgb(80, 80, 80);
+	--code-bg: rgb(240, 240, 240);
+	--preview-bg: rgb(249, 252, 255);
+	--breadcrumb-text: rgb(99, 16, 16);
+	--disabled-text: rgb(120, 120, 120);
+
+	--link-text: rgb(32, 100, 163);
+	--link-visited: rgb(51, 7, 77);
+}
+
+@media (prefers-color-scheme: dark) {
+	body {
+		--main-text: white;
+		--main-bg: rgb(20, 20, 20);
+		--main-border: rgb(60, 60, 60);
+		--main-hover: rgb(45, 45, 45);
+
+		--dim-text: rgb(200, 200, 200);
+		--dim-bg: rgb(30, 30, 30);
+		--dim-border: rgb(60, 60, 60);
+
+		--panel-bg: rgb(30, 30, 30);
+		--modal-bg: rgb(45, 45, 45);
+
+		--input-bg: rgb(30, 30, 30);
+		--input-border: rgb(60, 60, 60);
+		--code-text: rgb(160, 160, 160);
+		--code-bg: rgb(30, 30, 30);
+		--preview-bg: rgb(30, 30, 60);
+		--breadcrumb-text: rgb(131, 81, 81);
+		--disabled-text: rgb(150, 150, 150);
+
+		--link-text: rgb(110, 174, 235);
+		--link-visited: rgb(134, 58, 179);
+	}
 }
 
 h1,
@@ -32,9 +83,9 @@ a {
 
 code {
 	font-family: var(--mono-font);
-	color: rgb(80, 80, 80);
-	background-color: rgb(240, 240, 240);
-	border: 1px solid rgb(200, 200, 200);
+	color: var(--code-text);
+	background-color: var(--code-bg);
+	border: 1px solid var(--main-border);
 	padding: 0.2em 0.4em;
 	border-radius: 4px;
 }
@@ -45,8 +96,8 @@ code {
 
 .table {
 	display: grid;
-	border-left: 1px solid rgb(200, 200, 200);
-	border-top: 1px solid rgb(200, 200, 200);
+	border-left: 1px solid var(--main-border);
+	border-top: 1px solid var(--main-border);
 	font-size: 110%;
 }
 
@@ -55,8 +106,8 @@ code {
 }
 
 .table div {
-	border-right: 1px solid rgb(200, 200, 200);
-	border-bottom: 1px solid rgb(200, 200, 200);
+	border-right: 1px solid var(--main-border);
+	border-bottom: 1px solid var(--main-border);
 	padding: 0.3em;
 }
 
@@ -75,10 +126,9 @@ code {
 
 .radio label {
 	display: flex;
-}
-
-.radio label {
-	border: 1px solid rgb(100, 100, 100);
+	border: 1px solid var(--dim-border);
+	background-color: var(--dim-bg);
+	color: var(--dim-text);
 	border-right: none;
 	padding: 0.2em 0.5em;
 	position: relative;
@@ -96,7 +146,7 @@ code {
 }
 
 .radio label:hover {
-	background-color: rgb(232, 232, 255);
+	background-color: var(--main-hover);
 }
 
 .radio input:focus + label {
@@ -125,7 +175,7 @@ code {
 }
 
 .radio label:last-of-type {
-	border-right: 1px solid rgb(100, 100, 100);
+	border-right: 1px solid var(--dim-border);
 	border-top-right-radius: 5px;
 	border-bottom-right-radius: 5px;
 }
@@ -157,10 +207,10 @@ code {
 .button {
 	padding: 0.2em 0.5em;
 	margin: 0.25em;
-	background-color: white;
-	border: 1px solid rgb(100, 100, 100);
+	background-color: var(--dim-bg);
+	border: 1px solid var(--dim-border);
 	border-radius: 5px;
-	color: rgb(60, 60, 60);
+	color: var(--dim-text);
 	font: var(--header-font);
 	font-size: 1rem;
 	position: relative;
@@ -217,7 +267,7 @@ code {
 
 .text-preview {
 	border: 1px solid rgb(153, 197, 255);
-	background-color: rgb(249, 252, 255);
+	background-color: var(--preview-bg);
 	border-radius: 3px;
 	font-size: unset;
 	font-family: var(--mono-font);

@@ -74,7 +74,7 @@
 	}
 
 	.alias {
-		color: rgb(100, 100, 100);
+		color: var(--dim-text);
 		font-size: 1rem;
 	}
 
@@ -110,7 +110,7 @@
 
 	a:hover,
 	a:focus {
-		background-color: rgb(241, 248, 255);
+		background-color: var(--main-hover);
 	}
 </style>
 

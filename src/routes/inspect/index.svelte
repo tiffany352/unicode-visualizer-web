@@ -50,6 +50,11 @@
 	textarea {
 		font-size: 1rem;
 		font-family: var(--mono-font);
+		color: var(--main-text);
+		background-color: var(--input-bg);
+		border: 1px solid var(--input-border);
+		border-radius: 3px;
+		padding: 3px;
 		width: 100%;
 		box-sizing: border-box;
 		white-space: pre-wrap;

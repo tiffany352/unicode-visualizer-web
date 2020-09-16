@@ -22,7 +22,7 @@
 	.scroll {
 		padding: 0.5em;
 		margin: 0 -0.25em;
-		background-color: rgb(153, 153, 153);
+		background-color: var(--panel-bg);
 		display: flex;
 		flex-direction: column;
 	}
@@ -30,7 +30,7 @@
 	.inspect {
 		display: grid;
 		grid-template-columns: 2em min-content 2fr 1fr;
-		background-color: white;
+		background-color: var(--main-bg);
 	}
 
 	.header {
@@ -43,35 +43,35 @@
 		grid-column: 1;
 		text-align: right;
 		padding: 0.25em;
-		border-top: 1px solid rgb(200, 200, 200);
-		border-bottom: 1px solid rgb(200, 200, 200);
+		border-top: 1px solid var(--main-border);
+		border-bottom: 1px solid var(--main-border);
 		padding-right: 0.5em;
 	}
 
 	.codeunit {
 		font-family: var(--mono-font);
 		grid-column: 2;
-		border-top: 1px solid rgb(200, 200, 200);
-		border-bottom: 1px solid rgb(200, 200, 200);
+		border-top: 1px solid var(--main-border);
+		border-bottom: 1px solid var(--main-border);
 		padding: 0.25em;
 	}
 
 	.codepoint {
 		grid-column: 3;
-		border-top: 1px solid rgb(200, 200, 200);
-		border-bottom: 1px solid rgb(200, 200, 200);
+		border-top: 1px solid var(--main-border);
+		border-bottom: 1px solid var(--main-border);
 	}
 
 	.codepoint[data-invalid="true"] {
-		border-top: 1px solid rgb(255, 89, 89);
-		border-bottom: 1px solid rgb(255, 89, 89);
-		background-color: rgb(255, 243, 243);
+		border-top: 1px solid rgba(255, 0, 0, 0.33);
+		border-bottom: 1px solid rgba(255, 0, 0, 0.33);
+		background-color: rgba(255, 0, 0, 0.02);
 	}
 
 	.grapheme {
 		grid-column: 4;
-		border-top: 1px solid rgb(200, 200, 200);
-		border-bottom: 1px solid rgb(200, 200, 200);
+		border-top: 1px solid var(--main-border);
+		border-bottom: 1px solid var(--main-border);
 	}
 
 	.class {

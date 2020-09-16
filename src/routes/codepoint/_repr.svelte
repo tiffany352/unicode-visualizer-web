@@ -16,7 +16,7 @@
 	div {
 		display: inline-block;
 		padding: 0.25em;
-		border: 1px solid rgb(200, 200, 200);
+		border: 1px solid var(--main-border);
 		font-family: var(--mono-font);
 	}
 </style>

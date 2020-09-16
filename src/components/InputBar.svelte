@@ -34,8 +34,9 @@
 		flex-grow: 1;
 		font-size: 1.2em;
 		padding: 0.25em;
-		border: 1px solid rgb(100, 100, 100);
-		background-color: white;
+		border: 1px solid var(--input-border);
+		background-color: var(--input-bg);
+		color: var(--main-text);
 		border-radius: 5px;
 		margin-left: -28px;
 		padding-left: calc(0.25em + 24px);

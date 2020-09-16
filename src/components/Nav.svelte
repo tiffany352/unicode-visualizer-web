@@ -17,7 +17,7 @@
 		padding: 2em 2em;
 		box-sizing: border-box;
 		height: 100%;
-		background-color: white;
+		background-color: var(--main-bg);
 	}
 
 	ul {

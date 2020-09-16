@@ -54,14 +54,15 @@
 		display: block;
 		width: 1.75em;
 		height: 1.75em;
-		border: 1px solid rgb(156, 195, 255);
+		border: 1px solid var(--dim-border);
+		background-color: var(--dim-bg);
 		text-decoration: none;
 		text-align: center;
 	}
 
 	a:hover,
 	a:focus {
-		background-color: rgb(241, 248, 255);
+		background-color: var(--main-hover);
 	}
 
 	a[aria-current="page"] {

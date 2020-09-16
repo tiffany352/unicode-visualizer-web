@@ -41,7 +41,6 @@
 	main {
 		position: relative;
 		max-width: 56em;
-		background-color: white;
 		padding: 2em;
 		box-sizing: border-box;
 	}
@@ -116,12 +115,11 @@
 
 	hr {
 		border: none;
-		border-bottom: 1px solid rgb(200, 200, 200);
+		border-bottom: 1px solid var(--main-border);
 	}
 </style>
 
 <div class="outer">
-
 	<header id="main-menu" aria-expanded={menuExpanded}>
 		<Nav {segment} closeMenu={() => (menuExpanded = false)} />
 	</header>

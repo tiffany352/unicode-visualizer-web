@@ -11,14 +11,14 @@
 <style>
 	nav {
 		position: relative;
-		color: black;
+		color: var(--main-text);
 	}
 
 	ul {
 		visibility: hidden;
 		position: absolute;
 		left: 0;
-		background-color: white;
+		background-color: var(--main-bg);
 		box-shadow: 3px 3px 12px 4px rgba(0, 0, 0, 0.2);
 		border-radius: 10px;
 		padding: 0;
@@ -41,7 +41,7 @@
 		text-decoration: none;
 		padding: 0.5em;
 		border: none;
-		border-bottom: 1px solid rgb(177, 177, 177);
+		border-bottom: 1px solid var(--main-border);
 		color: inherit;
 		border-radius: inherit;
 		background-color: inherit;
@@ -49,14 +49,14 @@
 	}
 
 	ul :global(li > .disabled) {
-		color: rgb(100, 100, 100);
+		color: var(--disabled-text);
 	}
 
 	ul :global(a):hover,
 	ul :global(a):focus,
 	ul :global(button):hover,
 	ul :global(button):focus {
-		background-color: rgb(247, 247, 247);
+		background-color: var(--main-hover);
 		color: inherit;
 	}
 

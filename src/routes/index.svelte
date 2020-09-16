@@ -73,7 +73,7 @@
 	nav a {
 		text-decoration: none;
 		font-size: 1.2em;
-		color: rgb(60, 60, 60);
+		color: var(--dim-text);
 	}
 
 	nav a:hover,
@@ -102,11 +102,9 @@
 </p>
 
 <p>
-	The
-	<a href="inspect">inspect page</a>
-	lets you paste in any string and learn what it has in it. It can help diagnose
-	issues with encodings, Unicode handling in apps, text filter bypasses, and
-	other Unicode-related tasks.
+	The <a href="inspect">inspect page</a> lets you paste in any string and learn what
+	it has in it. It can help diagnose issues with encodings, Unicode handling in apps,
+	text filter bypasses, and other Unicode-related tasks.
 </p>
 
 <h2>Search</h2>
@@ -119,8 +117,7 @@
 <ul>
 	{#each examples as example}
 		<li>
-			{example.description}:
-			<a href={createUrl(example)}>{example.string}</a>
+			{example.description}: <a href={createUrl(example)}>{example.string}</a>
 		</li>
 	{/each}
 

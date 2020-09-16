@@ -22,7 +22,7 @@
 	.scroll {
 		padding: 0.5em;
 		margin: 0 -0.25em;
-		background-color: rgb(153, 153, 153);
+		background-color: var(--panel-bg);
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
@@ -34,33 +34,33 @@
 		width: min-content;
 		overflow-x: auto;
 		text-align: center;
-		background-color: white;
+		background-color: var(--main-bg);
 	}
 
 	.codeunit {
 		font-family: var(--mono-font);
 		grid-row: 1;
-		border-left: 1px solid rgb(200, 200, 200);
-		border-right: 1px solid rgb(200, 200, 200);
+		border-left: 1px solid var(--main-border);
+		border-right: 1px solid var(--main-border);
 		padding: 0.25em;
 	}
 
 	.codepoint {
 		grid-row: 2;
-		border-left: 1px solid rgb(200, 200, 200);
-		border-right: 1px solid rgb(200, 200, 200);
+		border-left: 1px solid var(--main-border);
+		border-right: 1px solid var(--main-border);
 	}
 
 	.codepoint[data-invalid="true"] {
-		border-left: 1px solid rgb(255, 89, 89);
-		border-right: 1px solid rgb(255, 89, 89);
-		background-color: rgb(255, 243, 243);
+		border-top: 1px solid rgba(255, 0, 0, 0.33);
+		border-bottom: 1px solid rgba(255, 0, 0, 0.33);
+		background-color: rgba(255, 0, 0, 0.1);
 	}
 
 	.grapheme {
 		grid-row: 3;
-		border-left: 1px solid rgb(200, 200, 200);
-		border-right: 1px solid rgb(200, 200, 200);
+		border-left: 1px solid var(--main-border);
+		border-right: 1px solid var(--main-border);
 	}
 </style>
 
