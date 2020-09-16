@@ -118,14 +118,12 @@ code {
 }
 
 .radio {
-	padding: 0.25em;
-	width: min-content;
 	display: flex;
-	border: none;
+	flex-direction: row;
 }
 
 .radio label {
-	display: flex;
+	display: block;
 	border: 1px solid var(--dim-border);
 	background-color: var(--dim-bg);
 	color: var(--dim-text);
@@ -139,6 +137,7 @@ code {
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
+	display: block;
 	width: 0;
 	height: 0;
 	margin: 0;

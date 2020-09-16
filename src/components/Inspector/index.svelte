@@ -38,21 +38,34 @@
 		align-items: flex-end;
 		flex-wrap: wrap;
 	}
+
+	fieldset {
+		padding: 0.25em;
+		width: min-content;
+		border: none;
+	}
 </style>
 
 <nav>
-	<fieldset class="radio">
+	<fieldset>
 		<legend>Display</legend>
 
-		<input id="row" type="radio" bind:group={direction} value={Direction.Row} />
-		<label for="row">Row</label>
+		<!-- Required because of Chrome bug. -->
+		<div class="radio">
+			<input
+				id="row"
+				type="radio"
+				bind:group={direction}
+				value={Direction.Row} />
+			<label for="row">Row</label>
 
-		<input
-			id="col"
-			type="radio"
-			bind:group={direction}
-			value={Direction.Column} />
-		<label for="col">Col</label>
+			<input
+				id="col"
+				type="radio"
+				bind:group={direction}
+				value={Direction.Column} />
+			<label for="col">Col</label>
+		</div>
 	</fieldset>
 
 	<Menu title="Convert text to another encoding">
@@ -108,7 +121,6 @@
 			{/if}
 		{/each}
 	</Menu>
-
 </nav>
 
 <pre class="text-preview">{string.stringEncode()}</pre>
