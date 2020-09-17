@@ -73,14 +73,26 @@ the Unicode Consortium. The full license can be found here:
   ```
 
 - If you're running behind nginx, your config will look something like
-  this.
+  this. Using `try_files` helps because nginx is much better at serving
+  static files, and this reduces load on the Node server to focus on
+  dynamic content.
   ```nginx
   location / {
     root /srv/unicode/static;
-    proxy_pass http://127.0.0.1:3000;
+    # Tries each location in order.
+    # 1. $uri means it tries to find a file named $uri in the root (above).
+    # 2. @proxy then falls back to the Node server.
+    try_files $uri @proxy;
   }
   location /client {
-    root /srv/unicode/build/client;
-    proxy_pass http://127.0.0.1:3000;
+    # $uri is the full path, including the /client prefix.
+    #
+    # So if you fetch `/client/index.js` the final path is
+    # "/srv/unicode/build" + "/client/index.js".
+    root /srv/unicode/build;
+  }
+  # Named location for try_files to refer to.
+  location @proxy {
+      proxy_pass http://127.0.0.1:3000;
   }
   ```
