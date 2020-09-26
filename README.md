@@ -37,62 +37,6 @@ The files in `data/` are under the Unicode License and is copyright to
 the Unicode Consortium. The full license can be found here:
 <http://www.unicode.org/copyright.html>.
 
-## Deploying
+## Install / Deployment
 
-- Run `npm run build build` to place the built JS into `build/`.
-- Make a directory called `deps`, cd into it, copy the `package.json`
-  and `package.lock` there. Run `npm install --production` to get
-  `node_modules` without any dev dependencies.
-- Copy `build/`, `node_modules/` (the one in `deps/`), `static/` and
-  `data/` to your webserver.
-- Run `node build/` to start the server. It respects these environment
-  variables:
-  ```ini
-  PORT=3000 # The port to run on
-  NODE_ENV=production # You want this to be production
-  ```
-- You'll probably want to create a systemd unit file to keep the server
-  running. You can use something like this:
-
-  ```ini
-  [Unit]
-  Description=Unicode Visualizer
-
-  [Service]
-  User=unicode # The user you want to run as.
-  Group=unicode
-  Environment=PORT=3000 # You'll probably want to pick a new one.
-  Environment=NODE_ENV=production
-  ExecStart=/usr/bin/node /srv/unicode/build # Location of the files.
-  WorkingDirectory=/srv/unicode/
-  Restart=on-failure
-  RestartSec = 5
-
-  [Install]
-  WantedBy=multi-user.target
-  ```
-
-- If you're running behind nginx, your config will look something like
-  this. Using `try_files` helps because nginx is much better at serving
-  static files, and this reduces load on the Node server to focus on
-  dynamic content.
-  ```nginx
-  location / {
-    root /srv/unicode/static;
-    # Tries each location in order.
-    # 1. $uri means it tries to find a file named $uri in the root (above).
-    # 2. @proxy then falls back to the Node server.
-    try_files $uri @proxy;
-  }
-  location /client {
-    # $uri is the full path, including the /client prefix.
-    #
-    # So if you fetch `/client/index.js` the final path is
-    # "/srv/unicode/build" + "/client/index.js".
-    root /srv/unicode/build;
-  }
-  # Named location for try_files to refer to.
-  location @proxy {
-      proxy_pass http://127.0.0.1:3000;
-  }
-  ```
+[Deployment Guide](https://github.com/tiffany352/unicode-visualizer-web/wiki/Deployment-Guide)
