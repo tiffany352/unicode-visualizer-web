@@ -7,7 +7,12 @@ import * as Utf8 from "./Utf8";
 import * as Utf16 from "./Utf16";
 import * as Utf32 from "./Utf32";
 import Windows1252String, * as Windows1252 from "./Windows1252";
-import { decodeSurrogate, stringFromCodePoint } from "./Util";
+import {
+	base64Decode,
+	base64Encode,
+	decodeSurrogate,
+	stringFromCodePoint,
+} from "./Util";
 
 export enum Encoding {
 	Utf8,
@@ -236,15 +241,7 @@ export default class StringBlob {
 	}
 
 	static base64Decode(encoding: Encoding, data: string) {
-		data = data.replace(/[^+=/\w]/g, "");
-		// Base64 decode. This returns a "byte string", a string full of
-		// values from 0-0xFF.
-		data = atob(data);
-		const array = new ArrayBuffer(data.length);
-		const uint8 = new Uint8Array(array);
-		for (let i = 0; i < data.length; i++) {
-			uint8[i] = data.charCodeAt(i);
-		}
+		const array = base64Decode(data);
 		const encoder = getEncoder(encoding);
 		const string = encoder.reinterpret(array);
 		return new StringBlob(encoding, encoder, string);
@@ -293,9 +290,7 @@ export default class StringBlob {
 
 	base64Encode(useSep: boolean = true) {
 		const array = this.data.getArrayBuffer();
-		const u8 = new Uint8Array(array);
-		const byteString = String.fromCharCode(...u8);
-		const base64 = btoa(byteString);
+		const base64 = base64Encode(array);
 		if (useSep) {
 			return base64.replace(/(.{6})/g, "$&.").replace(/\.$/, "");
 		}

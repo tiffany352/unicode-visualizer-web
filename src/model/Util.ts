@@ -86,3 +86,34 @@ export function stringFromCodePoint(codepoint: number) {
 		return String.fromCharCode(codepoint);
 	}
 }
+
+export function base64Encode(input: ArrayBuffer): string {
+	if (process.browser) {
+		const array = new Uint8Array(input);
+		const byteString = String.fromCharCode(...array);
+		const base64 = btoa(byteString);
+		return base64;
+	} else {
+		const buffer = Buffer.from(input);
+		const base64 = buffer.toString("base64");
+		return base64;
+	}
+}
+
+export function base64Decode(input: string): ArrayBuffer {
+	input = input.replace(/[^+=/\w]/g, "");
+	if (process.browser) {
+		// This returns a "byte string", a string full of values from
+		// 0 to 0xFF.
+		input = atob(input);
+		const array = new ArrayBuffer(input.length);
+		const uint8 = new Uint8Array(array);
+		for (let i = 0; i < input.length; i++) {
+			uint8[i] = input.charCodeAt(i);
+		}
+		return array;
+	} else {
+		const buffer = Buffer.from(input, "base64");
+		return buffer.buffer;
+	}
+}
