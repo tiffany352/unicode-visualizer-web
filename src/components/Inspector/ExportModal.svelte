@@ -60,11 +60,11 @@
 
 	@keyframes fadeout {
 		from {
-			color: black;
+			color: var(--main-text);
 		}
 
 		50% {
-			color: black;
+			color: var(--main-text);
 		}
 
 		to {
