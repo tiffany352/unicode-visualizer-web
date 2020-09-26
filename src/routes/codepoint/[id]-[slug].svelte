@@ -26,10 +26,12 @@
 	import { getDisplayText } from "strings";
 	import { Encoding } from "model/StringBlob";
 	import OpenGraph from "../../components/OpenGraph.svelte";
+	import CopyButton from "../../components/CopyButton.svelte";
 	import Repr from "./_repr.svelte";
 	import CaseMap from "./_caseMap.svelte";
 
 	export let char: CharInfo;
+	let preview: HTMLElement;
 </script>
 
 <style>
@@ -82,7 +84,9 @@
 {#if char.type == 'char'}
 	<h1><span class="mono">U+{char.codepointStr}</span> {char.name}</h1>
 
-	<div class="preview">{char.text}</div>
+	<div class="preview" bind:this={preview}>{char.text}</div>
+
+	<CopyButton text={char.text} />
 
 	<h2>Properties</h2>
 

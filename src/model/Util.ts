@@ -117,3 +117,9 @@ export function base64Decode(input: string): ArrayBuffer {
 		return buffer.buffer;
 	}
 }
+
+export function selectText(element: HTMLElement) {
+	const range = document.createRange();
+	range.selectNode(element);
+	window.getSelection()?.addRange(range);
+}

@@ -7,7 +7,8 @@
 	import { getDisplayText } from "strings";
 	import { createEventDispatcher, onMount } from "svelte";
 	import Modal from "../Modal.svelte";
-	import Icon from "../Icon.svelte";
+	import CopyButton from "../CopyButton.svelte";
+	import { selectText } from "model/Util";
 
 	const dispatch = createEventDispatcher();
 	const close = () => dispatch("close");
@@ -16,62 +17,17 @@
 	export let exportType: DataType;
 
 	let pre: HTMLPreElement;
-	let success: boolean;
 	let useSep: boolean = true;
 
 	$: dataType = getDisplayText(`dataType.${exportType}`);
 	$: encoding = getDisplayText(`encoding.${encodingToTag(string.encoding)}`);
 	$: html = string.dataEncode(exportType, useSep).replace(/\./g, ".<wbr>");
-
-	function selectText() {
-		const range = document.createRange();
-		range.selectNode(pre);
-		window.getSelection()?.addRange(range);
-	}
-
-	function copyText() {
-		selectText();
-		success = false;
-		try {
-			success = document.execCommand(
-				"copy",
-				undefined,
-				(exportType && string.dataEncode(exportType)) || ""
-			);
-		} catch (err) {
-			console.log("Unable to copy: ", err);
-		}
-		setTimeout(() => (success = false), 500);
-	}
+	$: textToCopy = (exportType && string.dataEncode(exportType)) || "";
 
 	onMount(() => {
-		selectText();
+		selectText(pre);
 	});
 </script>
-
-<style>
-	.copyText {
-		color: transparent;
-	}
-
-	.copyText.success {
-		animation: 0.5s ease-out fadeout;
-	}
-
-	@keyframes fadeout {
-		from {
-			color: var(--main-text);
-		}
-
-		50% {
-			color: var(--main-text);
-		}
-
-		to {
-			color: transparent;
-		}
-	}
-</style>
 
 <Modal on:close={close}>
 	{#if exportType == DataType.Codepoints}
@@ -88,9 +44,6 @@
 	</pre>
 
 	<div slot="buttons">
-		<button class="button" on:click={copyText}>
-			<Icon icon="copy" />
-			Copy</button>
-		<span class="copyText" class:success>Copied!</span>
+		<CopyButton text={textToCopy} element={pre} />
 	</div>
 </Modal>
