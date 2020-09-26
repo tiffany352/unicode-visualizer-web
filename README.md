@@ -13,14 +13,6 @@ A web app for inspecting unicode strings.
 
 Run `npm install` and `npm run dev` and you should be good to go!
 
-To update to the latest Unicode Character Database version, download the
-.zip from [here][1] and unpack it into the `data/` directory. Then
-download emoji-sequences.txt and emoji-zwj-sequences.txt from [here][2]
-and put them in `data/emoji/`.
-
-[1]: https://www.unicode.org/Public/UCD/latest/ucd/UCD.zip
-[2]: https://www.unicode.org/Public/emoji/
-
 Make sure any new files you add have the license boilerplate:
 
 ```js
@@ -28,6 +20,16 @@ Make sure any new files you add have the license boilerplate:
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 ```
+
+### Updating Unicode data
+
+1. Download [UCD.zip][1] and unzip it into `data/ucd/`.
+2. Download [Unihan.zip][2] and unzip it into `data/han/`.
+3. Download [emoji-sequences.txt & emoji-zwj-sequences.txt][3] and place them in `data/emoji/`.
+
+[1]: https://www.unicode.org/Public/UCD/latest/ucd/UCD.zip
+[2]: https://www.unicode.org/Public/UCD/latest/ucd/Unihan.zip
+[3]: https://www.unicode.org/Public/emoji/
 
 ## License
 
