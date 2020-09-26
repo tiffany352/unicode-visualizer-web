@@ -279,3 +279,10 @@ code {
 	overflow-x: auto;
 	padding: 0.5em;
 }
+
+.repr-box {
+	display: inline-block;
+	padding: 0.25em;
+	border: 1px solid var(--main-border);
+	font-family: var(--mono-font);
+}

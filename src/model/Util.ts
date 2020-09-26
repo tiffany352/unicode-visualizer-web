@@ -123,3 +123,12 @@ export function selectText(element: HTMLElement) {
 	range.selectNode(element);
 	window.getSelection()?.addRange(range);
 }
+
+export function escapeHtml(text: string): string {
+	return text
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#039;");
+}

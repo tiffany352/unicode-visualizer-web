@@ -67,6 +67,12 @@ export default class Range {
 	inspect(): string {
 		return `Range(${this.first}..${this.last})`;
 	}
+
+	values(): { [Symbol.iterator]: () => RangeIterator } {
+		return {
+			[Symbol.iterator]: () => new RangeIterator(this),
+		};
+	}
 }
 
 export class RangeIterator implements Iterator<number> {

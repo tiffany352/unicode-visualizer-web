@@ -11,6 +11,8 @@ A web app for inspecting unicode strings.
 
 ## Development
 
+Requires Node 14 or newer.
+
 Run `npm install` and `npm run dev` and you should be good to go!
 
 Make sure any new files you add have the license boilerplate:

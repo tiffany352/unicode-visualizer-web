@@ -79,8 +79,9 @@ export function binary(input: string): boolean {
 }
 
 export function codepoint(input: string): number {
-	if (/^[a-zA-Z0-9]+$/.test(input)) {
-		return parseInt(input, 16);
+	const match = input.match(/^(?:U\+)?([a-zA-Z0-9]+)$/);
+	if (match) {
+		return parseInt(match[1], 16);
 	} else {
 		throw new ValidationError("codepoint", input);
 	}
@@ -125,5 +126,19 @@ export function enumeration<T extends string>(values: T[]): Parser<T> {
 			}
 		}
 		throw new ValidationError(values.join(" | "), input);
+	};
+}
+
+export function intEnum<T extends number>(values: T[]): (input: string) => T {
+	return (input) => {
+		if (/^[0-9]+$/.test(input)) {
+			const number = parseInt(input);
+			for (const value of values) {
+				if (number == value) {
+					return value;
+				}
+			}
+		}
+		throw new ValidationError(values.join(" | "), input.toString());
 	};
 }

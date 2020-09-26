@@ -22,16 +22,36 @@
 </script>
 
 <script lang="typescript">
-	import type { CharInfo } from "server/Unicode";
+	import type { CharInfo, SingleCharRef } from "server/Unicode";
 	import { getDisplayText } from "strings";
 	import { Encoding } from "model/StringBlob";
 	import OpenGraph from "../../components/OpenGraph.svelte";
 	import CopyButton from "../../components/CopyButton.svelte";
 	import Repr from "./_repr.svelte";
-	import CaseMap from "./_caseMap.svelte";
+	import CharRef from "./_charRef.svelte";
+	import { escapeHtml } from "model/Util";
 
 	export let char: CharInfo;
 	let preview: HTMLElement;
+
+	function linkifyDefinition(
+		input: string | null,
+		refs: SingleCharRef[]
+	): string {
+		if (!input) {
+			return "None";
+		}
+		input = escapeHtml(input);
+		return input.replace(/U\+([A-Za-z0-9]{4,6})/g, (match, value) => {
+			const code = parseInt(value, 16);
+			for (const ref of refs) {
+				if (ref.codepoint == code) {
+					return `<a href="codepoint/${ref.slug}" title="U+${ref.codepointStr} ${ref.name}">U+${ref.codepointStr}</a>`;
+				}
+			}
+			return match;
+		});
+	}
 </script>
 
 <style>
@@ -50,7 +70,7 @@
 	}
 
 	.table {
-		grid-template-columns: 6em 1fr;
+		grid-template-columns: 8em 1fr;
 	}
 
 	.tag {
@@ -93,6 +113,7 @@
 	<div class="table">
 		<div>Appeared</div>
 		<div><a href="versions/{char.age}/page/1">Unicode {char.age}</a></div>
+
 		<div>Aliases</div>
 		<div>
 			{#if char.type == 'char' && char.aliases && char.aliases.length > 0}
@@ -103,55 +124,155 @@
 				</ul>
 			{:else}None{/if}
 		</div>
+
 		<div>Block</div>
 		<div><a href="blocks/{char.block.slug}">{char.block.name}</a></div>
+
 		<div>Category</div>
 		<div>
 			{getDisplayText(`generalCategory.${char.category}`)} ({char.category})
 		</div>
+
 		<div>Script</div>
 		<div>{char.script.name}</div>
+
 		<div>East-Asian Width</div>
 		<div>{getDisplayText(`eastAsianWidth.${char.eastAsianWidth}`)}</div>
+
 		<div>Numeric Value</div>
 		<div>
 			{#if char.type == 'char' && char.numeric}
 				{char.numeric.value}
 			{:else}Not numeric.{/if}
 		</div>
+
 		{#if char.type == 'char' && char.lowercaseForm}
 			<div>Lowercase</div>
 			<div>
-				<CaseMap mapping={char.lowercaseForm} />
+				<CharRef ref={char.lowercaseForm} />
 			</div>
 		{/if}
+
 		{#if char.type == 'char' && char.uppercaseForm}
 			<div>Uppercase</div>
 			<div>
-				<CaseMap mapping={char.uppercaseForm} />
+				<CharRef ref={char.uppercaseForm} />
 			</div>
 		{/if}
+
 		{#if char.type == 'char' && char.titlecaseForm}
 			<div>Titlecase</div>
 			<div>
-				<CaseMap mapping={char.titlecaseForm} />
+				<CharRef ref={char.titlecaseForm} />
 			</div>
 		{/if}
+
 		<div>Tags</div>
 		<div class="flow">
 			{#each char.tags as tag}
 				<div class="tag">{tag}</div>
 			{:else}None{/each}
 		</div>
+
 		<div>UTF-8</div>
 		<div class="flow">
 			<Repr codepoint={char.codepoint} encoding={Encoding.Utf8} />
 		</div>
+
 		<div>UTF-16</div>
 		<div class="flow">
 			<Repr codepoint={char.codepoint} encoding={Encoding.Utf16} />
 		</div>
 	</div>
+
+	{#if char.type == 'char' && char.unihan != null}
+		<h2>Unihan Data</h2>
+
+		<div class="table">
+			<div>Definition</div>
+			<div>
+				{@html linkifyDefinition(char.unihan.definition, char.unihan.definitionRefs)}
+			</div>
+
+			<div>Stroke Count</div>
+			<div>{char.unihan.totalStrokes || 'Unknown'}</div>
+
+			<div>Cantonese</div>
+			<div>{char.unihan.cantonese || 'None'}</div>
+
+			<div>Japanese Kun</div>
+			<div>{char.unihan.japaneseKun?.toLowerCase() || 'None'}</div>
+
+			<div>Japanese On</div>
+			<div>{char.unihan.japaneseOn?.toLowerCase() || 'None'}</div>
+
+			<div>Korean</div>
+			<div>{char.unihan.korean?.toLowerCase() || 'None'}</div>
+
+			<div>Mandarin</div>
+			<div>{char.unihan.mandarin || 'None'}</div>
+
+			<div>Vietnamese</div>
+			<div>{char.unihan.vietnamese || 'None'}</div>
+
+			<div>Grade Level</div>
+			<div>{char.unihan.gradeLevel || 'None'}</div>
+
+			<div>Big5 Encoding</div>
+			<div>
+				{#if char.type == 'char' && char.unihan && char.unihan.bigFiveEncoding}
+					<div class="repr-box">
+						{char.unihan.bigFiveEncoding?.toString(16)}
+					</div>
+				{:else}None{/if}
+			</div>
+
+			<div>GB-1 Encoding</div>
+			<div>
+				{#if char.type == 'char' && char.unihan?.gb1Encoding}
+					<div class="repr-box">{char.unihan.gb1Encoding?.toString(16)}</div>
+				{:else}None{/if}
+			</div>
+
+			{#if char.type == 'char' && char.unihan?.simplifiedChinese}
+				<div>Simplified Form</div>
+				<div>
+					<CharRef ref={char.unihan.simplifiedChinese} />
+				</div>
+			{/if}
+
+			{#if char.type == 'char' && char.unihan?.traditionalChinese}
+				<div>Traditional Form</div>
+				<div>
+					<CharRef ref={char.unihan.traditionalChinese} />
+				</div>
+			{/if}
+		</div>
+
+		<h2>External Links</h2>
+
+		<ul>
+			<li>
+				<a
+					href="https://www.mdbg.net/chinese/dictionary?page=worddict&wdrst=0&wdqb={char.text}">MDBG
+					Chinese Dictionary (Simplified Chinese)</a>
+			</li>
+			<li>
+				<a
+					href="https://www.mdbg.net/chinese/dictionary?page=worddict&wdrst=1&wdqb={char.text}">MDBG
+					Chinese Dictionary (Traditional Chinese)</a>
+			</li>
+			<li>
+				<a
+					href="http://www.cantonese.sheik.co.uk/dictionary/characters/{char.text}/">CantoDict
+					Project Cantonese Dictionary</a>
+			</li>
+			<li>
+				<a
+					href="http://en.glyphwiki.org/wiki/u{char.codepointStr.toLowerCase()}">GlyphWiki</a>
+			</li>
+		</ul>
+	{/if}
 {:else}
 	<h1>0x{char.codepointStr} Invalid Unicode</h1>
 

@@ -25,6 +25,7 @@
 	import Searchbar from "../../../components/Searchbar.svelte";
 	import OpenGraph from "../../../components/OpenGraph.svelte";
 	import StringBlob, { Encoding } from "model/StringBlob";
+	import { escapeHtml } from "model/Util";
 
 	export let results: Page[];
 	export let requestTime: number;
@@ -48,15 +49,6 @@
 				break;
 		}
 		return list;
-	}
-
-	function escapeHtml(text: string): string {
-		return text
-			.replace(/&/g, "&amp;")
-			.replace(/</g, "&lt;")
-			.replace(/>/g, "&gt;")
-			.replace(/"/g, "&quot;")
-			.replace(/'/g, "&#039;");
 	}
 
 	function highlight(text: string): string {

@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import fs from "fs";
-import { parse } from "./SemicolonValues";
+import { parse, parseTabs } from "./SemicolonValues";
 import * as t from "./Types";
 
 function read(name: string) {
@@ -178,6 +178,93 @@ export const derivedNumericValue = parse(
 		Numeric_Value: input[1],
 		Fraction: input[3],
 	})
+);
+
+// Unihan - http://www.unicode.org/reports/tr38/#N10260
+
+export const gradeLevelType = t.intEnum([1, 2, 3, 4, 5, 6]);
+export type GradeLevel = ReturnType<typeof gradeLevelType>;
+
+export const kTotalStrokes = new Map<number, number>();
+export const kGradeLevel = new Map<number, GradeLevel>();
+export const kBigFive = new Map<number, number>();
+export const kGB1 = new Map<number, number>();
+
+// Readings
+export const kCantonese = new Map<number, string>();
+export const kDefinition = new Map<number, string>();
+export const kHanyuPinlu = new Map<number, string>();
+export const kHanyuPinyin = new Map<number, string>();
+export const kJapaneseKun = new Map<number, string>();
+export const kJapaneseOn = new Map<number, string>();
+export const kKorean = new Map<number, string>();
+export const kMandarin = new Map<number, string>();
+export const kVietnamese = new Map<number, string>();
+
+// Variants
+export const kSimplifiedVariant = new Map<number, number[]>();
+export const kTraditionalVariant = new Map<number, number[]>();
+
+parseTabs(
+	{
+		DictionaryIndices: read("han/Unihan_DictionaryIndices.txt"),
+		DictionaryLikeData: read("han/Unihan_DictionaryLikeData.txt"),
+		IRGSources: read("han/Unihan_IRGSources.txt"),
+		NumericValues: read("han/Unihan_NumericValues.txt"),
+		OtherMappings: read("han/Unihan_OtherMappings.txt"),
+		RadicalStrokeCounts: read("han/Unihan_RadicalStrokeCounts.txt"),
+		Readings: read("han/Unihan_Readings.txt"),
+		Variants: read("han/Unihan_Variants.txt"),
+	},
+	(entry) => {
+		switch (entry.type) {
+			case "kTotalStrokes":
+				kTotalStrokes.set(entry.codepoint, parseInt(entry.value));
+				break;
+			case "kGradeLevel":
+				kGradeLevel.set(entry.codepoint, gradeLevelType(entry.value));
+				break;
+			case "kBigFive":
+				kBigFive.set(entry.codepoint, parseInt(entry.value, 16));
+				break;
+			case "kGB1":
+				kGB1.set(entry.codepoint, parseInt(entry.value, 16));
+				break;
+			case "kCantonese":
+				kCantonese.set(entry.codepoint, entry.value);
+				break;
+			case "kDefinition":
+				kDefinition.set(entry.codepoint, entry.value);
+				break;
+			case "kHanyuPinlu":
+				kHanyuPinlu.set(entry.codepoint, entry.value);
+				break;
+			case "kHanyuPinyin":
+				kHanyuPinyin.set(entry.codepoint, entry.value);
+				break;
+			case "kJapaneseKun":
+				kJapaneseKun.set(entry.codepoint, entry.value);
+				break;
+			case "kJapaneseOn":
+				kJapaneseOn.set(entry.codepoint, entry.value);
+				break;
+			case "kKorean":
+				kKorean.set(entry.codepoint, entry.value);
+				break;
+			case "kMandarin":
+				kMandarin.set(entry.codepoint, entry.value);
+				break;
+			case "kVietnamese":
+				kVietnamese.set(entry.codepoint, entry.value);
+				break;
+			case "kSimplifiedVariant":
+				kSimplifiedVariant.set(entry.codepoint, t.codepointList(entry.value));
+				break;
+			case "kTraditionalVariant":
+				kTraditionalVariant.set(entry.codepoint, t.codepointList(entry.value));
+				break;
+		}
+	}
 );
 
 console.log("Done.");

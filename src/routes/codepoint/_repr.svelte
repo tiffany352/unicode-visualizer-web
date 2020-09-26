@@ -12,15 +12,6 @@
 	$: codeunits = string.getCodeunits();
 </script>
 
-<style>
-	div {
-		display: inline-block;
-		padding: 0.25em;
-		border: 1px solid var(--main-border);
-		font-family: var(--mono-font);
-	}
-</style>
-
 {#each codeunits as unit}
-	<div>{unit.text}</div>
+	<div class="repr-box">{unit.text}</div>
 {/each}

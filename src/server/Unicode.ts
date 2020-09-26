@@ -19,8 +19,9 @@ export interface ScriptInfo {
 }
 
 // Refers to a codepoint
-export interface CaseMappingSimple {
-	type: "simple";
+export interface SingleCharRef {
+	type: "single";
+	codepoint: number;
 	text: string;
 	name: string;
 	codepointStr: string;
@@ -28,12 +29,12 @@ export interface CaseMappingSimple {
 }
 
 // Refers to a sequence
-export interface CaseMappingFull {
-	type: "full";
+export interface MultiCharRef {
+	type: "multi";
 	text: string;
 }
 
-export type CaseMapping = CaseMappingSimple | CaseMappingFull | null;
+export type CharRef = SingleCharRef | MultiCharRef | null;
 
 export type EastAsianWidth = "A" | "F" | "H" | "Na" | "W" | "N";
 
@@ -42,6 +43,29 @@ export type NumericType = "Decimal" | "Digit" | "Numeric";
 export interface Numeric {
 	type: NumericType;
 	value: string;
+}
+
+export interface UnihanChar {
+	totalStrokes: number | null;
+	gradeLevel: 1 | 2 | 3 | 4 | 5 | 6 | null;
+	bigFiveEncoding: number | null;
+	gb1Encoding: number | null;
+
+	// Readings
+	cantonese: string | null;
+	definition: string | null;
+	definitionRefs: SingleCharRef[];
+	hanyuPinlu: string | null;
+	hanyuPinyin: string | null;
+	japaneseKun: string | null;
+	japaneseOn: string | null;
+	korean: string | null;
+	mandarin: string | null;
+	vietnamese: string | null;
+
+	// Variants
+	simplifiedChinese: CharRef;
+	traditionalChinese: CharRef;
 }
 
 export interface Char {
@@ -55,13 +79,16 @@ export interface Char {
 	aliases: NameAlias[];
 	block: BlockInfo;
 	tags: string[];
-	lowercaseForm: CaseMapping;
-	uppercaseForm: CaseMapping;
-	titlecaseForm: CaseMapping;
+	lowercaseForm: CharRef;
+	uppercaseForm: CharRef;
+	titlecaseForm: CharRef;
 	eastAsianWidth: EastAsianWidth;
 	numeric: Numeric | null;
 	category: string;
 	script: ScriptInfo;
+
+	// Unihan info
+	unihan: UnihanChar | null;
 }
 
 export type InvalidReason =
@@ -282,6 +309,36 @@ const numericValueMap = new IntervalMap(
 	Data.derivedNumericValue.map((row) => [row.Range, row.Fraction])
 );
 
+// This data is not explicitly included in the Unihan Database, and
+// instead is available from this table in the TR:
+// https://www.unicode.org/reports/tr38/#BlockListing
+const isUnihan = new IntervalTree([
+	[new Range(0x3400, 0x4db5), true],
+	[new Range(0x4db6, 0x4dbf), true],
+	[new Range(0x4e00, 0x9fa5), true],
+	[new Range(0x9fa6, 0x9fbb), true],
+	[new Range(0x9fbc, 0x9fc3), true],
+	[new Range(0x9fc4, 0x9fcb), true],
+	[new Range(0x9fcc, 0x9fcc), true],
+	[new Range(0x9fcd, 0x9fd5), true],
+	[new Range(0x9fd6, 0x9fea), true],
+	[new Range(0x9feb, 0x9fef), true],
+	[new Range(0x9ff0, 0x9ffc), true],
+	[new Range(0xf900, 0xfa2d), true],
+	[new Range(0xfa2e, 0xfa2f), true],
+	[new Range(0xfa30, 0xfa6a), true],
+	[new Range(0xfa6b, 0xfa6d), true],
+	[new Range(0xfa70, 0xfad9), true],
+	[new Range(0x20000, 0x2a6d6), true],
+	[new Range(0x2a6d7, 0x2a6dd), true],
+	[new Range(0x2a700, 0x2b734), true],
+	[new Range(0x2b740, 0x2b81d), true],
+	[new Range(0x2b820, 0x2cea1), true],
+	[new Range(0x2ceb0, 0x2ebe0), true],
+	[new Range(0x30000, 0x3134a), true],
+	[new Range(0x2f800, 0x2fa1d), true],
+]);
+
 console.log("Done.");
 
 // Getters
@@ -400,6 +457,15 @@ function findName(
 			result = toTitleCase(result);
 		}
 		result = result.replace("Cjk", "CJK");
+
+		if (result.startsWith("CJK Unified Ideograph")) {
+			const definitions = Data.kDefinition.get(codepoint);
+			if (definitions) {
+				const first = definitions.split(";")[0];
+				return `CJK ${toTitleCase(first)}`;
+			}
+		}
+
 		return result;
 	}
 
@@ -413,36 +479,47 @@ function findName(
 	return toTitleCase(aliases[0].text);
 }
 
-function parseCaseMap(codepoints: number[] | null): CaseMapping {
+function createSingleCharRef(
+	codepoint: number | null | undefined
+): SingleCharRef | null {
+	if (!codepoint) {
+		return null;
+	}
+
+	const entry = charMap.get(codepoint);
+	if (entry) {
+		const aliases = aliasMap.get(codepoint) || [];
+		const name = findName(entry, aliases, codepoint);
+		const codepointStr = codepointToString(codepoint);
+		const slugName = toSlug(name);
+		const slug = `${codepointStr}-${slugName || "unicode"}`;
+		const text = String.fromCodePoint(codepoint);
+		return {
+			type: "single",
+			codepoint,
+			codepointStr,
+			name,
+			text,
+			slug,
+		};
+	}
+	return null;
+}
+
+function createCharRef(codepoints: number[] | null | undefined): CharRef {
 	if (!codepoints) {
 		return null;
 	}
 
 	if (codepoints.length > 1) {
 		return {
-			type: "full",
+			type: "multi",
 			text: String.fromCodePoint(...codepoints),
 		};
 	} else {
 		const codepoint = codepoints[0];
-		const entry = charMap.get(codepoint);
-		if (entry) {
-			const aliases = aliasMap.get(codepoint) || [];
-			const name = findName(entry, aliases, codepoint);
-			const codepointStr = codepointToString(codepoint);
-			const slugName = toSlug(name);
-			const slug = `${codepointStr}-${slugName || "unicode"}`;
-			const text = String.fromCodePoint(codepoint);
-			return {
-				type: "simple",
-				codepointStr,
-				name,
-				text,
-				slug,
-			};
-		}
+		return createSingleCharRef(codepoint);
 	}
-	return null;
 }
 
 function parseEntry(entry: CharEntry, codepoint: number): Char {
@@ -467,9 +544,9 @@ function parseEntry(entry: CharEntry, codepoint: number): Char {
 	};
 
 	//const caseMapping = caseMaps.get(codepoint) || null;
-	let uppercaseForm = parseCaseMap(entry.Simple_Uppercase_Mapping);
-	let lowercaseForm = parseCaseMap(entry.Simple_Lowercase_Mapping);
-	let titlecaseForm = parseCaseMap(entry.Simple_Titlecase_Mapping);
+	let uppercaseForm = createCharRef(entry.Simple_Uppercase_Mapping);
+	let lowercaseForm = createCharRef(entry.Simple_Lowercase_Mapping);
+	let titlecaseForm = createCharRef(entry.Simple_Titlecase_Mapping);
 
 	const tags: string[] = [];
 	for (const [type, tree] of emojiProps.entries()) {
@@ -503,6 +580,69 @@ function parseEntry(entry: CharEntry, codepoint: number): Char {
 		}
 	}
 
+	let unihan = null;
+	if (isUnihan.get(codepoint)) {
+		const totalStrokes = Data.kTotalStrokes.get(codepoint) || null;
+		const gradeLevel = Data.kGradeLevel.get(codepoint) || null;
+		const bigFiveEncoding = Data.kBigFive.get(codepoint) || null;
+		const gb1Encoding = Data.kGB1.get(codepoint) || null;
+
+		// Readings
+		const cantonese = Data.kCantonese.get(codepoint) || null;
+		const definition = Data.kDefinition.get(codepoint) || null;
+		const hanyuPinlu = Data.kHanyuPinlu.get(codepoint) || null;
+		const hanyuPinyin = Data.kHanyuPinyin.get(codepoint) || null;
+		const japaneseKun = Data.kJapaneseKun.get(codepoint) || null;
+		const japaneseOn = Data.kJapaneseOn.get(codepoint) || null;
+		const korean = Data.kKorean.get(codepoint) || null;
+		const mandarin = Data.kMandarin.get(codepoint) || null;
+		const vietnamese = Data.kVietnamese.get(codepoint) || null;
+
+		const definitionRefs: SingleCharRef[] = [];
+		if (definition) {
+			const regex = /U\+([A-Za-z0-9]{4,6})/g;
+			let match: RegExpExecArray | null;
+			while ((match = regex.exec(definition))) {
+				const codepoint = parseInt(match[1], 16);
+				const ref = createSingleCharRef(codepoint);
+				if (ref) {
+					definitionRefs.push(ref);
+				}
+			}
+		}
+
+		// Variants
+		const simplifiedChinese = createCharRef(
+			Data.kSimplifiedVariant.get(codepoint)
+		);
+		const traditionalChinese = createCharRef(
+			Data.kTraditionalVariant.get(codepoint)
+		);
+
+		unihan = {
+			totalStrokes,
+			gradeLevel,
+			bigFiveEncoding,
+			gb1Encoding,
+
+			// Readings
+			cantonese,
+			definition,
+			definitionRefs,
+			hanyuPinlu,
+			hanyuPinyin,
+			japaneseKun,
+			japaneseOn,
+			korean,
+			mandarin,
+			vietnamese,
+
+			// Variants
+			simplifiedChinese,
+			traditionalChinese,
+		};
+	}
+
 	return {
 		type: "char",
 		codepoint,
@@ -521,6 +661,7 @@ function parseEntry(entry: CharEntry, codepoint: number): Char {
 		numeric,
 		slug,
 		text,
+		unihan,
 	};
 }
 
