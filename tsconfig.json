@@ -4,7 +4,6 @@
 	"compilerOptions": {
 		"baseUrl": "src",
 		"resolveJsonModule": true,
-		"target": "ES6",
 		"strict": true
 	},
 	"include": ["./src/**/*"]

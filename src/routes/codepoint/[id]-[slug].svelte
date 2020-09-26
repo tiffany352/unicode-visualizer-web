@@ -52,6 +52,13 @@
 			return match;
 		});
 	}
+
+	function maybeLowerCase(input: string | null): string {
+		if (!input) {
+			return "None";
+		}
+		return input.toLowerCase();
+	}
 </script>
 
 <style>
@@ -201,13 +208,13 @@
 			<div>{char.unihan.cantonese || 'None'}</div>
 
 			<div>Japanese Kun</div>
-			<div>{char.unihan.japaneseKun?.toLowerCase() || 'None'}</div>
+			<div>{maybeLowerCase(char.unihan.japaneseKun)}</div>
 
 			<div>Japanese On</div>
-			<div>{char.unihan.japaneseOn?.toLowerCase() || 'None'}</div>
+			<div>{maybeLowerCase(char.unihan.japaneseOn)}</div>
 
 			<div>Korean</div>
-			<div>{char.unihan.korean?.toLowerCase() || 'None'}</div>
+			<div>{maybeLowerCase(char.unihan.korean)}</div>
 
 			<div>Mandarin</div>
 			<div>{char.unihan.mandarin || 'None'}</div>
@@ -221,27 +228,25 @@
 			<div>Big5 Encoding</div>
 			<div>
 				{#if char.type == 'char' && char.unihan && char.unihan.bigFiveEncoding}
-					<div class="repr-box">
-						{char.unihan.bigFiveEncoding?.toString(16)}
-					</div>
+					<div class="repr-box">{char.unihan.bigFiveEncoding.toString(16)}</div>
 				{:else}None{/if}
 			</div>
 
 			<div>GB-1 Encoding</div>
 			<div>
-				{#if char.type == 'char' && char.unihan?.gb1Encoding}
-					<div class="repr-box">{char.unihan.gb1Encoding?.toString(16)}</div>
+				{#if char.type == 'char' && char.unihan && char.unihan.gb1Encoding}
+					<div class="repr-box">{char.unihan.gb1Encoding.toString(16)}</div>
 				{:else}None{/if}
 			</div>
 
-			{#if char.type == 'char' && char.unihan?.simplifiedChinese}
+			{#if char.type == 'char' && char.unihan && char.unihan.simplifiedChinese}
 				<div>Simplified Form</div>
 				<div>
 					<CharRef ref={char.unihan.simplifiedChinese} />
 				</div>
 			{/if}
 
-			{#if char.type == 'char' && char.unihan?.traditionalChinese}
+			{#if char.type == 'char' && char.unihan && char.unihan.traditionalChinese}
 				<div>Traditional Form</div>
 				<div>
 					<CharRef ref={char.unihan.traditionalChinese} />
