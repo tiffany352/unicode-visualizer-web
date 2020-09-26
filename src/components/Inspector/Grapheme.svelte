@@ -8,6 +8,7 @@
 
 	export let grapheme: GraphemeInfo;
 	export let extra: Extra | null = null;
+	export let onlyItem: boolean = false;
 
 	function findSequence() {
 		if (!extra) {
@@ -17,6 +18,13 @@
 		const sequence = extra.sequences.find((seq) => seq.text == grapheme.text);
 
 		if (!sequence) {
+			if (onlyItem) {
+				const codepoint = grapheme.text.codePointAt(0) || 0;
+				const char = extra.chars[codepoint.toString(16)];
+				if (char && char.type == "char") {
+					return char.name;
+				}
+			}
 			return null;
 		}
 
@@ -33,6 +41,7 @@
 
 	.sequence {
 		font: var(--mono-font);
+		padding: 0.25em;
 	}
 </style>
 

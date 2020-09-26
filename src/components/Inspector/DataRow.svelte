@@ -31,7 +31,7 @@
 	.inspect {
 		display: grid;
 		grid-template-rows: min-content min-content min-content;
-		width: min-content;
+		width: max-content;
 		overflow-x: auto;
 		text-align: center;
 		background-color: var(--main-bg);
@@ -83,7 +83,7 @@
 			<div
 				class="grapheme"
 				style="grid-column-start: {grapheme.first + 1}; grid-column-end: {grapheme.last + 2}">
-				<Grapheme {grapheme} {extra} />
+				<Grapheme {grapheme} {extra} onlyItem={codepoints.length == 1} />
 			</div>
 		{/each}
 	</div>
