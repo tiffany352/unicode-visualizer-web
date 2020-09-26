@@ -7,12 +7,12 @@ import { parse } from "./SemicolonValues";
 import * as t from "./Types";
 
 function read(name: string) {
-	return fs.readFileSync(`data/${name}.txt`, { encoding: "utf-8" });
+	return fs.readFileSync(`data/${name}`, { encoding: "utf-8" });
 }
 
 console.log("Parsing UCD.");
 
-export const unicodeData = parse(read("UnicodeData"), (input) => ({
+export const unicodeData = parse(read("ucd/UnicodeData.txt"), (input) => ({
 	Codepoint: t.codepoint(input[0]),
 	Name: t.name(input[1]),
 	General_Category: input[2],
@@ -30,7 +30,7 @@ export const unicodeData = parse(read("UnicodeData"), (input) => ({
 	Simple_Titlecase_Mapping: t.optional(input[14], t.codepointList),
 }));
 
-export const blocks = parse(read("Blocks"), (input) => ({
+export const blocks = parse(read("ucd/Blocks.txt"), (input) => ({
 	Range: t.codepointRange(input[0]),
 	Block: input[1],
 }));
@@ -43,7 +43,7 @@ export const nameAliasType = t.enumeration([
 	"abbreviation",
 ]);
 
-export const nameAliases = parse(read("NameAliases"), (input) => ({
+export const nameAliases = parse(read("ucd/NameAliases.txt"), (input) => ({
 	Codepoint: t.codepoint(input[0]),
 	Alias: input[1],
 	Type: nameAliasType(input[2]),
@@ -52,7 +52,7 @@ export type NameAlias = typeof nameAliases[0];
 
 type NamedSequence = "Named_Sequence";
 
-export const sequences = parse(read("NamedSequences"), (input) => ({
+export const sequences = parse(read("ucd/NamedSequences.txt"), (input) => ({
 	Name: input[0],
 	Type: "Named_Sequence" as NamedSequence,
 	Codepoints: t.codepointList(input[1]),
@@ -60,21 +60,24 @@ export const sequences = parse(read("NamedSequences"), (input) => ({
 
 const versionRegex = /Version ([\d\.]+)/;
 
-const result = read("ReadMe").match(versionRegex);
+const result = read("ucd/ReadMe.txt").match(versionRegex);
 if (!result) {
 	throw new Error("ReadMe.txt didn't contain version number");
 }
 export const version = result[1];
 
-export const derivedAge = parse(read("DerivedAge"), (input) => ({
+export const derivedAge = parse(read("ucd/DerivedAge.txt"), (input) => ({
 	Range: t.codepointOrRange(input[0]),
 	Version: input[1],
 }));
 
-export const derivedName = parse(read("extracted/DerivedName"), (input) => ({
-	Range: t.codepointOrRange(input[0]),
-	Name: input[1],
-}));
+export const derivedName = parse(
+	read("ucd/extracted/DerivedName.txt"),
+	(input) => ({
+		Range: t.codepointOrRange(input[0]),
+		Name: input[1],
+	})
+);
 
 const emojiType = t.enumeration([
 	"Extended_Pictographic",
@@ -85,7 +88,7 @@ const emojiType = t.enumeration([
 	"Emoji",
 ]);
 
-export const emojiData = parse(read("emoji/emoji-data"), (input) => ({
+export const emojiData = parse(read("ucd/emoji/emoji-data.txt"), (input) => ({
 	Range: t.codepointOrRange(input[0]),
 	Type: emojiType(input[1]),
 }));
@@ -98,16 +101,19 @@ const emojiSequenceType = t.enumeration([
 	"RGI_Emoji_Modifier_Sequence",
 ]);
 
-export const emojiSequences = parse(read("emoji/emoji-sequences"), (input) => ({
-	Codepoints: t.codepointListOrRange(input[0]),
-	Type: emojiSequenceType(input[1]),
-	Name: t.escapedString(input[2]),
-}));
+export const emojiSequences = parse(
+	read("emoji/emoji-sequences.txt"),
+	(input) => ({
+		Codepoints: t.codepointListOrRange(input[0]),
+		Type: emojiSequenceType(input[1]),
+		Name: t.escapedString(input[2]),
+	})
+);
 
 const emojiZwjSequenceType = t.enumeration(["RGI_Emoji_ZWJ_Sequence"]);
 
 export const emojiZwjSequences = parse(
-	read("emoji/emoji-zwj-sequences"),
+	read("emoji/emoji-zwj-sequences.txt"),
 	(input) => ({
 		Codepoints: t.codepointList(input[0]),
 		Type: emojiZwjSequenceType(input[1]),
@@ -115,7 +121,7 @@ export const emojiZwjSequences = parse(
 	})
 );
 
-export const scripts = parse(read("Scripts"), (input) => ({
+export const scripts = parse(read("ucd/Scripts.txt"), (input) => ({
 	Range: t.codepointOrRange(input[0]),
 	Script: input[1],
 }));
@@ -127,13 +133,13 @@ export const statusType = t.enumeration([
 	"T", // Turkish
 ]);
 
-export const caseFolding = parse(read("CaseFolding"), (input) => ({
+export const caseFolding = parse(read("ucd/CaseFolding.txt"), (input) => ({
 	Codepoint: t.codepoint(input[0]),
 	Status: statusType(input[1]),
 	Mapping: t.codepointList(input[2]),
 }));
 
-export const propList = parse(read("PropList"), (input) => ({
+export const propList = parse(read("ucd/PropList.txt"), (input) => ({
 	Range: t.codepointOrRange(input[0]),
 	Prop: input[1],
 }));
@@ -147,15 +153,18 @@ export const eastAsianWidthType = t.enumeration([
 	"N",
 ]);
 
-export const eastAsianWidth = parse(read("EastAsianWidth"), (input) => ({
-	Range: t.codepointOrRange(input[0]),
-	Type: eastAsianWidthType(input[1]),
-}));
+export const eastAsianWidth = parse(
+	read("ucd/EastAsianWidth.txt"),
+	(input) => ({
+		Range: t.codepointOrRange(input[0]),
+		Type: eastAsianWidthType(input[1]),
+	})
+);
 
 export const numericType = t.enumeration(["Decimal", "Digit", "Numeric"]);
 
 export const derivedNumericType = parse(
-	read("extracted/DerivedNumericType"),
+	read("ucd/extracted/DerivedNumericType.txt"),
 	(input) => ({
 		Range: t.codepointOrRange(input[0]),
 		Type: numericType(input[1]),
@@ -163,7 +172,7 @@ export const derivedNumericType = parse(
 );
 
 export const derivedNumericValue = parse(
-	read("extracted/DerivedNumericValues"),
+	read("ucd/extracted/DerivedNumericValues.txt"),
 	(input) => ({
 		Range: t.codepointOrRange(input[0]),
 		Numeric_Value: input[1],
