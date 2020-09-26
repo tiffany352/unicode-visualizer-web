@@ -7,6 +7,7 @@
 	import { getDisplayText } from "strings";
 	import { createEventDispatcher, onMount } from "svelte";
 	import Modal from "../Modal.svelte";
+	import Icon from "../Icon.svelte";
 
 	const dispatch = createEventDispatcher();
 	const close = () => dispatch("close");
@@ -87,7 +88,9 @@
 	</pre>
 
 	<div slot="buttons">
-		<button class="button" on:click={copyText}>Copy</button>
+		<button class="button" on:click={copyText}>
+			<Icon icon="copy" />
+			Copy</button>
 		<span class="copyText" class:success>Copied!</span>
 	</div>
 </Modal>

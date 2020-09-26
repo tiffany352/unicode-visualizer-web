@@ -15,6 +15,6 @@
 	}
 </style>
 
-<svg width="24" height="24">
+<svg width="24" height="24" class="icon">
 	<use href="icons/{icon}.svg#{icon}" />
 </svg>

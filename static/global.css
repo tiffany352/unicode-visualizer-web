@@ -253,6 +253,10 @@ code {
 	display: block;
 }
 
+.button > .icon {
+	transform: scale(75%);
+}
+
 @keyframes ripple {
 	from {
 		opacity: 1;
