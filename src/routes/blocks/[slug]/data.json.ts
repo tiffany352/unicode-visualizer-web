@@ -7,6 +7,7 @@ import {
 	codepointToString,
 	getBlockFromSlug,
 	getCodepointsInRange,
+	versionCompare,
 } from "server/Unicode";
 
 export function get(req: Request, res: Response, next: NextFunction) {
@@ -27,6 +28,14 @@ export function get(req: Request, res: Response, next: NextFunction) {
 	const totalCount = block.range.last - block.range.first + 1;
 	const firstCodepointStr = codepointToString(block.range.first);
 	const lastCodepointStr = codepointToString(block.range.last);
+
+	const newestVersion = codepoints.codepoints.reduce(
+		(acc, value) =>
+			value.type == "char" && versionCompare(acc, value.age) < 0
+				? value.age
+				: acc,
+		"1.1"
+	);
 
 	const first = codepoints.codepoints[0];
 	let allAreEquallyInvalid: false | string = false;
@@ -54,5 +63,6 @@ export function get(req: Request, res: Response, next: NextFunction) {
 		firstCodepointStr,
 		lastCodepointStr,
 		allAreEquallyInvalid,
+		newestVersion,
 	});
 }

@@ -11,6 +11,7 @@
 			firstCodepointStr: string;
 			lastCodepointStr: string;
 			allAreEquallyInvalid: false | string;
+			newestVersion: string;
 		};
 
 	export async function preload(this: any, page: any, session: any) {
@@ -50,6 +51,13 @@
 	are reserved.
 </p>
 
+<p>
+	This block was most recently added to in <a
+		href="/versions/{block.newestVersion}/{block.slug}"
+		>Unicode {block.newestVersion}</a
+	>.
+</p>
+
 {#if block.allAreEquallyInvalid}
 	<div class="table">
 		<div>N/A</div>
@@ -86,12 +94,12 @@
 		text-align: center;
 	}
 
-	a {
+	.table a {
 		text-decoration: none;
 	}
 
-	a:hover,
-	a:focus {
+	.table a:hover,
+	.table a:focus {
 		text-decoration: underline;
 	}
 </style>

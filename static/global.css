@@ -101,6 +101,10 @@ code {
 	font-size: 110%;
 }
 
+.table .header {
+	font-weight: bold;
+}
+
 .table > a {
 	display: contents;
 }

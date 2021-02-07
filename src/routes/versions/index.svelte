@@ -22,14 +22,15 @@
 
 <OpenGraph
 	title="Versions - Unicode Visualizer"
-	description="Browse the list of Unicode releases." />
+	description="Browse the list of Unicode releases."
+/>
 
 <h1>Unicode Versions</h1>
 
 <ul>
 	{#each versions as version}
 		<li>
-			<a href="versions/{version}/page/1">{version}</a>
+			<a href="versions/{version}">{version}</a>
 		</li>
 	{/each}
 </ul>

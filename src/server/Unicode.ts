@@ -393,7 +393,7 @@ export function getDescription(): string {
 	return Data.version;
 }
 
-function versionCompare(a: string, b: string): number {
+export function versionCompare(a: string, b: string): number {
 	const [leftMaj, leftMin] = a.split(".");
 	const [rightMaj, rightMin] = b.split(".");
 
