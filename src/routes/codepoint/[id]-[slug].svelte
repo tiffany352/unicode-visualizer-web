@@ -46,7 +46,7 @@
 			const code = parseInt(value, 16);
 			for (const ref of refs) {
 				if (ref.codepoint == code) {
-					return `<a href="codepoint/${ref.slug}" title="U+${ref.codepointStr} ${ref.name}">U+${ref.codepointStr}</a>`;
+					return `<a href="/codepoint/${ref.slug}" title="U+${ref.codepointStr} ${ref.name}">U+${ref.codepointStr}</a>`;
 				}
 			}
 			return match;
@@ -86,7 +86,7 @@
 
 	<div class="table">
 		<div>Appeared</div>
-		<div><a href="versions/{char.age}/page/1">Unicode {char.age}</a></div>
+		<div><a href="/versions/{char.age}/page/1">Unicode {char.age}</a></div>
 
 		<div>Aliases</div>
 		<div>
@@ -100,7 +100,7 @@
 		</div>
 
 		<div>Block</div>
-		<div><a href="blocks/{char.block.slug}">{char.block.name}</a></div>
+		<div><a href="/blocks/{char.block.slug}">{char.block.name}</a></div>
 
 		<div>Category</div>
 		<div>

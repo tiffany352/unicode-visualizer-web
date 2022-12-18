@@ -103,7 +103,7 @@
 		</div>
 	{:else}
 		<p>
-			Did you mean to <a href="inspect/{createInspectLink(query)}"
+			Did you mean to <a href="/inspect/{createInspectLink(query)}"
 				>inspect a string</a
 			> instead?
 		</p>

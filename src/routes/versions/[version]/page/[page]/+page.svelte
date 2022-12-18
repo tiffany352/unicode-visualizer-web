@@ -48,7 +48,7 @@
 <div class="table">
 	{#each chars as char}
 		{#if char.type == "char"}
-			<a href="codepoint/{char.slug}">
+			<a href="/codepoint/{char.slug}">
 				<div class="char">
 					<span>{char.text}</span>
 				</div>

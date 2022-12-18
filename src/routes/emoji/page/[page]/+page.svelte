@@ -47,7 +47,7 @@
 
 <div class="table">
 	{#each emoji as char}
-		<a href="codepoint/{char.slug}">
+		<a href="/codepoint/{char.slug}">
 			<div>{char.text}</div>
 			<div>
 				<code>U+{char.codepointStr}</code>

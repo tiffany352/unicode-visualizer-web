@@ -58,6 +58,53 @@
 	}
 </script>
 
+<OpenGraph
+	title="Unicode Visualizer"
+	description="A tool for working with Unicode"
+/>
+
+<h1>Unicode Visualizer</h1>
+
+<nav>
+	<a href="https://github.com/tiffany352/unicode-visualizer-web">
+		<Icon icon="github" />
+		GitHub
+	</a>
+</nav>
+
+<p>
+	Unicode Visualizer is a website with information from the Unicode Character
+	Database. It also offers a tool that lets you inspect strings and view the
+	breakdown of their codepoints and graphemes.
+</p>
+
+<p>
+	The <a href="/inspect">inspect page</a> lets you paste in any string and learn
+	what it has in it. It can help diagnose issues with encodings, Unicode handling
+	in apps, text filter bypasses, and other Unicode-related tasks.
+</p>
+
+<h2>Search</h2>
+<Searchbar />
+
+<h2>Quick Inspect</h2>
+<InspectBar />
+
+<h2>Examples</h2>
+<ul>
+	{#each examples as example}
+		<li>
+			{example.description}: <a href={createUrl(example)}>{example.string}</a>
+		</li>
+	{/each}
+
+	<!-- prettier-ignore -->
+	<li>
+		Have more? Submit them as issues on{' '}
+		<a href="https://github.com/tiffany352/unicode-visualizer-web">GitHub</a>!
+	</li>
+</ul>
+
 <style>
 	h1 {
 		text-align: center;
@@ -81,49 +128,3 @@
 		text-decoration: underline;
 	}
 </style>
-
-<OpenGraph
-	title="Unicode Visualizer"
-	description="A tool for working with Unicode" />
-
-<h1>Unicode Visualizer</h1>
-
-<nav>
-	<a href="https://github.com/tiffany352/unicode-visualizer-web">
-		<Icon icon="github" />
-		GitHub
-	</a>
-</nav>
-
-<p>
-	Unicode Visualizer is a website with information from the Unicode Character
-	Database. It also offers a tool that lets you inspect strings and view the
-	breakdown of their codepoints and graphemes.
-</p>
-
-<p>
-	The <a href="inspect">inspect page</a> lets you paste in any string and learn what
-	it has in it. It can help diagnose issues with encodings, Unicode handling in apps,
-	text filter bypasses, and other Unicode-related tasks.
-</p>
-
-<h2>Search</h2>
-<Searchbar />
-
-<h2>Quick Inspect</h2>
-<InspectBar />
-
-<h2>Examples</h2>
-<ul>
-	{#each examples as example}
-		<li>
-			{example.description}: <a href={createUrl(example)}>{example.string}</a>
-		</li>
-	{/each}
-
-	<!-- prettier-ignore -->
-	<li>
-		Have more? Submit them as issues on{' '}
-		<a href="https://github.com/tiffany352/unicode-visualizer-web">GitHub</a>!
-	</li>
-</ul>

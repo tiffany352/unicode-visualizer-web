@@ -30,7 +30,7 @@
 <ul>
 	{#each versions as version}
 		<li>
-			<a href="versions/{version}">{version}</a>
+			<a href="/versions/{version}">{version}</a>
 		</li>
 	{/each}
 </ul>

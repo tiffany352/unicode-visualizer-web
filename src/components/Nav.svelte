@@ -10,6 +10,33 @@
 	export let closeMenu: () => void;
 </script>
 
+<nav>
+	<h1>Unicode Visualizer</h1>
+
+	<a
+		href="#main-menu-toggle"
+		id="main-menu-close"
+		class="menu-close"
+		aria-label="Close main menu"
+		on:click|preventDefault={closeMenu}
+	>
+		<span class="sr-only">Close main menu</span>
+		<Icon icon="x" />
+	</a>
+
+	<ul>
+		<NavLink {segment} {closeMenu} href="/">Home</NavLink>
+		<NavLink {segment} {closeMenu} href="/search">Search</NavLink>
+		<NavLink {segment} {closeMenu} href="/inspect">Inspect</NavLink>
+		<hr />
+		<h2>Browse</h2>
+		<NavLink {segment} {closeMenu} href="/blocks">Blocks</NavLink>
+		<NavLink {segment} {closeMenu} href="/sequences">Sequences</NavLink>
+		<NavLink {segment} {closeMenu} href="/versions">Versions</NavLink>
+	</ul>
+	<div class="spacer" />
+</nav>
+
 <style>
 	nav {
 		border-right: 1px solid rgba(112, 47, 25, 0.562);
@@ -58,29 +85,3 @@
 		}
 	}
 </style>
-
-<nav>
-	<h1>Unicode Visualizer</h1>
-
-	<a
-		href="#main-menu-toggle"
-		id="main-menu-close"
-		class="menu-close"
-		aria-label="Close main menu"
-		on:click|preventDefault={closeMenu}>
-		<span class="sr-only">Close main menu</span>
-		<Icon icon="x" />
-	</a>
-
-	<ul>
-		<NavLink {segment} {closeMenu} href=".">Home</NavLink>
-		<NavLink {segment} {closeMenu} href="search">Search</NavLink>
-		<NavLink {segment} {closeMenu} href="inspect">Inspect</NavLink>
-		<hr />
-		<h2>Browse</h2>
-		<NavLink {segment} {closeMenu} href="blocks">Blocks</NavLink>
-		<NavLink {segment} {closeMenu} href="sequences">Sequences</NavLink>
-		<NavLink {segment} {closeMenu} href="versions">Versions</NavLink>
-	</ul>
-	<div class="spacer" />
-</nav>

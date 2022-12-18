@@ -40,7 +40,7 @@
 
 <div class="table">
 	{#each sequences as sequence}
-		<a href="sequences/{sequence.slug}">
+		<a href="/sequences/{sequence.slug}">
 			<div>{sequence.name}</div>
 			<div>
 				<code>{sequence.text}</code>

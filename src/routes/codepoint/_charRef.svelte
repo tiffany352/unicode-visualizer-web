@@ -10,13 +10,13 @@
 </script>
 
 {#if ref.type == "single"}
-	<a href="codepoint/{ref.slug}">
+	<a href="/codepoint/{ref.slug}">
 		{ref.text} U+{ref.codepointStr}
 		{ref.name}
 	</a>
 {:else if ref.type == "multi"}
 	<a
-		href="inspect/{StringBlob.stringDecode(
+		href="/inspect/{StringBlob.stringDecode(
 			Encoding.Utf8,
 			ref.text
 		).urlEncode()}"

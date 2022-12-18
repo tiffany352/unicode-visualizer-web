@@ -60,7 +60,7 @@
 
 		{#each getEncodings() as encoding}
 			<li>
-				<a href="inspect/{string.convert(encoding).urlEncode()}">
+				<a href="/inspect/{string.convert(encoding).urlEncode()}">
 					{getDisplayText(`encoding.${encodingToTag(encoding)}`)}
 				</a>
 			</li>
@@ -72,7 +72,7 @@
 
 		{#each getEncodings() as encoding}
 			<li>
-				<a href="inspect/{string.reinterpret(encoding).urlEncode()}">
+				<a href="/inspect/{string.reinterpret(encoding).urlEncode()}">
 					{getDisplayText(`encoding.${encodingToTag(encoding)}`)}
 				</a>
 			</li>
@@ -87,7 +87,7 @@
 				{#if string.normalize(nf).equal(string)}
 					<div class="disabled">✓ {getDisplayText(`normalForm.${nf}`)}</div>
 				{:else}
-					<a href="inspect/{string.normalize(nf).urlEncode()}">
+					<a href="/inspect/{string.normalize(nf).urlEncode()}">
 						{getDisplayText(`normalForm.${nf}`)}
 					</a>
 				{/if}

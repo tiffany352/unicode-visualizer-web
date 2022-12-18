@@ -34,7 +34,7 @@
 
 <div class="table">
 	{#each blocks as block}
-		<a href="blocks/{block.slug}">
+		<a href="/blocks/{block.slug}">
 			<div>{block.name}</div>
 			<div>
 				<code>{codepoint(block.range.first)}</code>
