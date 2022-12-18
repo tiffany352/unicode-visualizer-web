@@ -6,7 +6,7 @@
 	import type { CodepointInfo } from "$lib/model/StringBlob";
 	import { stringFromCodePoint } from "$lib/model/Util";
 	import type { CharInfo } from "$lib/server/Unicode";
-	import { getDisplayText } from "strings";
+	import { getDisplayText } from "$lib/strings";
 	import type { Extra } from "./extra";
 
 	export let codepoint: CodepointInfo;

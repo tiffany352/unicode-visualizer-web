@@ -4,7 +4,7 @@
 	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 	import StringBlob, { encodingToTag, DataType } from "$lib/model/StringBlob";
-	import { getDisplayText } from "strings";
+	import { getDisplayText } from "$lib/strings";
 	import { createEventDispatcher, onMount } from "svelte";
 	import Modal from "../Modal.svelte";
 	import CopyButton from "../CopyButton.svelte";

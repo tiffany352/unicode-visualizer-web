@@ -9,7 +9,7 @@ import {
 	getVersions,
 	getSequences,
 } from "./Unicode";
-import { getDisplayText } from "strings";
+import { getDisplayText } from "$lib/strings";
 
 export interface Link {
 	text: string;

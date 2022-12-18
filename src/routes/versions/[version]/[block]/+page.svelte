@@ -24,7 +24,7 @@
 
 <script lang="ts">
 	import type { BlockInfo, CharInfo } from "$lib/server/Unicode";
-	import { getDisplayText } from "strings";
+	import { getDisplayText } from "$lib/strings";
 	import OpenGraph from "../../../../components/OpenGraph.svelte";
 
 	export let beforeThisVersion: number;

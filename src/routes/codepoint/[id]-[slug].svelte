@@ -23,7 +23,7 @@
 
 <script lang="ts">
 	import type { CharInfo, SingleCharRef } from "$lib/server/Unicode";
-	import { getDisplayText } from "strings";
+	import { getDisplayText } from "$lib/strings";
 	import { Encoding } from "$lib/model/StringBlob";
 	import OpenGraph from "../../components/OpenGraph.svelte";
 	import CopyButton from "../../components/CopyButton.svelte";

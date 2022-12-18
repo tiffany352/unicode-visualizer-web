@@ -7,7 +7,7 @@
 		getDataTypes,
 	} from "$lib/model/StringBlob";
 	import type { Extra } from "./extra";
-	import { getDisplayText } from "strings";
+	import { getDisplayText } from "$lib/strings";
 	import DataRow from "./DataRow.svelte";
 	import DataCol from "./DataCol.svelte";
 	import Menu from "../Menu.svelte";

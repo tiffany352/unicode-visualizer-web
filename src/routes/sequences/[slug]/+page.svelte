@@ -28,7 +28,7 @@
 <script lang="ts">
 	import type { SequenceInfo, CharMap, CharInfo } from "$lib/server/Unicode";
 	import StringBlob, { Encoding } from "$lib/model/StringBlob";
-	import { getDisplayText } from "strings";
+	import { getDisplayText } from "$lib/strings";
 	import OpenGraph from "../../../components/OpenGraph.svelte";
 	import Inspector from "../../../components/Inspector/index.svelte";
 
