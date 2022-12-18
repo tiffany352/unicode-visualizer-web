@@ -9,7 +9,7 @@
 	export let query: string = "";
 
 	function onSubmit() {
-		goto(`search/${encodeURIComponent(query)}`);
+		goto(`/search/${encodeURIComponent(query)}`);
 	}
 </script>
 

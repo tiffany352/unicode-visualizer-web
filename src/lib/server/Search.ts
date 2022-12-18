@@ -41,7 +41,7 @@ console.log("Initializing search engine");
 
 for (const char of getAllNotableChars()) {
 	const page: Page = {
-		url: `codepoint/${char.slug}`,
+		url: `/codepoint/${char.slug}`,
 		title: `${char.text} U+${char.codepointStr} ${char.name}`,
 		description: `Properties of U+${char.codepointStr} ${char.name}, a character in the ${char.block.name} block.`,
 		tags: char.tags
@@ -51,14 +51,14 @@ for (const char of getAllNotableChars()) {
 		links: [
 			{
 				text: char.block.name,
-				url: `blocks/${char.block.slug}`,
+				url: `/blocks/${char.block.slug}`,
 			},
 		],
 	};
 	if (char.tags.indexOf("Emoji_Presentation") != -1) {
 		page.links?.push({
 			text: "Emoji",
-			url: `emoji`,
+			url: `/emoji`,
 		});
 	}
 	index.add(page);
@@ -66,7 +66,7 @@ for (const char of getAllNotableChars()) {
 
 for (const block of getBlocks()) {
 	const page = {
-		url: `blocks/${block.slug}`,
+		url: `/blocks/${block.slug}`,
 		title: block.name,
 		description: `Browse characters in the ${block.name} block.`,
 	};
@@ -75,7 +75,7 @@ for (const block of getBlocks()) {
 
 for (const version of getVersions()) {
 	const page = {
-		url: `versions/${version}/page/1`,
+		url: `/versions/${version}/page/1`,
 		title: `Unicode ${version}`,
 		description: `Browse characters added in Unicode ${version}`,
 	};
@@ -85,7 +85,7 @@ for (const version of getVersions()) {
 for (const seq of getSequences()) {
 	const type = getDisplayText(`sequenceTypeLower.${seq.type}`);
 	const page: Page = {
-		url: `sequences/${seq.slug}`,
+		url: `/sequences/${seq.slug}`,
 		title: `${seq.text} ${seq.name}`,
 		description: `View the codepoint breakdown of the ${seq.name} ${type}.`,
 	};

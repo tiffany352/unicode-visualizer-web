@@ -1,35 +1,11 @@
-<script lang="ts" context="module">
-	/* This Source Code Form is subject to the terms of the Mozilla Public
-	 * License, v. 2.0. If a copy of the MPL was not distributed with this
-	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-
-	export async function preload(this: any, page: any, session: any) {
-		const { query } = page.params;
-		const response: Response = await this.fetch(
-			`search/${encodeURIComponent(query)}/results.json`
-		);
-
-		if (response.status == 200) {
-			const json = await response.json();
-			const results = json.results;
-			const requestTime = json.requestTime;
-			return { results, requestTime, query };
-		} else {
-			this.error(response.status, response.statusText);
-		}
-	}
-</script>
-
 <script lang="ts">
-	import type { Page } from "$lib/server/Search";
 	import Searchbar from "../../../components/Searchbar.svelte";
 	import OpenGraph from "../../../components/OpenGraph.svelte";
 	import StringBlob, { Encoding } from "$lib/model/StringBlob";
 	import { escapeHtml } from "$lib/model/Util";
+	import type { PageData } from "./$types";
 
-	export let results: Page[];
-	export let requestTime: number;
-	export let query: string;
+	export let data: PageData;
 
 	interface Breadcrumb {
 		text: string;
@@ -38,6 +14,9 @@
 
 	function breadcrumbs(url: string): Breadcrumb[] {
 		url = url.replace(/\/page\/[0-9]+/, "");
+		if (url.startsWith("/")) {
+			url = url.substring(1);
+		}
 		const list: Breadcrumb[] = url
 			.split("/")
 			.map((text) => ({ text, url: null }));
@@ -53,7 +32,7 @@
 
 	function highlight(text: string): string {
 		text = escapeHtml(text);
-		for (const word of query.match(/(\w+)/g) || []) {
+		for (const word of data.query.match(/(\w+)/g) || []) {
 			text = text.replace(new RegExp(word, "gi"), "<strong>$&</strong>");
 		}
 		return text;
@@ -65,18 +44,18 @@
 </script>
 
 <OpenGraph
-	title="{query} - Search - Unicode Visualizer"
-	description="Search results for {query}."
+	title="{data.query} - Search - Unicode Visualizer"
+	description="Search results for {data.query}."
 />
 
 <h1>Search Results</h1>
 
-<Searchbar bind:query />
+<Searchbar query={data.query} />
 
-<p>Found {results.length} results in {requestTime}ms.</p>
+<p>Found {data.results.length} results in {data.requestTime}ms.</p>
 
 <div class="results">
-	{#each results as result}
+	{#each data.results as result}
 		<div class="result">
 			<span class="breadcrumbs">
 				{#each breadcrumbs(result.url) as breadcrumb, i}
@@ -103,7 +82,7 @@
 		</div>
 	{:else}
 		<p>
-			Did you mean to <a href="/inspect/{createInspectLink(query)}"
+			Did you mean to <a href="/inspect/{createInspectLink(data.query)}"
 				>inspect a string</a
 			> instead?
 		</p>
