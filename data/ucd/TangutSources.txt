@@ -1,17 +1,17 @@
-# TangutSources-13.0.0.txt
-# Date: 2020-01-28, 15:31:00 GMT [MS, KW]
-# © 2020 Unicode®, Inc.
+# TangutSources-15.0.0.txt
+# Date: 2022-05-03, 18:55:00 GMT [MS, KW]
+# © 2022 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
-# For terms of use, see http://www.unicode.org/terms_of_use.html
+# For terms of use, see https://www.unicode.org/terms_of_use.html
 #
 # Unicode Character Database
-# For documentation, see http://www.unicode.org/reports/tr44/
+# For documentation, see https://www.unicode.org/reports/tr44/
 #
 # This file is a normative contributory data file in the
 # Unicode Character Database.
 #
 #	Data values match those for ISO/IEC 10646:2020
-#	Original Date: 2020-NN-NN (TBD)
+#	Original Date: 2019-07-29
 #
 #	Format information:
 #
@@ -48,7 +48,7 @@
 # S1968 = Sofronov M. V. (М. В. Софронов), Грамматика тангутского языка (Grammatika tangutskogo jazyka)
 #	      [Grammar of the Tangut Language]. Moscow, 1968.
 # UTN42 = Andrew West and Viacheslav Zaytsev, Tangut Character Additions and Glyph Corrections,
-#         Unicode Technical Note #42. 2017-10-17.
+#         Unicode Technical Note #42. 2019-12-21.
 #
 #	For more information, see Section 18.10, Tangut, of the
 #	core specification.

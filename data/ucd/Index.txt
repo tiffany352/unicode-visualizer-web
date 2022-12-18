@@ -270,6 +270,7 @@ ARABIC LETTER HEH WITH YEH ABOVE	06C0
 ARABIC LETTER MARK	061C
 Arabic Letters, Extended	0671
 Arabic Letters, Extended	0750
+Arabic Letters, Extended	10EC0
 ARABIC LIGATURE BISMILLAH AR-RAHMAN AR-RAHEEM	FDFD
 Arabic Ligatures	FBEA
 Arabic Mathematical Alphabetic Symbols	1EE00
@@ -387,7 +388,7 @@ ASTERISM	2042
 Astrological Signs	26B3
 Astrological Signs, Tibetan	0F15
 Astrological Symbols	263D
-Astrological Symbols	28D3
+Astrological Symbols	2BD3
 Astrological Symbols, Weather and	2600
 asymptotic to	2248
 ASYMPTOTICALLY EQUAL TO	2243
@@ -953,6 +954,7 @@ CJK Unified Ideographs Extension D	2B740
 CJK Unified Ideographs Extension E	2B820
 CJK Unified Ideographs Extension F	2CEB0
 CJK Unified Ideographs Extension G	30000
+CJK Unified Ideographs Extension H	31350
 CLAPPING HANDS SIGN	1F44F
 claudian antisigma	2183
 claudian digamma inversum	2132
@@ -1036,6 +1038,7 @@ combining counterclockwise ring overlay	20DA
 Combining Diacritical Marks	0300
 Combining Diacritical Marks Extended	1AB0
 Combining Diacritical Marks for Symbols	20D0
+Combining Diacritical Marks Supplement	1DC0
 COMBINING DIAERESIS	0308
 COMBINING DIAERESIS BELOW	0324
 COMBINING DOT ABOVE	0307
@@ -1373,6 +1376,7 @@ Cyrillic Combining Characters	0483
 Cyrillic Extended-A	2DE0
 Cyrillic Extended-B	A640
 Cyrillic Extended-C	1C80
+Cyrillic Extended-D	1E030
 Cyrillic Extensions	0450
 Cyrillic Extensions	048A
 Cyrillic Historic Letters	0460
@@ -1466,6 +1470,7 @@ Devanagari Dependent Vowel Signs	093E
 Devanagari Digits	0966
 DEVANAGARI DOUBLE DANDA	0965
 Devanagari Extended	A8E0
+Devanagari Extended-A	11B00
 Devanagari Extensions	0951
 Devanagari Independent Vowels	0904
 DEVANAGARI OM	0950
@@ -1625,6 +1630,7 @@ DOLPHIN	1F42C
 domain restriction	25C1
 Domino Tiles	1F030
 DONG SIGN	20AB
+DONKEY	1FACF
 dot	002E
 DOT ABOVE	02D9
 DOT ABOVE RIGHT, COMBINING	0358
@@ -1937,6 +1943,7 @@ Equality and Inequality Signs	22D5
 EQUALS COLON	2255
 EQUALS SIGN	003D
 EQUALS SIGN BELOW, COMBINING	0347
+EQUALS SIGN, HEAVY	1F7F0
 EQUALS, CIRCLED	229C
 EQUALS, COLON	2254
 equals, nearly	2252
@@ -2032,6 +2039,7 @@ FACE, WHITE FROWNING	2639
 FACE, WHITE SMILING	263A
 Faces	1F600
 Faces	1F920
+Faces	1FAE0
 Facial Parts Symbols	1F440
 FACSIMILE SIGN	213B
 factorial	0021
@@ -2039,6 +2047,7 @@ factory	26ED
 FAHRENHEIT, DEGREE	2109
 Fairy Tale Symbols	1F478
 FAMILY	1F46A
+FAN, FOLDING HAND	1FAAD
 fast cursor down	21A1
 fast cursor left	219E
 fast cursor right	21A0
@@ -2247,6 +2256,7 @@ GETA MARK	3013
 ghana currency	20B5
 GHOST	1F47B
 GIMEL SYMBOL	2137
+GINGER ROOT	1FADA
 GIRL	1F467
 Glagolitic	2C00
 Glagolitic Supplement	1E000
@@ -2269,6 +2279,7 @@ GOBLIN, JAPANESE	1F47A
 gold medal	1F947
 Golden Numbers, Runic	16EE
 golf course	26F3
+GOOSE	1FABF
 Gothic	10330
 Grantha	11300
 GRAPHEME JOINER, COMBINING	034F
@@ -2429,6 +2440,7 @@ han-daku-on, japanese	309C
 Hand Symbols	1F446
 Hand Symbols	1F58E
 Hand Symbols	1F918
+Hand Symbols	1FAF0
 Hand Symbols, Pointing	261A
 Hand, Index Finger Pointing	1F446
 HAND, RAISED	270B
@@ -2478,6 +2490,7 @@ HEADPHONE	1F3A7
 HEADSTONE GRAVEYARD SYMBOL	26FC
 HEART BULLET, REVERSED ROTATED FLORAL	2619
 Heart Dingbats	2763
+HEART HANDS	1FAF6
 Heart Ornaments	2763
 Heart Symbols	1F493
 HEART, BLACK	1F5A4
@@ -2558,6 +2571,7 @@ ht	0009
 Hungarian, Old	10C80
 HV, LATIN SMALL LETTER	0195
 HWAIR, LATIN CAPITAL LETTER	01F6
+HYACINTH	1FABB
 HYPHEN	2010
 HYPHEN BULLET	2043
 hyphen or minus sign	002D
@@ -2567,6 +2581,7 @@ HYPHEN, DOUBLE	2E40
 HYPHEN, KATAKANA-HIRAGANA DOUBLE	30A0
 HYPHEN, MONGOLIAN TODO SOFT	1806
 HYPHEN, NON-BREAKING	2011
+HYPHEN, OBLIQUE	2E5D
 hyphen, papyrological	035C
 HYPHEN, SOFT	00AD
 HYPHEN-MINUS	002D
@@ -2641,6 +2656,7 @@ Ideographs Extension D, CJK Unified	2B740
 Ideographs Extension E, CJK Unified	2B820
 Ideographs Extension F, CJK Unified	2CEB0
 Ideographs Extension G, CJK Unified	30000
+Ideographs Extension H, CJK Unified	31350
 Ideographs Supplement, CJK Compatibility	2F800
 Ideographs, Circled	3280
 Ideographs, CJK Compatibility	F900
@@ -2824,6 +2840,7 @@ Japanese Katakana Words, Squared	3300
 Japanese Katakana, Circled	32D0
 japanese kome	203B
 Javanese	A980
+JELLYFISH	1FABC
 JERUSALEM, CROSS OF	2629
 jis composition circle	20DD
 JIS X 0213 Compatibility Ideographs	FA30
@@ -2847,6 +2864,7 @@ K, LATIN SUBSCRIPT SMALL LETTER	2096
 KA, HIRAGANA LETTER SMALL	3095
 kabusiki-gaisya	337F
 Kaithi	11080
+Kaktovik Numerals	1D2C0
 Kana Extended-A	1B100
 Kana Extension, Small	1B130
 Kana Repeat Marks	3031
@@ -2871,6 +2889,7 @@ Katakana Words, Squared	3300
 Katakana, Circled	32D0
 KATAKANA-HIRAGANA DOUBLE HYPHEN	30A0
 KATAKANA-HIRAGANA PROLONGED SOUND MARK	30FC
+Kawi	11F00
 Kayah Li	A900
 KELVIN SIGN	212A
 ket	27E9
@@ -2888,7 +2907,9 @@ Keyboard Symbols	2324
 Keyboard Symbols	2380
 Keyboard Symbols	2396
 KEYCAP, COMBINING ENCLOSING	20E3
+KHANDA	1FAAF
 khanda, gurmukhi	262C
+khanda ta, bangla	09CE
 Kharoshthi	10A00
 Kharoshthi Digits	10A40
 Khitan Small Script	18B00
@@ -3531,6 +3552,7 @@ MOON, CRESCENT	1F319
 MOON, FIRST QUARTER	263D
 MOON, LAST QUARTER	263E
 Moon, Sun, and Star Symbols	1F311
+MOOSE	1FACE
 mortarboard	1F393
 most positive	223E
 MOTORWAY	1F6E3
@@ -3616,6 +3638,7 @@ N-ARY WHITE VERTICAL BAR	2AFF
 naal, tamil	0BF3
 Nabataean	10880
 NABLA	2207
+Nag Mundari	1E4D0
 NAIRA SIGN	20A6
 NAND	22BC
 Nandinagari	119A0
@@ -3731,6 +3754,7 @@ Numbers, Runic Golden	16EE
 Numbers, Tamil	0BE7
 Numbers, White on Black Circled	24EB
 Numerals, Hangzhou	3021
+Numerals, Kaktovik	1D2C0
 Numerals, Mayan	1D2E0
 Numerals, Old Italic	10320
 Numerals, Roman	2160
@@ -4094,6 +4118,8 @@ plaintiff	226C
 PLANCK CONSTANT	210E
 PLANCK CONSTANT OVER TWO PI	210F
 Planet Symbols	263F
+Planets, Symbols for Minor	26B3
+Planets, Symbols for Minor	1F77B
 Plant Symbols	1F330
 Plastics Recycling Symbols	2673
 Playing Card Suits	2660
@@ -5979,6 +6005,7 @@ WHITE VERTICAL BAR, N-ARY	2AFF
 WIDE BRIDGE ABOVE, COMBINING	20E9
 Wiggly Fences	29D8
 WIGGLY VERTICAL LINE	2E3E
+WING	1FABD
 wj	2060
 WOLF FACE	1F43A
 WOMAN	1F469
