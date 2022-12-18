@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import type { Request, Response, NextFunction } from "express";
-import { search } from "server/Search";
+import { search } from "$lib/server/Search";
 
 export async function get(req: Request, res: Response, next: NextFunction) {
 	const { query } = req.params;

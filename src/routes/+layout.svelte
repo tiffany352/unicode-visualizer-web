@@ -1,21 +1,4 @@
-<script lang="typescript" context="module">
-	/* This Source Code Form is subject to the terms of the Mozilla Public
-	 * License, v. 2.0. If a copy of the MPL was not distributed with this
-	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-
-	export async function preload(this: any, page: any, session: any) {
-		const response: Response = await this.fetch(`version.json`);
-		if (response.status == 200) {
-			const json = await response.json();
-			const version = json.version;
-			return { version };
-		} else {
-			this.error(500, "Unable to fetch version string");
-		}
-	}
-</script>
-
-<script lang="typescript">
+<script lang="ts">
 	import Nav from "../components/Nav.svelte";
 	import Icon from "../components/Icon.svelte";
 

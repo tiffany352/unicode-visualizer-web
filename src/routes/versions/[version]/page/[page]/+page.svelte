@@ -1,4 +1,4 @@
-<script lang="typescript" context="module">
+<script lang="ts" context="module">
 	/* This Source Code Form is subject to the terms of the Mozilla Public
 	 * License, v. 2.0. If a copy of the MPL was not distributed with this
 	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
@@ -20,8 +20,8 @@
 	}
 </script>
 
-<script lang="typescript">
-	import type { CharInfo } from "server/Unicode";
+<script lang="ts">
+	import type { CharInfo } from "$lib/server/Unicode";
 	import { getDisplayText } from "strings";
 	import OpenGraph from "../../../../../components/OpenGraph.svelte";
 	import Paginate from "../../../../../components/Paginate.svelte";
@@ -32,31 +32,22 @@
 	export let pages: number;
 </script>
 
-<style>
-	.table {
-		grid-template-columns: 3em min-content 1fr;
-	}
-
-	.char {
-		font-size: 1.2em;
-		text-align: center;
-	}
-</style>
-
 <OpenGraph
 	title="Unicode {version} - Unicode Visualizer"
-	description="View codepoints that were added in Unicode {version}." />
+	description="View codepoints that were added in Unicode {version}."
+/>
 
 <h1>Unicode {version}</h1>
 
 <Paginate
 	current={page}
 	{pages}
-	createUrl={(page) => `versions/${version}/page/${page}`} />
+	createUrl={(page) => `versions/${version}/page/${page}`}
+/>
 
 <div class="table">
 	{#each chars as char}
-		{#if char.type == 'char'}
+		{#if char.type == "char"}
 			<a href="codepoint/{char.slug}">
 				<div class="char">
 					<span>{char.text}</span>
@@ -81,4 +72,16 @@
 <Paginate
 	current={page}
 	{pages}
-	createUrl={(page) => `versions/${version}/page/${page}`} />
+	createUrl={(page) => `versions/${version}/page/${page}`}
+/>
+
+<style>
+	.table {
+		grid-template-columns: 3em min-content 1fr;
+	}
+
+	.char {
+		font-size: 1.2em;
+		text-align: center;
+	}
+</style>

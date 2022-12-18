@@ -1,4 +1,4 @@
-<script lang="typescript" context="module">
+<script lang="ts" context="module">
 	/* This Source Code Form is subject to the terms of the Mozilla Public
 	 * License, v. 2.0. If a copy of the MPL was not distributed with this
 	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
@@ -22,32 +22,28 @@
 	}
 </script>
 
-<script lang="typescript">
+<script lang="ts">
 	import OpenGraph from "../../../../components/OpenGraph.svelte";
 	import Paginate from "../../../../components/Paginate.svelte";
-	import type { Char } from "server/Unicode";
+	import type { Char } from "$lib/server/Unicode";
 
 	export let emoji: Char[];
 	export let currentPage: number;
 	export let pageCount: number;
 </script>
 
-<style>
-	.table {
-		grid-template-columns: min-content 1fr;
-	}
-</style>
-
 <OpenGraph
 	title="Sequences - Unicode Visualizer"
-	description="Browse the named sequences in Unicode." />
+	description="Browse the named sequences in Unicode."
+/>
 
 <h1>Browse Emoji</h1>
 
 <Paginate
 	pages={pageCount}
 	current={currentPage}
-	createUrl={(page) => `emoji/page/${page}`} />
+	createUrl={(page) => `emoji/page/${page}`}
+/>
 
 <div class="table">
 	{#each emoji as char}
@@ -64,4 +60,11 @@
 <Paginate
 	pages={pageCount}
 	current={currentPage}
-	createUrl={(page) => `emoji/page/${page}`} />
+	createUrl={(page) => `emoji/page/${page}`}
+/>
+
+<style>
+	.table {
+		grid-template-columns: min-content 1fr;
+	}
+</style>

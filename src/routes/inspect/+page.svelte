@@ -1,4 +1,4 @@
-<script lang="typescript">
+<script lang="ts">
 	/* This Source Code Form is subject to the terms of the Mozilla Public
 	 * License, v. 2.0. If a copy of the MPL was not distributed with this
 	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
@@ -10,9 +10,9 @@
 		getDataTypes,
 		getEncodings,
 		encodingToTag,
-	} from "model/StringBlob";
-	import { getDisplayText } from "strings";
-	import { goto } from "@sapper/app";
+	} from "$lib/model/StringBlob";
+	import { getDisplayText } from "$lib/strings";
+	import { goto } from "$app/navigation";
 
 	let dataType: DataType = DataType.Plain;
 	let currentEncoding: Encoding = Encoding.Utf8;
@@ -37,29 +37,6 @@
 		goto(`inspect/${string.urlEncode()}`);
 	}
 </script>
-
-<style>
-	.options {
-		display: flex;
-		flex-direction: row;
-		align-items: flex-end;
-		flex-wrap: wrap;
-		margin-bottom: 1em;
-	}
-
-	textarea {
-		font-size: 1rem;
-		font-family: var(--mono-font);
-		color: var(--main-text);
-		background-color: var(--input-bg);
-		border: 1px solid var(--input-border);
-		border-radius: 3px;
-		padding: 3px;
-		width: 100%;
-		box-sizing: border-box;
-		white-space: pre-wrap;
-	}
-</style>
 
 <!-- prettier-ignore -->
 <OpenGraph
@@ -89,7 +66,8 @@
 					id={encodingToTag(encoding)}
 					type="radio"
 					bind:group={currentEncoding}
-					value={encoding} />
+					value={encoding}
+				/>
 				<label for={encodingToTag(encoding)}>
 					{getDisplayText(`encoding.${encodingToTag(encoding)}`)}
 				</label>
@@ -105,3 +83,26 @@
 <h3>Preview</h3>
 
 <pre class="text-preview">{string.stringEncode()}</pre>
+
+<style>
+	.options {
+		display: flex;
+		flex-direction: row;
+		align-items: flex-end;
+		flex-wrap: wrap;
+		margin-bottom: 1em;
+	}
+
+	textarea {
+		font-size: 1rem;
+		font-family: var(--mono-font);
+		color: var(--main-text);
+		background-color: var(--input-bg);
+		border: 1px solid var(--input-border);
+		border-radius: 3px;
+		padding: 3px;
+		width: 100%;
+		box-sizing: border-box;
+		white-space: pre-wrap;
+	}
+</style>

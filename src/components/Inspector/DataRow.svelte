@@ -1,4 +1,4 @@
-<script lang="typescript">
+<script lang="ts">
 	/* This Source Code Form is subject to the terms of the Mozilla Public
 	 * License, v. 2.0. If a copy of the MPL was not distributed with this
 	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@
 		CodeunitInfo,
 		CodepointInfo,
 		GraphemeInfo,
-	} from "model/StringBlob";
+	} from "$lib/model/StringBlob";
 	import type { Extra } from "./extra";
 	import Codepoint from "./Codepoint.svelte";
 	import Grapheme from "./Grapheme.svelte";
@@ -17,6 +17,36 @@
 	export let codepoints: CodepointInfo[];
 	export let graphemes: GraphemeInfo[];
 </script>
+
+<div class="scroll">
+	<div
+		class="inspect"
+		style="grid-template-columns: repeat({codeunits.length}, fit-content)"
+	>
+		{#each codeunits as codeunit}
+			<div class="codeunit" title={codeunit.class}>{codeunit.text}</div>
+		{/each}
+		{#each codepoints as codepoint}
+			<div
+				class="codepoint"
+				data-invalid={codepoint.value == null}
+				style="grid-column-start: {codepoint.first +
+					1}; grid-column-end: {codepoint.last + 2}"
+			>
+				<Codepoint {codepoint} {extra} />
+			</div>
+		{/each}
+		{#each graphemes as grapheme}
+			<div
+				class="grapheme"
+				style="grid-column-start: {grapheme.first +
+					1}; grid-column-end: {grapheme.last + 2}"
+			>
+				<Grapheme {grapheme} {extra} onlyItem={codepoints.length == 1} />
+			</div>
+		{/each}
+	</div>
+</div>
 
 <style>
 	.scroll {
@@ -63,28 +93,3 @@
 		border-right: 1px solid var(--main-border);
 	}
 </style>
-
-<div class="scroll">
-	<div
-		class="inspect"
-		style="grid-template-columns: repeat({codeunits.length}, fit-content)">
-		{#each codeunits as codeunit}
-			<div class="codeunit" title={codeunit.class}>{codeunit.text}</div>
-		{/each}
-		{#each codepoints as codepoint}
-			<div
-				class="codepoint"
-				data-invalid={codepoint.value == null}
-				style="grid-column-start: {codepoint.first + 1}; grid-column-end: {codepoint.last + 2}">
-				<Codepoint {codepoint} {extra} />
-			</div>
-		{/each}
-		{#each graphemes as grapheme}
-			<div
-				class="grapheme"
-				style="grid-column-start: {grapheme.first + 1}; grid-column-end: {grapheme.last + 2}">
-				<Grapheme {grapheme} {extra} onlyItem={codepoints.length == 1} />
-			</div>
-		{/each}
-	</div>
-</div>

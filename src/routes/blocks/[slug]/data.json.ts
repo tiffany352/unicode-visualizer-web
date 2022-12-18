@@ -8,7 +8,7 @@ import {
 	getBlockFromSlug,
 	getCodepointsInRange,
 	versionCompare,
-} from "server/Unicode";
+} from "$lib/server/Unicode";
 
 export function get(req: Request, res: Response, next: NextFunction) {
 	const { slug } = req.params;

@@ -1,5 +1,5 @@
-<script lang="typescript" context="module">
-	import type { CharInfo } from "server/Unicode";
+<script lang="ts" context="module">
+	import type { CharInfo } from "$lib/server/Unicode";
 
 	export async function preload(this: any, page: any, session: any) {
 		const { id } = page.params;

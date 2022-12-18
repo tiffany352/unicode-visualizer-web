@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import type { Request, Response, NextFunction } from "express";
-import { getCodepointsInVersion } from "server/Unicode";
+import { getCodepointsInVersion } from "$lib/server/Unicode";
 
 const pageSize = 250;
 

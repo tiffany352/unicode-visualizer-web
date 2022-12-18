@@ -1,4 +1,4 @@
-<script lang="typescript" context="module">
+<script lang="ts" context="module">
 	/* This Source Code Form is subject to the terms of the Mozilla Public
 	 * License, v. 2.0. If a copy of the MPL was not distributed with this
 	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
@@ -20,12 +20,12 @@
 	}
 </script>
 
-<script lang="typescript">
-	import type { Page } from "server/Search";
+<script lang="ts">
+	import type { Page } from "$lib/server/Search";
 	import Searchbar from "../../../components/Searchbar.svelte";
 	import OpenGraph from "../../../components/OpenGraph.svelte";
-	import StringBlob, { Encoding } from "model/StringBlob";
-	import { escapeHtml } from "model/Util";
+	import StringBlob, { Encoding } from "$lib/model/StringBlob";
+	import { escapeHtml } from "$lib/model/Util";
 
 	export let results: Page[];
 	export let requestTime: number;
@@ -63,6 +63,52 @@
 		return StringBlob.stringDecode(Encoding.Utf8, query).urlEncode();
 	}
 </script>
+
+<OpenGraph
+	title="{query} - Search - Unicode Visualizer"
+	description="Search results for {query}."
+/>
+
+<h1>Search Results</h1>
+
+<Searchbar bind:query />
+
+<p>Found {results.length} results in {requestTime}ms.</p>
+
+<div class="results">
+	{#each results as result}
+		<div class="result">
+			<span class="breadcrumbs">
+				{#each breadcrumbs(result.url) as breadcrumb, i}
+					{#if i > 0}&nbsp;›{/if}
+					{#if breadcrumb.url}
+						<a href={breadcrumb.url}>{breadcrumb.text}</a>
+					{:else}{breadcrumb.text}{/if}
+				{/each}
+			</span>
+			<a class="link" href={result.url}>
+				{@html highlight(result.title)}
+			</a>
+			<p>
+				{@html highlight(result.description)}
+			</p>
+			{#if result.links && result.links.length > 0}
+				<span class="extra-links">
+					{#each result.links as { url, text }, i}
+						{#if i > 0}&nbsp;•{/if}
+						<a href={url}>{text}</a>
+					{/each}
+				</span>
+			{/if}
+		</div>
+	{:else}
+		<p>
+			Did you mean to <a href="inspect/{createInspectLink(query)}"
+				>inspect a string</a
+			> instead?
+		</p>
+	{/each}
+</div>
 
 <style>
 	.result {
@@ -108,47 +154,3 @@
 		font-size: 90%;
 	}
 </style>
-
-<OpenGraph
-	title="{query} - Search - Unicode Visualizer"
-	description="Search results for {query}." />
-
-<h1>Search Results</h1>
-
-<Searchbar bind:query />
-
-<p>Found {results.length} results in {requestTime}ms.</p>
-
-<div class="results">
-	{#each results as result}
-		<div class="result">
-			<span class="breadcrumbs">
-				{#each breadcrumbs(result.url) as breadcrumb, i}
-					{#if i > 0}&nbsp;›{/if}
-					{#if breadcrumb.url}
-						<a href={breadcrumb.url}>{breadcrumb.text}</a>
-					{:else}{breadcrumb.text}{/if}
-				{/each}
-			</span>
-			<a class="link" href={result.url}>
-				{@html highlight(result.title)}
-			</a>
-			<p>
-				{@html highlight(result.description)}
-			</p>
-			{#if result.links && result.links.length > 0}
-				<span class="extra-links">
-					{#each result.links as { url, text }, i}
-						{#if i > 0}&nbsp;•{/if}
-						<a href={url}>{text}</a>
-					{/each}
-				</span>
-			{/if}
-		</div>
-	{:else}
-		<p>
-			Did you mean to <a href="inspect/{createInspectLink(query)}">inspect a
-				string</a> instead?
-		</p>
-	{/each}
-</div>

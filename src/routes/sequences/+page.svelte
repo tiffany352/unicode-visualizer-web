@@ -1,4 +1,4 @@
-<script lang="typescript" context="module">
+<script lang="ts" context="module">
 	/* This Source Code Form is subject to the terms of the Mozilla Public
 	 * License, v. 2.0. If a copy of the MPL was not distributed with this
 	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
@@ -18,10 +18,10 @@
 	}
 </script>
 
-<script lang="typescript">
+<script lang="ts">
 	import OpenGraph from "../../components/OpenGraph.svelte";
-	import type { SequenceInfo } from "server/Unicode";
-	import StringBlob, { Encoding } from "model/StringBlob";
+	import type { SequenceInfo } from "$lib/server/Unicode";
+	import StringBlob, { Encoding } from "$lib/model/StringBlob";
 
 	export let sequences: SequenceInfo[];
 
@@ -31,15 +31,10 @@
 	}
 </script>
 
-<style>
-	.table {
-		grid-template-columns: 1fr min-content;
-	}
-</style>
-
 <OpenGraph
 	title="Sequences - Unicode Visualizer"
-	description="Browse the named sequences in Unicode." />
+	description="Browse the named sequences in Unicode."
+/>
 
 <h1>Browse Unicode Named Sequences</h1>
 
@@ -53,3 +48,9 @@
 		</a>
 	{/each}
 </div>
+
+<style>
+	.table {
+		grid-template-columns: 1fr min-content;
+	}
+</style>

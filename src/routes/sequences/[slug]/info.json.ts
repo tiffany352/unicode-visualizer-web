@@ -3,14 +3,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import type { Request, Response, NextFunction } from "express";
-import StringBlob, { Encoding } from "model/StringBlob";
+import StringBlob, { Encoding } from "$lib/model/StringBlob";
 import {
 	lookupChar,
 	lookupSequence,
 	CharMap,
 	lookupSequenceSlug,
-} from "server/Unicode";
-import type { SequenceInfo } from "server/Unicode";
+} from "$lib/server/Unicode";
+import type { SequenceInfo } from "$lib/server/Unicode";
 
 export async function get(req: Request, res: Response, next: NextFunction) {
 	const { slug } = req.params;

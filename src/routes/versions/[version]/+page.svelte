@@ -1,4 +1,4 @@
-<script lang="typescript" context="module">
+<script lang="ts" context="module">
 	/* This Source Code Form is subject to the terms of the Mozilla Public
 	 * License, v. 2.0. If a copy of the MPL was not distributed with this
 	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
@@ -27,8 +27,8 @@
 	}
 </script>
 
-<script lang="typescript">
-	import type { BlockInfo } from "server/Unicode";
+<script lang="ts">
+	import type { BlockInfo } from "$lib/server/Unicode";
 	import OpenGraph from "../../../components/OpenGraph.svelte";
 
 	export let version: string;

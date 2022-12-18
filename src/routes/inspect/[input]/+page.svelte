@@ -1,4 +1,4 @@
-<script lang="typescript" context="module">
+<script lang="ts" context="module">
 	/* This Source Code Form is subject to the terms of the Mozilla Public
 	 * License, v. 2.0. If a copy of the MPL was not distributed with this
 	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
@@ -24,11 +24,11 @@
 	}
 </script>
 
-<script lang="typescript">
-	import type { CharMap, SequenceInfo } from "server/Unicode";
+<script lang="ts">
+	import type { CharMap, SequenceInfo } from "$lib/server/Unicode";
 	import OpenGraph from "../../../components/OpenGraph.svelte";
 	import Inspector from "../../../components/Inspector/index.svelte";
-	import StringBlob from "model/StringBlob";
+	import StringBlob from "$lib/model/StringBlob";
 
 	interface Extra {
 		chars: CharMap;
@@ -43,7 +43,8 @@
 
 <OpenGraph
 	title="Unicode Visualizer - Inspect String"
-	description="Shows a breakdown of the contents of a given string." />
+	description="Shows a breakdown of the contents of a given string."
+/>
 
 <h1>Inspect</h1>
 

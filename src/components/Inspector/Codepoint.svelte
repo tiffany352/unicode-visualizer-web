@@ -1,11 +1,11 @@
-<script lang="typescript">
+<script lang="ts">
 	/* This Source Code Form is subject to the terms of the Mozilla Public
 	 * License, v. 2.0. If a copy of the MPL was not distributed with this
 	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-	import type { CodepointInfo } from "model/StringBlob";
-	import { stringFromCodePoint } from "model/Util";
-	import type { CharInfo } from "server/Unicode";
+	import type { CodepointInfo } from "$lib/model/StringBlob";
+	import { stringFromCodePoint } from "$lib/model/Util";
+	import type { CharInfo } from "$lib/server/Unicode";
 	import { getDisplayText } from "strings";
 	import type { Extra } from "./extra";
 
@@ -67,6 +67,25 @@
 	$: tooltip = tooltipOf(char);
 </script>
 
+{#if codepoint.value}
+	<a href={url} class="cell" title={tooltip} class:wide>
+		<div class="preview">
+			{#if alias}
+				<span class="alias">{alias}</span>
+			{:else}{stringFromCodePoint(codepoint.value || 0)}{/if}
+		</div>
+		<div class="scalar">
+			U+{codepoint.value.toString(16).padStart(4, "0").toUpperCase()}
+			{#if name}{name}{/if}
+		</div>
+	</a>
+{:else}
+	<div class="cell" title={tooltip} class:wide>
+		<div class="preview">�</div>
+		<div class="scalar">Invalid</div>
+	</div>
+{/if}
+
 <style>
 	.preview {
 		font-size: 1.2em;
@@ -113,22 +132,3 @@
 		background-color: var(--main-hover);
 	}
 </style>
-
-{#if codepoint.value}
-	<a href={url} class="cell" title={tooltip} class:wide>
-		<div class="preview">
-			{#if alias}
-				<span class="alias">{alias}</span>
-			{:else}{stringFromCodePoint(codepoint.value || 0)}{/if}
-		</div>
-		<div class="scalar">
-			U+{codepoint.value.toString(16).padStart(4, '0').toUpperCase()}
-			{#if name}{name}{/if}
-		</div>
-	</a>
-{:else}
-	<div class="cell" title={tooltip} class:wide>
-		<div class="preview">�</div>
-		<div class="scalar">Invalid</div>
-	</div>
-{/if}

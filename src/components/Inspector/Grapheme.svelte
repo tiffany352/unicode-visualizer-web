@@ -1,9 +1,9 @@
-<script lang="typescript">
+<script lang="ts">
 	/* This Source Code Form is subject to the terms of the Mozilla Public
 	 * License, v. 2.0. If a copy of the MPL was not distributed with this
 	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-	import type { GraphemeInfo } from "model/StringBlob";
+	import type { GraphemeInfo } from "$lib/model/StringBlob";
 	import type { Extra } from "./extra";
 
 	export let grapheme: GraphemeInfo;
@@ -34,6 +34,9 @@
 	$: sequence = findSequence() || "";
 </script>
 
+<div class="preview">{grapheme.text}</div>
+<div class="sequence">{sequence}</div>
+
 <style>
 	.preview {
 		font-size: 1.2em;
@@ -44,6 +47,3 @@
 		padding: 0.25em;
 	}
 </style>
-
-<div class="preview">{grapheme.text}</div>
-<div class="sequence">{sequence}</div>

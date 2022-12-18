@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import type { Request, Response, NextFunction } from "express";
-import { lookupChar } from "server/Unicode";
+import { lookupChar } from "$lib/server/Unicode";
 
 export function get(req: Request, res: Response, next: NextFunction) {
 	const { id } = req.params;

@@ -1,5 +1,5 @@
-<script lang="typescript">
-	import { selectText } from "model/Util";
+<script lang="ts">
+	import { selectText } from "$lib/model/Util";
 	import Icon from "./Icon.svelte";
 
 	export let text: string;
@@ -21,6 +21,16 @@
 		setTimeout(() => (success = false), 500);
 	}
 </script>
+
+<button class="button" on:click={copyText} data-text={text}>
+	<Icon icon="copy" />
+	Copy
+</button>
+<span class="copyText" class:success>Copied!</span>
+
+{#if !element}
+	<span class="hidden" bind:this={fallbackElement}>{text}</span>
+{/if}
 
 <style>
 	.copyText {
@@ -49,13 +59,3 @@
 		}
 	}
 </style>
-
-<button class="button" on:click={copyText} data-text={text}>
-	<Icon icon="copy" />
-	Copy
-</button>
-<span class="copyText" class:success>Copied!</span>
-
-{#if !element}
-	<span class="hidden" bind:this={fallbackElement}>{text}</span>
-{/if}

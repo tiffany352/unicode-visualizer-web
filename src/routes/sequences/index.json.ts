@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import type { Request, Response } from "express";
-import { getSequences } from "server/Unicode";
+import { getSequences } from "$lib/server/Unicode";
 
 export function get(req: Request, res: Response) {
 	const sequences = getSequences();

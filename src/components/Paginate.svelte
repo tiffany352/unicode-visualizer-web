@@ -1,9 +1,9 @@
-<script lang="typescript">
+<script lang="ts">
 	/* This Source Code Form is subject to the terms of the Mozilla Public
 	 * License, v. 2.0. If a copy of the MPL was not distributed with this
 	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-	import Range from "util/Range";
+	import Range from "$lib/util/Range";
 
 	export let pages: number;
 	export let current: number;

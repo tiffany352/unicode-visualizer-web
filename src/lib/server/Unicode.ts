@@ -3,9 +3,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import * as Data from "./Data";
-import IntervalTree from "util/IntervalTree";
-import Range from "util/Range";
-import { IntervalMap } from "util/IntervalMap";
+import IntervalTree from "$lib/util/IntervalTree";
+import Range from "$lib/util/Range";
+import { IntervalMap } from "$lib/util/IntervalMap";
 
 // Types
 

@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import type { Request, Response } from "express";
-import { getEmoji } from "server/Unicode";
+import { getEmoji } from "$lib/server/Unicode";
 
 const pageSize = 250;
 

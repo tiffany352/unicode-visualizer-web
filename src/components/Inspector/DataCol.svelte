@@ -1,4 +1,4 @@
-<script lang="typescript">
+<script lang="ts">
 	/* This Source Code Form is subject to the terms of the Mozilla Public
 	 * License, v. 2.0. If a copy of the MPL was not distributed with this
 	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@
 		CodeunitInfo,
 		CodepointInfo,
 		GraphemeInfo,
-	} from "model/StringBlob";
+	} from "$lib/model/StringBlob";
 	import type { Extra } from "./extra";
 	import Codepoint from "./Codepoint.svelte";
 	import Grapheme from "./Grapheme.svelte";
@@ -17,6 +17,54 @@
 	export let codepoints: CodepointInfo[];
 	export let graphemes: GraphemeInfo[];
 </script>
+
+<div class="scroll">
+	<div
+		class="inspect"
+		style="grid-template-columns: repeat({codeunits.length}, fit-content)"
+	>
+		<div class="offset header">#</div>
+		<div class="codeunit header">Unit</div>
+		<div class="codepoint header">Codepoint</div>
+		<div class="grapheme header">Grapheme</div>
+		{#each codeunits as codeunit, offset}
+			<div
+				class="offset"
+				style="grid-row: {offset + 2}"
+				title="Offset: 0x{offset.toString(16).padStart(2, '0')}"
+			>
+				{offset}
+			</div>
+			<div
+				class="codeunit"
+				title={codeunit.class}
+				style="grid-row: {offset + 2}"
+			>
+				{codeunit.text}
+				<span class="class">{codeunit.class}</span>
+			</div>
+		{/each}
+		{#each codepoints as codepoint}
+			<div
+				class="codepoint"
+				data-invalid={codepoint.value == null}
+				style="grid-row-start: {codepoint.first +
+					2}; grid-row-end: {codepoint.last + 3}"
+			>
+				<Codepoint {codepoint} {extra} wide />
+			</div>
+		{/each}
+		{#each graphemes as grapheme}
+			<div
+				class="grapheme"
+				style="grid-row-start: {grapheme.first +
+					2}; grid-row-end: {grapheme.last + 3}"
+			>
+				<Grapheme {grapheme} {extra} />
+			</div>
+		{/each}
+	</div>
+</div>
 
 <style>
 	.scroll {
@@ -79,44 +127,3 @@
 		font-family: var(--font);
 	}
 </style>
-
-<div class="scroll">
-	<div
-		class="inspect"
-		style="grid-template-columns: repeat({codeunits.length}, fit-content)">
-		<div class="offset header">#</div>
-		<div class="codeunit header">Unit</div>
-		<div class="codepoint header">Codepoint</div>
-		<div class="grapheme header">Grapheme</div>
-		{#each codeunits as codeunit, offset}
-			<div
-				class="offset"
-				style="grid-row: {offset + 2}"
-				title="Offset: 0x{offset.toString(16).padStart(2, '0')}">
-				{offset}
-			</div>
-			<div
-				class="codeunit"
-				title={codeunit.class}
-				style="grid-row: {offset + 2}">
-				{codeunit.text}
-				<span class="class">{codeunit.class}</span>
-			</div>
-		{/each}
-		{#each codepoints as codepoint}
-			<div
-				class="codepoint"
-				data-invalid={codepoint.value == null}
-				style="grid-row-start: {codepoint.first + 2}; grid-row-end: {codepoint.last + 3}">
-				<Codepoint {codepoint} {extra} wide />
-			</div>
-		{/each}
-		{#each graphemes as grapheme}
-			<div
-				class="grapheme"
-				style="grid-row-start: {grapheme.first + 2}; grid-row-end: {grapheme.last + 3}">
-				<Grapheme {grapheme} {extra} />
-			</div>
-		{/each}
-	</div>
-</div>

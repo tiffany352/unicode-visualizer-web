@@ -1,11 +1,11 @@
-<script lang="typescript">
+<script lang="ts">
 	import StringBlob, {
 		Encoding,
 		getEncodings,
 		encodingToTag,
 		DataType,
 		getDataTypes,
-	} from "model/StringBlob";
+	} from "$lib/model/StringBlob";
 	import type { Extra } from "./extra";
 	import { getDisplayText } from "strings";
 	import DataRow from "./DataRow.svelte";
@@ -31,21 +31,6 @@
 	const normalForms = ["NFC", "NFD", "NFKC", "NFKD"];
 </script>
 
-<style>
-	nav {
-		display: flex;
-		flex-direction: row;
-		align-items: flex-end;
-		flex-wrap: wrap;
-	}
-
-	fieldset {
-		padding: 0.25em;
-		width: min-content;
-		border: none;
-	}
-</style>
-
 <nav>
 	<fieldset>
 		<legend>Display</legend>
@@ -56,14 +41,16 @@
 				id="row"
 				type="radio"
 				bind:group={direction}
-				value={Direction.Row} />
+				value={Direction.Row}
+			/>
 			<label for="row">Row</label>
 
 			<input
 				id="col"
 				type="radio"
 				bind:group={direction}
-				value={Direction.Column} />
+				value={Direction.Column}
+			/>
 			<label for="col">Col</label>
 		</div>
 	</fieldset>
@@ -134,3 +121,18 @@
 {#if exportType}
 	<ExportModal {string} {exportType} on:close={() => (exportType = null)} />
 {/if}
+
+<style>
+	nav {
+		display: flex;
+		flex-direction: row;
+		align-items: flex-end;
+		flex-wrap: wrap;
+	}
+
+	fieldset {
+		padding: 0.25em;
+		width: min-content;
+		border: none;
+	}
+</style>

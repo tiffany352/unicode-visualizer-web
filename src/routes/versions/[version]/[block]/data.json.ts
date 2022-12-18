@@ -8,7 +8,7 @@ import {
 	getCodepointsInRange,
 	getCodepointsInVersion,
 	versionCompare,
-} from "server/Unicode";
+} from "$lib/server/Unicode";
 
 export function get(req: Request, res: Response) {
 	const { version, block: blockSlug } = req.params;

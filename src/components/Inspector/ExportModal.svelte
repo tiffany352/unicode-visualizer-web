@@ -1,14 +1,14 @@
-<script lang="typescript">
+<script lang="ts">
 	/* This Source Code Form is subject to the terms of the Mozilla Public
 	 * License, v. 2.0. If a copy of the MPL was not distributed with this
 	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-	import StringBlob, { encodingToTag, DataType } from "model/StringBlob";
+	import StringBlob, { encodingToTag, DataType } from "$lib/model/StringBlob";
 	import { getDisplayText } from "strings";
 	import { createEventDispatcher, onMount } from "svelte";
 	import Modal from "../Modal.svelte";
 	import CopyButton from "../CopyButton.svelte";
-	import { selectText } from "model/Util";
+	import { selectText } from "$lib/model/Util";
 
 	const dispatch = createEventDispatcher();
 	const close = () => dispatch("close");
