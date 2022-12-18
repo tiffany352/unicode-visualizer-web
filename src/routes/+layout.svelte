@@ -13,6 +13,15 @@
 	let menuExpanded: boolean = false;
 </script>
 
+<svelte:head>
+	<link
+		rel="search"
+		type="application/opensearchdescription+xml"
+		href="/opensearch.xml"
+		title="Search {$page.url.hostname}"
+	/>
+</svelte:head>
+
 <div class="outer">
 	<header id="main-menu" aria-expanded={menuExpanded}>
 		<Nav {segment} closeMenu={() => (menuExpanded = false)} />
