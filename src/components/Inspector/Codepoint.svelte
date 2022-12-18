@@ -38,11 +38,11 @@
 
 	function createUrl(char: CharInfo | null) {
 		if (char) {
-			return `codepoint/${char.slug}`;
+			return `/codepoint/${char.slug}`;
 		}
 		if (codepoint.value) {
 			const cp = codepoint.value.toString(16).padStart(4, "0").toUpperCase();
-			return `codepoint/${cp}-unicode`;
+			return `/codepoint/${cp}-unicode`;
 		}
 		return "";
 	}
