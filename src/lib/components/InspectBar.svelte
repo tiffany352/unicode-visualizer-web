@@ -2,15 +2,16 @@
  !-- License, v. 2.0. If a copy of the MPL was not distributed with this
  !-- file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <script lang="ts">
+	import { goto } from "$app/navigation";
+	import InputBar from "./InputBar.svelte";
 	import StringBlob, { Encoding } from "$lib/model/StringBlob";
 
-	export let codepoint: number;
-	export let encoding: Encoding;
+	let query: string = "";
 
-	$: string = StringBlob.fromCodepoint(encoding, codepoint);
-	$: codeunits = string.getCodeunits();
+	function onSubmit() {
+		const string = StringBlob.stringDecode(Encoding.Utf8, query);
+		goto(`inspect/${string.urlEncode()}`);
+	}
 </script>
 
-{#each codeunits as unit}
-	<div class="repr-box">{unit.text}</div>
-{/each}
+<InputBar on:submit={onSubmit} icon="terminal" bind:query />
