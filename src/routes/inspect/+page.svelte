@@ -20,17 +20,18 @@
 
 	$: string = StringBlob.dataDecode(dataType, currentEncoding, data);
 
-	function updateSize(event: Event & { target: HTMLTextAreaElement }) {
+	function updateSize(event: Event & { currentTarget: HTMLTextAreaElement }) {
 		const lines = Math.max(
 			10,
-			event.target.value
+			event.currentTarget.value
 				.split("\n")
 				.reduce(
-					(acc, line) => (acc += Math.ceil(line.length / event.target.cols)),
+					(acc, line) =>
+						(acc += Math.ceil(line.length / event.currentTarget.cols)),
 					0
 				)
 		);
-		event.target.rows = lines;
+		event.currentTarget.rows = lines;
 	}
 
 	function onSubmit() {
