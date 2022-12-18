@@ -8,7 +8,7 @@
 	import { page } from "$app/stores";
 
 	export let data: PageData;
-	let segment = $page.url.pathname;
+	$: segment = $page.url.pathname;
 
 	let menuExpanded: boolean = false;
 </script>
