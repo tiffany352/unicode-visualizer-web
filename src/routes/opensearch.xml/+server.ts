@@ -12,6 +12,7 @@ export const GET: RequestHandler = async ({ url }) => {
 		<Image width="16" height="16" type="image/x-icon">${prefix}/favicon.png</Image>
 		<Url type="text/html" template="${prefix}/search?q={searchTerms}" />
 		<Url type="application/x-suggestions+json" template="${prefix}/search/suggestions?q={searchTerms}"/>
+		<Url type="application/opensearchdescription+xml" rel="self" template="${prefix}/opensearch.xml" />
 		<moz:SearchForm>${prefix}/search</moz:SearchForm>
 	</OpenSearchDescription>`;
 	return new Response(body, {
