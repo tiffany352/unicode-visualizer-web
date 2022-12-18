@@ -2,6 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import { browser } from "$app/environment";
+
 export function urlSlugNormalize(input: string): string {
 	input = input.replace(/\s+/g, "-");
 	return input.toLocaleLowerCase();
@@ -88,7 +90,7 @@ export function stringFromCodePoint(codepoint: number) {
 }
 
 export function base64Encode(input: ArrayBuffer): string {
-	if (process.browser) {
+	if (browser) {
 		const array = new Uint8Array(input);
 		const byteString = String.fromCharCode(...array);
 		const base64 = btoa(byteString);
@@ -102,7 +104,7 @@ export function base64Encode(input: ArrayBuffer): string {
 
 export function base64Decode(input: string): ArrayBuffer {
 	input = input.replace(/[^+=/\w]/g, "");
-	if (process.browser) {
+	if (browser) {
 		// This returns a "byte string", a string full of values from
 		// 0 to 0xFF.
 		input = atob(input);
