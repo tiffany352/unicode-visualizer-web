@@ -7,7 +7,7 @@ import * as t from "./Types";
 // Parser for the variant of CSV used by the Unicode database.
 export function parse<T>(file: string, visitor: (row: string[]) => T): T[] {
 	return file
-		.split("\n")
+		.split(/\r?\n/)
 		.map((line) => {
 			const result = line.match(/^([^#]*)#.*$/);
 			if (result) {
@@ -36,7 +36,7 @@ export function parseTabs(
 ) {
 	for (const [category, file] of Object.entries(files)) {
 		const lines = file
-			.split("\n")
+			.split(/\r?\n/)
 			.map((line) => {
 				const result = line.match(/^([^#]*)#.*$/);
 				if (result) {
