@@ -1,12 +1,22 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+ !-- License, v. 2.0. If a copy of the MPL was not distributed with this
+ !-- file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <script lang="ts">
-	/* This Source Code Form is subject to the terms of the Mozilla Public
-	 * License, v. 2.0. If a copy of the MPL was not distributed with this
-	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-
 	import Icon from "./Icon.svelte";
 
 	export let title: string = "";
 </script>
+
+<nav>
+	<button {title} class="button">
+		<slot name="button">
+			<Icon icon="menu" />
+		</slot>
+	</button>
+	<ul tabindex="-1">
+		<slot />
+	</ul>
+</nav>
 
 <style>
 	nav {
@@ -65,14 +75,3 @@
 		border-bottom: none;
 	}
 </style>
-
-<nav>
-	<button {title} class="button">
-		<slot name="button">
-			<Icon icon="menu" />
-		</slot>
-	</button>
-	<ul tabindex="-1">
-		<slot />
-	</ul>
-</nav>

@@ -1,8 +1,7 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+ !-- License, v. 2.0. If a copy of the MPL was not distributed with this
+ !-- file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <script lang="ts">
-	/* This Source Code Form is subject to the terms of the Mozilla Public
-	 * License, v. 2.0. If a copy of the MPL was not distributed with this
-	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-
 	import { createEventDispatcher } from "svelte";
 	import Icon from "./Icon.svelte";
 
@@ -11,6 +10,17 @@
 	export let query: string;
 	export let icon: string = "search";
 </script>
+
+<form
+	action="search"
+	method="get"
+	on:submit|preventDefault={(event) => dispatch("submit", event)}
+>
+	<div class="icon">
+		<Icon {icon} />
+	</div>
+	<input type="search" bind:value={query} />
+</form>
 
 <style>
 	form {
@@ -42,13 +52,3 @@
 		padding-left: calc(0.25em + 24px);
 	}
 </style>
-
-<form
-	action="search"
-	method="get"
-	on:submit|preventDefault={(event) => dispatch('submit', event)}>
-	<div class="icon">
-		<Icon {icon} />
-	</div>
-	<input type="search" bind:value={query} />
-</form>

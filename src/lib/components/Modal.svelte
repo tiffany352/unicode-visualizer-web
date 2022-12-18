@@ -1,8 +1,7 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+ !-- License, v. 2.0. If a copy of the MPL was not distributed with this
+ !-- file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <script>
-	/* This Source Code Form is subject to the terms of the Mozilla Public
-	 * License, v. 2.0. If a copy of the MPL was not distributed with this
-	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-
 	import { createEventDispatcher, onDestroy } from "svelte";
 
 	const dispatch = createEventDispatcher();
@@ -42,6 +41,23 @@
 	}
 </script>
 
+<svelte:window on:keydown={handle_keydown} />
+
+<div class="modal-background" on:click={close} />
+
+<div class="modal" role="dialog" aria-modal="true" bind:this={modal}>
+	<slot name="header" />
+	<hr />
+	<slot />
+	<hr />
+
+	<!-- svelte-ignore a11y-autofocus -->
+	<div class="buttons">
+		<button autofocus on:click={close} class="button">Close</button>
+		<slot name="buttons" />
+	</div>
+</div>
+
 <style>
 	.modal-background {
 		position: fixed;
@@ -80,20 +96,3 @@
 		gap: 0.5em;
 	}
 </style>
-
-<svelte:window on:keydown={handle_keydown} />
-
-<div class="modal-background" on:click={close} />
-
-<div class="modal" role="dialog" aria-modal="true" bind:this={modal}>
-	<slot name="header" />
-	<hr />
-	<slot />
-	<hr />
-
-	<!-- svelte-ignore a11y-autofocus -->
-	<div class="buttons">
-		<button autofocus on:click={close} class="button">Close</button>
-		<slot name="buttons" />
-	</div>
-</div>
