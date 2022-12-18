@@ -23,7 +23,7 @@
 	<meta property="og:title" content={title} />
 	<meta property="og:type" content={type} />
 	<meta property="og:url" content={getUrl($page, url)} />
-	<!-- <meta property="og:image" content="https://{$page.host}{image}" /> -->
+	<meta property="og:image" content="https://{$page.url.host}{image}" />
 	<meta property="og:description" content={description} />
 	<meta property="og:site_name" content="Unicode Visualizer" />
 	<meta name="twitter:card" content="summary" />
