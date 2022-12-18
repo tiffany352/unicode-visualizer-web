@@ -3,11 +3,23 @@
 	 * License, v. 2.0. If a copy of the MPL was not distributed with this
 	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-	export let status;
-	export let error;
+	import { page } from "$app/stores";
 
 	const dev = process.env.NODE_ENV === "development";
+	$: error = $page.error;
 </script>
+
+<svelte:head>
+	<title>{error.status}</title>
+</svelte:head>
+
+<h1>{error.status}</h1>
+
+<p>{error.message}</p>
+
+{#if dev && error.stack}
+	<pre>{error.stack}</pre>
+{/if}
 
 <style>
 	h1,
@@ -31,15 +43,3 @@
 		}
 	}
 </style>
-
-<svelte:head>
-	<title>{status}</title>
-</svelte:head>
-
-<h1>{status}</h1>
-
-<p>{error.message}</p>
-
-{#if dev && error.stack}
-	<pre>{error.stack}</pre>
-{/if}
