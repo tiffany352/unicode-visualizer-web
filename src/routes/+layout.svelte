@@ -1,12 +1,49 @@
 <script lang="ts">
 	import Nav from "../components/Nav.svelte";
 	import Icon from "../components/Icon.svelte";
+	import type { PageData } from "./$types";
+	import { page } from "$app/stores";
 
-	export let segment: string;
-	export let version: string;
+	export let data: PageData;
+	let segment = $page.url.pathname;
 
 	let menuExpanded: boolean = false;
 </script>
+
+<div class="outer">
+	<header id="main-menu" aria-expanded={menuExpanded}>
+		<Nav {segment} closeMenu={() => (menuExpanded = false)} />
+	</header>
+
+	<!-- svelte-ignore a11y-missing-content -->
+	<a
+		href="#main-menu-toggle"
+		class="backdrop"
+		tabindex="-1"
+		aria-hidden="true"
+		on:click|preventDefault={() => (menuExpanded = false)}
+	/>
+
+	<div class="scroll">
+		<main>
+			<a
+				id="main-menu-toggle"
+				href="#main-menu"
+				class="menu button"
+				on:click|preventDefault={() => (menuExpanded = true)}
+			>
+				<Icon icon="menu" />
+				Menu
+			</a>
+
+			<slot />
+
+			<hr />
+
+			<span>Data sourced from Unicode {data.version}.</span>
+		</main>
+	</div>
+</div>
 
 <style>
 	.outer {
@@ -101,36 +138,3 @@
 		border-bottom: 1px solid var(--main-border);
 	}
 </style>
-
-<div class="outer">
-	<header id="main-menu" aria-expanded={menuExpanded}>
-		<Nav {segment} closeMenu={() => (menuExpanded = false)} />
-	</header>
-
-	<!-- svelte-ignore a11y-missing-content -->
-	<a
-		href="#main-menu-toggle"
-		class="backdrop"
-		tabindex="-1"
-		aria-hidden="true"
-		on:click|preventDefault={() => (menuExpanded = false)} />
-
-	<div class="scroll">
-		<main>
-			<a
-				id="main-menu-toggle"
-				href="#main-menu"
-				class="menu button"
-				on:click|preventDefault={() => (menuExpanded = true)}>
-				<Icon icon="menu" />
-				Menu
-			</a>
-
-			<slot />
-
-			<hr />
-
-			<span>Data sourced from Unicode {version}.</span>
-		</main>
-	</div>
-</div>
