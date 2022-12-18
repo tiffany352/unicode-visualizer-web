@@ -2,8 +2,8 @@
 	import type { SequenceInfo, CharMap, CharInfo } from "$lib/server/Unicode";
 	import StringBlob, { Encoding } from "$lib/model/StringBlob";
 	import { getDisplayText } from "$lib/strings";
-	import OpenGraph from "../../../components/OpenGraph.svelte";
-	import Inspector from "../../../components/Inspector/index.svelte";
+	import OpenGraph from "$lib/components/OpenGraph.svelte";
+	import Inspector from "$lib/components/Inspector/index.svelte";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;

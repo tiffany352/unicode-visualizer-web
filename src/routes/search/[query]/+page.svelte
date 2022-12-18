@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Searchbar from "../../../components/Searchbar.svelte";
-	import OpenGraph from "../../../components/OpenGraph.svelte";
+	import Searchbar from "$lib/components/Searchbar.svelte";
+	import OpenGraph from "$lib/components/OpenGraph.svelte";
 	import StringBlob, { Encoding } from "$lib/model/StringBlob";
 	import { escapeHtml } from "$lib/model/Util";
 	import type { PageData } from "./$types";

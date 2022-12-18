@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Nav from "../components/Nav.svelte";
-	import Icon from "../components/Icon.svelte";
+	import Nav from "$lib/components/Nav.svelte";
+	import Icon from "$lib/components/Icon.svelte";
 	import type { PageData } from "./$types";
 	import { page } from "$app/stores";
 

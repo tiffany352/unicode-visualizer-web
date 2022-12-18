@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { CharMap, SequenceInfo } from "$lib/server/Unicode";
-	import OpenGraph from "../../../components/OpenGraph.svelte";
-	import Inspector from "../../../components/Inspector/index.svelte";
+	import OpenGraph from "$lib/components/OpenGraph.svelte";
+	import Inspector from "$lib/components/Inspector/index.svelte";
 	import StringBlob from "$lib/model/StringBlob";
 	import type { PageData } from "./$types";
 

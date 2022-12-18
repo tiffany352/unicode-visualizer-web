@@ -1,6 +1,6 @@
 <script lang="ts">
-	import OpenGraph from "../../../../components/OpenGraph.svelte";
-	import Paginate from "../../../../components/Paginate.svelte";
+	import OpenGraph from "$lib/components/OpenGraph.svelte";
+	import Paginate from "$lib/components/Paginate.svelte";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;

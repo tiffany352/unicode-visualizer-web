@@ -2,8 +2,8 @@
 	import type { CharInfo, SingleCharRef } from "$lib/server/Unicode";
 	import { getDisplayText } from "$lib/strings";
 	import { Encoding } from "$lib/model/StringBlob";
-	import OpenGraph from "../../../components/OpenGraph.svelte";
-	import CopyButton from "../../../components/CopyButton.svelte";
+	import OpenGraph from "$lib/components/OpenGraph.svelte";
+	import CopyButton from "$lib/components/CopyButton.svelte";
 	import Repr from "../_repr.svelte";
 	import CharRef from "../_charRef.svelte";
 	import { escapeHtml } from "$lib/model/Util";

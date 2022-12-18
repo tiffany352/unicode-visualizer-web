@@ -4,10 +4,10 @@
 	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 	import StringBlob, { Encoding } from "$lib/model/StringBlob";
-	import OpenGraph from "../components/OpenGraph.svelte";
-	import Searchbar from "../components/Searchbar.svelte";
-	import Icon from "../components/Icon.svelte";
-	import InspectBar from "../components/InspectBar.svelte";
+	import OpenGraph from "$lib/components/OpenGraph.svelte";
+	import Searchbar from "$lib/components/Searchbar.svelte";
+	import Icon from "$lib/components/Icon.svelte";
+	import InspectBar from "$lib/components/InspectBar.svelte";
 
 	interface Example {
 		string: string;

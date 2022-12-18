@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getDisplayText } from "$lib/strings";
-	import OpenGraph from "../../../components/OpenGraph.svelte";
+	import OpenGraph from "$lib/components/OpenGraph.svelte";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
