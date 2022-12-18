@@ -6,6 +6,10 @@
 	export let icon: string = "search";
 </script>
 
+<svg width="24" height="24" class="icon">
+	<use href="/icons/{icon}.svg#{icon}" />
+</svg>
+
 <style>
 	svg {
 		stroke: currentColor;
@@ -14,7 +18,3 @@
 		vertical-align: bottom;
 	}
 </style>
-
-<svg width="24" height="24" class="icon">
-	<use href="icons/{icon}.svg#{icon}" />
-</svg>
