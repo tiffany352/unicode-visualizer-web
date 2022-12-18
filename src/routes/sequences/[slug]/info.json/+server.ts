@@ -2,22 +2,22 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import type { Request, Response, NextFunction } from "express";
 import StringBlob, { Encoding } from "$lib/model/StringBlob";
 import {
 	lookupChar,
 	lookupSequence,
-	CharMap,
+	type CharMap,
 	lookupSequenceSlug,
 } from "$lib/server/Unicode";
 import type { SequenceInfo } from "$lib/server/Unicode";
+import { error, json, type RequestHandler } from "@sveltejs/kit";
 
-export async function get(req: Request, res: Response, next: NextFunction) {
-	const { slug } = req.params;
+export const GET: RequestHandler = async ({ params }) => {
+	const { slug } = params;
 
 	const sequence = lookupSequenceSlug(slug);
 	if (!sequence) {
-		return next();
+		throw error(404);
 	}
 
 	const string = StringBlob.stringDecode(Encoding.Utf8, sequence.text);
@@ -41,9 +41,9 @@ export async function get(req: Request, res: Response, next: NextFunction) {
 		}
 	}
 
-	res.json({
+	return json({
 		sequence,
 		codepoints,
 		sequences,
 	});
-}
+};
