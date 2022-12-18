@@ -3,6 +3,7 @@
  !-- file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <script lang="ts">
 	import { page } from "$app/stores";
+	import type { Page } from "@sveltejs/kit";
 
 	export let title: string;
 	export let type: string = "website";
@@ -10,10 +11,8 @@
 	export let description: string = "";
 	export let url: string | null = null;
 
-	function getUrl(page: any, path: string | null = null) {
-		const url = page.host + (path || page.path);
-
-		return `https://${url}`;
+	function getUrl(page: Page, path: string | null = null) {
+		return page.url.origin + (path || page.url.pathname);
 	}
 </script>
 
