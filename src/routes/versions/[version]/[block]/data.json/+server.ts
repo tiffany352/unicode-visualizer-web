@@ -2,22 +2,19 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import type { Request, Response } from "express";
 import {
 	getBlockFromSlug,
 	getCodepointsInRange,
-	getCodepointsInVersion,
 	versionCompare,
 } from "$lib/server/Unicode";
+import { error, json, type RequestHandler } from "@sveltejs/kit";
 
-export function get(req: Request, res: Response) {
-	const { version, block: blockSlug } = req.params;
+export const GET: RequestHandler = async ({ params }) => {
+	const { version, block: blockSlug } = params;
 
 	const block = getBlockFromSlug(blockSlug);
-
 	if (!block) {
-		res.status(404);
-		return;
+		throw error(404);
 	}
 
 	const codepoints = getCodepointsInRange(block.range.first, block.range.last);
@@ -48,7 +45,7 @@ export function get(req: Request, res: Response) {
 		}
 	}
 
-	res.json({
+	return json({
 		block,
 		codepoints: result,
 		beforeThisVersion,
@@ -56,4 +53,4 @@ export function get(req: Request, res: Response) {
 		previousVersion,
 		nextVersion,
 	});
-}
+};

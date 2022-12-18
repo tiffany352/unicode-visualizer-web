@@ -2,10 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import type { Request, Response } from "express";
 import { getVersions } from "$lib/server/Unicode";
+import { json, type RequestHandler } from "@sveltejs/kit";
 
-export function get(req: Request, res: Response) {
+export const GET: RequestHandler = async () => {
 	const versions = getVersions();
-	res.json(versions);
-}
+	return json(versions);
+};

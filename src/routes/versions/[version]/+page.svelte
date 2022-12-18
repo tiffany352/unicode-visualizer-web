@@ -1,58 +1,28 @@
-<script lang="ts" context="module">
-	/* This Source Code Form is subject to the terms of the Mozilla Public
-	 * License, v. 2.0. If a copy of the MPL was not distributed with this
-	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-
-	type BlockEntry = BlockInfo & {
-		count: number;
-		wasAddedThisVersion: boolean;
-	};
-
-	interface Summary {
-		blocks: BlockEntry[];
-		totalCount: number;
-	}
-
-	export async function preload(this: any, page: any, session: any) {
-		const { version } = page.params;
-		const response: Response = await this.fetch(
-			`versions/${version}/summary.json`
-		);
-		if (response.status == 200) {
-			const summary: Summary = await response.json();
-			return { summary, version };
-		} else {
-			this.error(response.status, "Couldn't load version data");
-		}
-	}
-</script>
-
 <script lang="ts">
-	import type { BlockInfo } from "$lib/server/Unicode";
 	import OpenGraph from "../../../components/OpenGraph.svelte";
+	import type { PageData } from "./$types";
 
-	export let version: string;
-	export let summary: Summary;
+	export let data: PageData;
 </script>
 
 <OpenGraph
-	title="Unicode {version} - Unicode Visualizer"
+	title="Unicode {data.version} - Unicode Visualizer"
 	description="Codepoints added in this version categorized by block."
 />
 
-<h1>Unicode {version}</h1>
+<h1>Unicode {data.version}</h1>
 
 <p>
-	{summary.totalCount} new {#if summary.totalCount == 1}
+	{data.summary.totalCount} new {#if data.summary.totalCount == 1}
 		character was
 	{:else}
 		characters were
-	{/if} added in Unicode {version}. This page categorizes them by block.
+	{/if} added in Unicode {data.version}. This page categorizes them by block.
 </p>
 
 <p>
 	For a list of every character added in this version, <a
-		href="/versions/{version}/page/1"
+		href="/versions/{data.version}/page/1"
 	>
 		go here</a
 	>.
@@ -62,8 +32,8 @@
 	<div class="header">Block</div>
 	<div class="header right">Count</div>
 
-	{#each summary.blocks as entry}
-		<a href="/versions/{version}/{entry.slug}">
+	{#each data.summary.blocks as entry}
+		<a href="/versions/{data.version}/{entry.slug}">
 			<div>
 				{entry.name}
 				{#if entry.wasAddedThisVersion}<sup>new</sup>{/if}

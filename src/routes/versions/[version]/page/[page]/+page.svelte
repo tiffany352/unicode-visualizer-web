@@ -1,52 +1,27 @@
-<script lang="ts" context="module">
-	/* This Source Code Form is subject to the terms of the Mozilla Public
-	 * License, v. 2.0. If a copy of the MPL was not distributed with this
-	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-
-	export async function preload(this: any, pageObj: any, session: any) {
-		const { version, page } = pageObj.params;
-		const response: Response = await this.fetch(
-			`versions/${version}/page/${page}/data.json`
-		);
-		if (response.status == 200) {
-			const json = await response.json();
-			const chars: CharInfo[] = json.chars;
-			const pages: number = json.pages;
-			const pageInt: number = parseInt(page);
-			return { version, chars, page: pageInt, pages };
-		} else {
-			this.error(404, `Could not find any Unicode version named ${version}.`);
-		}
-	}
-</script>
-
 <script lang="ts">
-	import type { CharInfo } from "$lib/server/Unicode";
 	import { getDisplayText } from "$lib/strings";
 	import OpenGraph from "../../../../../components/OpenGraph.svelte";
 	import Paginate from "../../../../../components/Paginate.svelte";
+	import type { PageData } from "./$types";
 
-	export let version: string;
-	export let chars: CharInfo[];
-	export let page: number;
-	export let pages: number;
+	export let data: PageData;
 </script>
 
 <OpenGraph
-	title="Unicode {version} - Unicode Visualizer"
-	description="View codepoints that were added in Unicode {version}."
+	title="Unicode {data.version} - Unicode Visualizer"
+	description="View codepoints that were added in Unicode {data.version}."
 />
 
-<h1>Unicode {version}</h1>
+<h1>Unicode {data.version}</h1>
 
 <Paginate
-	current={page}
-	{pages}
-	createUrl={(page) => `versions/${version}/page/${page}`}
+	current={data.page}
+	pages={data.pages}
+	createUrl={(page) => `/versions/${data.version}/page/${page}`}
 />
 
 <div class="table">
-	{#each chars as char}
+	{#each data.chars as char}
 		{#if char.type == "char"}
 			<a href="/codepoint/{char.slug}">
 				<div class="char">
@@ -70,9 +45,9 @@
 </div>
 
 <Paginate
-	current={page}
-	{pages}
-	createUrl={(page) => `versions/${version}/page/${page}`}
+	current={data.page}
+	pages={data.pages}
+	createUrl={(page) => `/versions/${data.version}/page/${page}`}
 />
 
 <style>
