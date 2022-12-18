@@ -33,8 +33,8 @@ const index: Index<Page> = FlexSearch.create({
 	},
 });
 
-export async function search(query: string): Promise<Page[]> {
-	return await index.search(query);
+export async function search(query: string, limit?: number): Promise<Page[]> {
+	return await index.search(query, { limit });
 }
 
 console.log("Initializing search engine");
