@@ -1,72 +1,44 @@
-<script lang="ts" context="module">
-	/* This Source Code Form is subject to the terms of the Mozilla Public
-	 * License, v. 2.0. If a copy of the MPL was not distributed with this
-	 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-
-	type BlockPageData = BlockInfo &
-		CodepointListing & {
-			assignedCount: number;
-			totalCount: number;
-			reservedCount: number;
-			firstCodepointStr: string;
-			lastCodepointStr: string;
-			allAreEquallyInvalid: false | string;
-			newestVersion: string;
-		};
-
-	export async function preload(this: any, page: any, session: any) {
-		const { slug } = page.params;
-		const response: Response = await this.fetch(`blocks/${slug}/data.json`);
-		if (response.status == 200) {
-			const block: BlockPageData = await response.json();
-			return { block };
-		} else {
-			this.error(404, `Could not find any Unicode block named ${slug}.`);
-		}
-	}
-</script>
-
 <script lang="ts">
-	import type { BlockInfo, CodepointListing } from "$lib/server/Unicode";
 	import { getDisplayText } from "$lib/strings";
 	import OpenGraph from "../../../components/OpenGraph.svelte";
+	import type { PageData } from "./$types";
 
-	export let block: BlockPageData;
+	export let data: PageData;
 </script>
 
 <OpenGraph
-	title="{block.name} - Blocks - Unicode Visualizer"
-	description="View codepoints in the {block.name} Unicode block."
+	title="{data.block.name} - Blocks - Unicode Visualizer"
+	description="View codepoints in the {data.block.name} Unicode data.block."
 />
 
-<h1>{block.name}</h1>
+<h1>{data.block.name}</h1>
 
 <p>
-	The <strong>{block.name}</strong> block spans
-	<code>U+{block.firstCodepointStr}</code>
+	The <strong>{data.block.name}</strong> block spans
+	<code>U+{data.block.firstCodepointStr}</code>
 	to
-	<code>U+{block.lastCodepointStr}</code>. Of the {block.totalCount} codepoints in
-	this block, {block.assignedCount}
-	have been assigned, and {block.reservedCount}
+	<code>U+{data.block.lastCodepointStr}</code>. Of the {data.block.totalCount} codepoints
+	in this block, {data.block.assignedCount}
+	have been assigned, and {data.block.reservedCount}
 	are reserved.
 </p>
 
 <p>
 	This block was most recently added to in <a
-		href="/versions/{block.newestVersion}/{block.slug}"
-		>Unicode {block.newestVersion}</a
+		href="/versions/{data.block.newestVersion}/{data.block.slug}"
+		>Unicode {data.block.newestVersion}</a
 	>.
 </p>
 
-{#if block.allAreEquallyInvalid}
+{#if data.block.allAreEquallyInvalid}
 	<div class="table">
 		<div>N/A</div>
 		<div>All</div>
-		<div>{getDisplayText(block.allAreEquallyInvalid)}</div>
+		<div>{getDisplayText(data.block.allAreEquallyInvalid)}</div>
 	</div>
 {:else}
 	<div class="table">
-		{#each block.codepoints as char}
+		{#each data.block.codepoints as char}
 			{#if char.type == "char"}
 				<a href="/codepoint/{char.slug}">
 					<div class="char"><span>{char.text}</span></div>
