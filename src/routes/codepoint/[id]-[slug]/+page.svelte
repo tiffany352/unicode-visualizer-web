@@ -60,7 +60,23 @@
 {#if data.type == "char"}
 	<h1><span class="mono">U+{data.codepointStr}</span> {data.name}</h1>
 
-	<div class="preview" bind:this={preview}>{data.text}</div>
+	<div class="previews">
+		<figure class="local">
+			<div class="preview" bind:this={preview}>{data.text}</div>
+			<figcaption>Your browser</figcaption>
+		</figure>
+
+		<figure class="prerendered">
+			<img
+				class="previewImg"
+				src="/codepoint/{data.codepointStr}.svg?color=3c3c3c"
+				width="128"
+				height="128"
+				alt="Pre-rendered SVG"
+			/>
+			<figcaption>Rendered SVG</figcaption>
+		</figure>
+	</div>
 
 	<CopyButton text={data.text} />
 
@@ -253,17 +269,29 @@
 {/if}
 
 <style>
-	.preview {
-		font-size: 3em;
-		padding: 10px;
+	div.previews {
+		display: flex;
+		flex-direction: row;
+		align-items: flex-start;
+		pad: 10px;
+	}
+
+	figure {
 		background-color: rgb(240, 240, 240);
+		color: #3c3c3c;
 		border: 1px solid rgb(100, 100, 100);
 		border-radius: 5px;
-		color: rgb(60, 60, 60);
-		width: min-content;
-		height: min-content;
-		min-width: 1em;
-		min-height: 1em;
+		padding: 10px;
+		width: 128px;
+		text-align: center;
+	}
+
+	div.preview {
+		font-size: 100px;
+		width: 128px;
+		height: 128px;
+		padding: 0;
+		line-height: 100px;
 		text-align: center;
 	}
 
