@@ -9,7 +9,7 @@
 </script>
 
 <OpenGraph
-	title="Versions - Unicode Visualizer"
+	title="Versions"
 	description="Browse the list of Unicode releases."
 />
 

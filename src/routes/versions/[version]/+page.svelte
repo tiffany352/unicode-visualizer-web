@@ -9,7 +9,7 @@
 </script>
 
 <OpenGraph
-	title="Unicode {data.version} - Unicode Visualizer"
+	title="Unicode {data.version}"
 	description="Codepoints added in this version categorized by block."
 />
 

@@ -47,7 +47,7 @@
 </script>
 
 <OpenGraph
-	title="{data.query} - Search - Unicode Visualizer"
+	title="{data.query} - Search"
 	description="Search results for {data.query}."
 />
 

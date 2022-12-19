@@ -11,7 +11,8 @@
 	},
 	"dependencies": {
 		"flexsearch": "^0.6.32",
-		"grapheme-splitter": "^1.0.4"
+		"grapheme-splitter": "^1.0.4",
+		"canvas": "^2.10.2"
 	},
 	"devDependencies": {
 		"@neoconfetti/svelte": "^1.0.0",

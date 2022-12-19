@@ -45,8 +45,9 @@
 {#if data.type == "char"}
 	<!-- prettier-ignore -->
 	<OpenGraph
-			title="U+{data.codepointStr} {data.name} - Unicode Visualizer"
+			title="U+{data.codepointStr} {data.name}"
 			description="View the properties of U+{data.codepointStr} {data.name}."
+			previewText={data.text}
 			url="/codepoint/{data.slug}" />
 {:else}
 	<!-- prettier-ignore -->

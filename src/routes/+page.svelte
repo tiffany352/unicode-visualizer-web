@@ -59,6 +59,7 @@
 
 <OpenGraph
 	title="Unicode Visualizer"
+	suffix=""
 	description="A tool for working with Unicode"
 />
 

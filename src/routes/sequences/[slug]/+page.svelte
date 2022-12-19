@@ -16,8 +16,9 @@
 
 <!-- prettier-ignore -->
 <OpenGraph
-		title="{data.sequence.name} - Sequences - Unicode Visualizer"
+		title="{data.sequence.name} - Sequences"
 		description="View the breakdown of the {data.sequence.name} Unicode named sequence."
+		previewText={string.stringEncode()}
 		url="/sequences/{data.sequence.slug}" />
 
 <h1>{data.sequence.name}</h1>

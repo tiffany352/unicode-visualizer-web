@@ -12,10 +12,7 @@
 	}
 </script>
 
-<OpenGraph
-	title="Blocks - Unicode Visualizer"
-	description="Browse the blocks in Unicode."
-/>
+<OpenGraph title="Blocks" description="Browse the blocks in Unicode." />
 
 <h1>Browse Unicode Blocks</h1>
 

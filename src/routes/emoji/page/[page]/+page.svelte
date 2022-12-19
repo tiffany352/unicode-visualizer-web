@@ -14,7 +14,7 @@
 </script>
 
 <OpenGraph
-	title="Sequences - Unicode Visualizer"
+	title="Sequences"
 	description="Browse the named sequences in Unicode."
 />
 

@@ -40,7 +40,7 @@
 
 <!-- prettier-ignore -->
 <OpenGraph
-	title="Inspect - Unicode Visualizer"
+	title="Inspect"
 	description=
 		"A page for inputting text to be inspected. Shows a breakdown of the codepoints in the string, and other information."
 />

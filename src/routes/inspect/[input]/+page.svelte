@@ -11,12 +11,27 @@
 
 	$: string = StringBlob.urlDecode(data.input);
 	$: extra = data.extra;
+
+	$: isSingleGrapheme = string.getGraphemes().length == 1;
+	$: origString = string.stringEncode();
+	$: truncString =
+		origString.length > 30
+			? string.stringEncode().substring(0, 27) + "..."
+			: origString;
 </script>
 
-<OpenGraph
-	title="Unicode Visualizer - Inspect String"
-	description="Shows a breakdown of the contents of a given string."
-/>
+{#if isSingleGrapheme}
+	<OpenGraph
+		title="Inspector"
+		description="Shows a breakdown of the contents of a given string."
+		previewText={truncString}
+	/>
+{:else}
+	<OpenGraph
+		title="{truncString} - Inspector"
+		description="Shows a breakdown of the contents of a given string."
+	/>
+{/if}
 
 <h1>Inspect</h1>
 

@@ -11,7 +11,7 @@
 </script>
 
 <OpenGraph
-	title="Unicode {data.version} - Unicode Visualizer"
+	title="Unicode {data.version}"
 	description="View codepoints that were added in Unicode {data.version}."
 />
 

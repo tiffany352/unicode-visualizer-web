@@ -5,13 +5,59 @@
 	import { getDisplayText } from "$lib/strings";
 	import OpenGraph from "$lib/components/OpenGraph.svelte";
 	import type { PageData } from "./$types";
+	import type { Char } from "$lib/server/Unicode";
 
 	export let data: PageData;
+
+	const categoryScores = {
+		Cc: -10, // Control
+		Cf: -20, // Format
+		Co: -30, // Private Use
+		Cs: -40, // Surrrogate
+		Ll: 20, // Lowercase Letter
+		Lm: 0, // Modifier Letter
+		Lo: 20, // Other Letter
+		Lt: 30, // Titlecase Letter
+		Lu: 30, // Uppercase Letter
+		Mc: 0, // Spacing Mark
+		Me: 0, // Enclosing Mark
+		Mn: 0, // Nonspacing Mark
+		Nd: 10, // Decimal Number
+		Nl: 10, // Letter Number
+		No: 10, // Other Number
+		Pc: 0, // Connector Punctuation
+		Pd: 0, // Dash Punctuation
+		Pe: 0, // Close Punctuation
+		Pf: 0, // Final Punctuation
+		Pi: 0, // Initial Punctuation
+		Po: 10, // Other Punctuation
+		Ps: 0, // Open Punctuation
+		Sc: 20, // Currency Symbol
+		Sk: 0, // Modifier Symbol
+		Sm: 20, // Math Symbol
+		So: 40, // Other Symbol
+		Zl: -10, // Line Separator
+		Zp: -10, // Paragraph Separator
+	};
+
+	function findBestPreviewChar(): Char {
+		let bestMatch: Char;
+		let bestScore = -10000;
+		for (const char of data.block.codepoints) {
+			const score = categoryScores[char.category];
+			if (score > bestScore) {
+				bestMatch = char;
+				bestScore = score;
+			}
+		}
+		return bestMatch;
+	}
 </script>
 
 <OpenGraph
-	title="{data.block.name} - Blocks - Unicode Visualizer"
+	title="{data.block.name} - Blocks"
 	description="View codepoints in the {data.block.name} Unicode data.block."
+	previewText={findBestPreviewChar().text}
 />
 
 <h1>{data.block.name}</h1>
