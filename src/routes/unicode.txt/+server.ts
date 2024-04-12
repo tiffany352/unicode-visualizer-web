@@ -74,18 +74,19 @@ export const GET = (async ({ }) => {
 				let scalar = (row << 4) + i;
 				let char: Char | InvalidChar | null = null;
 
-				let widthAdjust = 0;
 				let repr = '[X]';
+				let width = 1;
 				if (scalar >= block.range.first && scalar <= block.range.last) {
 					char = lookupChar(scalar);
 					if (char !== null && char.type == "char") {
 						if (char.eastAsianWidth == "W" || char.eastAsianWidth == "F") {
-							widthAdjust = 1;
+							width = 2;
 						}
-						if (char.combiningClass != "NR" || char.category == "Mn" || char.category == "Mc" || char.category == "Me") {
+						if (char.category == "Mn" || char.category == "Mc" || char.category == "Me") {
 							repr = "◌" + char.text;
-							if (char.category != "Mc")
-								widthAdjust = -1;
+							if (char.category == "Mc") {
+								width++;
+							}
 						} else if (char.category == "Cc" || char.category == 'Cf') {
 							let alias = char.aliases.find((alias) => alias.type == "abbreviation");
 							if (alias) {
@@ -94,8 +95,10 @@ export const GET = (async ({ }) => {
 								let shortest = char.aliases.reduce((prev, cur) => cur.text.length < prev.text.length ? cur : prev);
 								repr = shortest.text.slice(0, 4);
 							}
+							width = repr.length;
 						} else if (char.category == "Ws" || char.category == "Zs") {
 							repr = `'${char.text}'`;
+							width += 2;
 						} else {
 							repr = char.text;
 						}
@@ -103,12 +106,13 @@ export const GET = (async ({ }) => {
 						repr = String.fromCodePoint(scalar);
 					} else {
 						repr = '╌╌';
+						width = 2;
 					}
 				} else {
 					repr = '░░░░';
 				}
 
-				repr = repr.padStart(4 - widthAdjust);
+				repr = ' '.repeat(4 - width) + repr;
 				chars.push(repr);
 			}
 			let prefix = row.toString(16).toUpperCase().padStart(3, '0').padStart(5);
