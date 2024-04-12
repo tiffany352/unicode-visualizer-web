@@ -85,6 +85,7 @@ export interface Char {
 	eastAsianWidth: EastAsianWidth;
 	numeric: Numeric | null;
 	category: string;
+	combiningClass: string;
 	script: ScriptInfo;
 
 	// Unihan info
@@ -172,11 +173,11 @@ const blockTree = new IntervalTree(blocks.map((block) => [block.range, block]));
 interface SequenceRaw {
 	Codepoints: number[];
 	Type:
-		| "Basic_Emoji"
-		| "Emoji_Keycap_Sequence"
-		| "RGI_Emoji_Flag_Sequence"
-		| "RGI_Emoji_Tag_Sequence"
-		| "RGI_Emoji_Modifier_Sequence";
+	| "Basic_Emoji"
+	| "Emoji_Keycap_Sequence"
+	| "RGI_Emoji_Flag_Sequence"
+	| "RGI_Emoji_Tag_Sequence"
+	| "RGI_Emoji_Modifier_Sequence";
 	Name: string;
 }
 
@@ -250,7 +251,7 @@ for (const row of Data.derivedAge) {
 		if (result != row.Version) {
 			throw new Error(
 				"IntervalTree returned invalid result: " +
-					JSON.stringify({ result, row, i }, undefined, 2)
+				JSON.stringify({ result, row, i }, undefined, 2)
 			);
 		}
 	}
@@ -308,6 +309,11 @@ const numericTypeMap = new IntervalMap(
 const numericValueMap = new IntervalMap(
 	Data.derivedNumericValue.map((row) => [row.Range, row.Fraction])
 );
+
+const aliasValues = new Map();
+for (const entry of Data.valueAliases) {
+	aliasValues.set(entry.Type + ":" + entry.Value, entry.Alias)
+}
 
 // This data is not explicitly included in the Unihan Database, and
 // instead is available from this table in the TR:
@@ -538,6 +544,7 @@ function parseEntry(entry: CharEntry, codepoint: number): Char {
 		range: new Range(0, 0),
 	};
 	const category = entry.General_Category || "None";
+	const combiningClass = aliasValues.get("ccc:" + entry.Canonical_Combining_Class);
 
 	const script = {
 		name: scriptMap.get(codepoint) || "Unknown",
@@ -651,6 +658,7 @@ function parseEntry(entry: CharEntry, codepoint: number): Char {
 		aliases,
 		block,
 		category,
+		combiningClass,
 		script,
 		tags,
 		lowercaseForm,

@@ -30,6 +30,12 @@ export const unicodeData = parse(read("ucd/UnicodeData.txt"), (input) => ({
 	Simple_Titlecase_Mapping: t.optional(input[14], t.codepointList),
 }));
 
+export const valueAliases = parse(read("ucd/PropertyValueAliases.txt"), (input) => ({
+	Type: input[0],
+	Value: input[1],
+	Alias: input[2],
+}));
+
 export const blocks = parse(read("ucd/Blocks.txt"), (input) => ({
 	Range: t.codepointRange(input[0]),
 	Block: input[1],
