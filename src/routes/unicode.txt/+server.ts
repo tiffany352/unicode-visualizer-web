@@ -100,7 +100,7 @@ export const GET = (async ({ }) => {
 							repr = char.text;
 						}
 					} else if (char !== null && char.type == "invalid" && isPrivateUse(char)) {
-						repr = String.fromCharCode(scalar);
+						repr = String.fromCodePoint(scalar);
 					} else {
 						repr = '╌╌';
 					}
