@@ -12,7 +12,7 @@ export const GET: RequestHandler = async ({ params }) => {
 	const pageInt = parseInt(page);
 	const allChars = getCodepointsInVersion(version);
 	if (!allChars) {
-		throw error(404);
+		error(404);
 	}
 	const pages = Math.max(1, Math.ceil(allChars.length / pageSize));
 	const chars = allChars.slice((pageInt - 1) * pageSize, pageInt * pageSize);

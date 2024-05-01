@@ -16,11 +16,12 @@
 	},
 	"devDependencies": {
 		"@neoconfetti/svelte": "^1.0.0",
-		"@sveltejs/adapter-node": "^1.0.0",
-		"@sveltejs/kit": "^1.0.1",
-		"svelte": "^3.55.0",
-		"typescript": "^4.9.4",
-		"vite": "^4.0.1"
+		"@sveltejs/adapter-node": "^2.0.0",
+		"@sveltejs/kit": "^2.0.0",
+		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"svelte": "^4.0.0",
+		"typescript": "^5.0.0",
+		"vite": "^5.0.0"
 	},
 	"comments": [
 		"Do not update flexsearch, 0.7 made several unnecessary breaking changes and forgot to update TypeScript definitions."

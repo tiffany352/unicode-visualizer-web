@@ -20,11 +20,11 @@ export const load: PageLoad = async ({ params, fetch }) => {
 			if (page.title == query) {
 				// If there's a perfect match, then redirect straight there. The
 				// page titles are never something you'd type by accident.
-				throw redirect(302, page.url);
+				redirect(302, page.url);
 			}
 		}
 		return { results, requestTime, query };
 	} else {
-		throw error(response.status, response.statusText);
+		error(response.status, response.statusText);
 	}
 };

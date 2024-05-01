@@ -23,6 +23,6 @@ export const load: PageLoad = async ({ params, fetch }) => {
 		const extra = { chars, sequences };
 		return { sequence, extra };
 	} else {
-		throw error(response.status, response.statusText);
+		error(response.status, response.statusText);
 	}
 };

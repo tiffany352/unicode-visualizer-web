@@ -12,6 +12,6 @@ export const load: LayoutLoad = async ({ fetch }) => {
 		const version = json.version;
 		return { version };
 	} else {
-		throw error(500, "Unable to fetch version string");
+		error(500, "Unable to fetch version string");
 	}
 };

@@ -12,6 +12,6 @@ export const load: PageLoad = async ({ params, fetch }) => {
 		const block = await response.json();
 		return { block };
 	} else {
-		throw error(404, `Could not find any Unicode block named ${slug}.`);
+		error(404, `Could not find any Unicode block named ${slug}.`);
 	}
 };

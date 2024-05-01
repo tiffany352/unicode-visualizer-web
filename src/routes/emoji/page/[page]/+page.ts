@@ -16,6 +16,6 @@ export const load: PageLoad = async ({ params, fetch }) => {
 		const currentPage: number = json.currentPage;
 		return { emoji, pageCount, currentPage };
 	} else {
-		throw error(404, "Couldn't load list of emoji");
+		error(404, "Couldn't load list of emoji");
 	}
 };

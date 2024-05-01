@@ -11,8 +11,8 @@ export const load: PageLoad = async ({ params, fetch }) => {
 	const response: Response = await fetch(`/codepoint/${id}.json`);
 	if (response.status == 200) {
 		const char: CharInfo = await response.json();
-		throw redirect(301, `/codepoint/${char.slug}`);
+		redirect(301, `/codepoint/${char.slug}`);
 	} else {
-		throw error(response.status, response.statusText);
+		error(response.status, response.statusText);
 	}
 };

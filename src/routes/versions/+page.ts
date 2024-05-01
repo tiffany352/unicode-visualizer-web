@@ -11,6 +11,6 @@ export const load: PageLoad = async ({ fetch }) => {
 		const versions: string[] = await response.json();
 		return { versions };
 	} else {
-		throw error(404, "Couldn't load list of versions");
+		error(404, "Couldn't load list of versions");
 	}
 };

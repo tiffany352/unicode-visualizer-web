@@ -14,7 +14,7 @@ export const GET: RequestHandler = async ({ params }) => {
 
 	const block = getBlockFromSlug(blockSlug);
 	if (!block) {
-		throw error(404);
+		error(404);
 	}
 
 	const codepoints = getCodepointsInRange(block.range.first, block.range.last);

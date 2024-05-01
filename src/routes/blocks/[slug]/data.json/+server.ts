@@ -14,7 +14,7 @@ export const GET = (async ({ params }) => {
 	const { slug } = params;
 	const block = getBlockFromSlug(slug);
 	if (!block) {
-		throw error(404);
+		error(404);
 	}
 	const codepoints = getCodepointsInRange(block.range.first, block.range.last);
 	const assignedCount = codepoints.codepoints.reduce(

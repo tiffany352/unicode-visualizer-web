@@ -9,7 +9,7 @@ export const GET = (async ({ url, params }) => {
 	const { id } = params;
 	const char = lookupChar(parseInt(id, 16));
 	if (!char) {
-		throw error(404);
+		error(404);
 	}
 
 	return json(char);

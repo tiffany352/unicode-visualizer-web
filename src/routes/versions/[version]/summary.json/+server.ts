@@ -15,7 +15,7 @@ export const GET: RequestHandler = async ({ params }) => {
 	const codepoints = getCodepointsInVersion(version);
 
 	if (codepoints.length == 0) {
-		throw error(404, `No such version ${version}`);
+		error(404, `No such version ${version}`);
 	}
 
 	const blocks = new Map<string, number>();

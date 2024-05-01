@@ -18,6 +18,6 @@ export const load: PageLoad = async ({ params, fetch }) => {
 		const pageInt: number = parseInt(page);
 		return { version, chars, page: pageInt, pages };
 	} else {
-		throw error(404, `Could not find any Unicode version named ${version}.`);
+		error(404, `Could not find any Unicode version named ${version}.`);
 	}
 };

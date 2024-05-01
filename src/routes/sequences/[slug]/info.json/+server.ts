@@ -17,7 +17,7 @@ export const GET: RequestHandler = async ({ params }) => {
 
 	const sequence = lookupSequenceSlug(slug);
 	if (!sequence) {
-		throw error(404);
+		error(404);
 	}
 
 	const string = StringBlob.stringDecode(Encoding.Utf8, sequence.text);

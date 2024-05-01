@@ -23,6 +23,6 @@ export const load: PageLoad = async ({ params, fetch }) => {
 		const summary: Summary = await response.json();
 		return { summary, version };
 	} else {
-		throw error(response.status, "Couldn't load version data");
+		error(response.status, "Couldn't load version data");
 	}
 };

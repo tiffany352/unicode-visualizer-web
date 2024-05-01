@@ -11,6 +11,6 @@ export const load: PageLoad = async ({ fetch }) => {
 		const blocks = await response.json();
 		return blocks;
 	} else {
-		throw error(404, "Couldn't load list of blocks");
+		error(404, "Couldn't load list of blocks");
 	}
 };

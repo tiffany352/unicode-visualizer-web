@@ -10,6 +10,6 @@ export const load: PageLoad = async ({ fetch }) => {
 	if (response.status == 200) {
 		return await response.json();
 	} else {
-		throw error(404, "Couldn't load list of sequences");
+		error(404, "Couldn't load list of sequences");
 	}
 };
