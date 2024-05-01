@@ -27,7 +27,7 @@
 			const code = parseInt(value, 16);
 			for (const ref of refs) {
 				if (ref.codepoint == code) {
-					return `<a href="/codepoint/${ref.slug}" title="U+${ref.codepointStr} ${ref.name}">U+${ref.codepointStr}</a>`;
+					return `<a href="/codepoint/${ref.slug}" rel="nofollow" title="U+${ref.codepointStr} ${ref.name}">U+${ref.codepointStr}</a>`;
 				}
 			}
 			return match;

@@ -9,7 +9,7 @@
 </script>
 
 {#if ref.type == "single"}
-	<a href="/codepoint/{ref.slug}">
+	<a href="/codepoint/{ref.slug}" rel="nofollow">
 		{ref.text} U+{ref.codepointStr}
 		{ref.name}
 	</a>
@@ -19,6 +19,7 @@
 			Encoding.Utf8,
 			ref.text
 		).urlEncode()}"
+		rel="nofollow"
 	>
 		{ref.text}
 	</a>

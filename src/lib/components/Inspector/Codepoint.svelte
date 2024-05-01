@@ -67,7 +67,7 @@
 </script>
 
 {#if codepoint.value}
-	<a href={url} class="cell" title={tooltip} class:wide>
+	<a href={url} class="cell" title={tooltip} class:wide rel="nofollow">
 		<div class="preview">
 			{#if alias}
 				<span class="alias">{alias}</span>

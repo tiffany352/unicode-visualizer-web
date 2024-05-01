@@ -26,7 +26,7 @@
 <div class="table">
 	{#each data.chars as char}
 		{#if char.type == "char"}
-			<a href="/codepoint/{char.slug}">
+			<a href="/codepoint/{char.slug}" rel="nofollow">
 				<div class="char">
 					<span>{char.text}</span>
 				</div>
