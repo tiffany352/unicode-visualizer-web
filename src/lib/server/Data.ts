@@ -66,11 +66,13 @@ export const sequences = parse(read("ucd/NamedSequences.txt"), (input) => ({
 
 const versionRegex = /Version ([\d\.]+)/;
 
-const result = read("ucd/ReadMe.txt").match(versionRegex);
+const readme = read("ucd/ReadMe.txt");
+const result = readme.match(versionRegex);
+const isDraft = readme.includes("draft data files");
 if (!result) {
 	throw new Error("ReadMe.txt didn't contain version number");
 }
-export const version = result[1];
+export const version = result[1] + (isDraft ? " draft" : "");
 
 export const derivedAge = parse(read("ucd/DerivedAge.txt"), (input) => ({
 	Range: t.codepointOrRange(input[0]),
