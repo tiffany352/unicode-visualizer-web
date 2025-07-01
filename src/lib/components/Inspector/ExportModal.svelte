@@ -38,9 +38,7 @@
 	<input id="sep" type="checkbox" bind:checked={useSep} />
 	<label for="sep">Use separator</label>
 
-	<pre class="text-preview" bind:this={pre}>
-		{@html html}
-	</pre>
+	<pre class="text-preview" bind:this={pre}>{@html html}</pre>
 
 	<div slot="buttons">
 		<CopyButton text={textToCopy} element={pre} />

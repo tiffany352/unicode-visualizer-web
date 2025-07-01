@@ -63,9 +63,11 @@
 
 		{#each getEncodings() as encoding}
 			<li>
-				<a href="/inspect/{string.convert(encoding).urlEncode()}" rel="nofollow">
-					{getDisplayText(`encoding.${encodingToTag(encoding)}`)}
-				</a>
+				<form method="get" action="/inspect/{string.convert(encoding).urlEncode()}">
+					<button>
+						{getDisplayText(`encoding.${encodingToTag(encoding)}`)}
+					</button>
+				</form>
 			</li>
 		{/each}
 	</Menu>
@@ -75,9 +77,11 @@
 
 		{#each getEncodings() as encoding}
 			<li>
-				<a href="/inspect/{string.reinterpret(encoding).urlEncode()}" rel="nofollow">
-					{getDisplayText(`encoding.${encodingToTag(encoding)}`)}
-				</a>
+				<form method="get" action="/inspect/{string.reinterpret(encoding).urlEncode()}">
+					<button>
+						{getDisplayText(`encoding.${encodingToTag(encoding)}`)}
+					</button>
+				</form>
 			</li>
 		{/each}
 	</Menu>
@@ -88,11 +92,15 @@
 		{#each normalForms as nf}
 			<li title={getDisplayText(`normalFormTooltip.${nf}`)}>
 				{#if string.normalize(nf).equal(string)}
-					<div class="disabled">✓ {getDisplayText(`normalForm.${nf}`)}</div>
+					<button disabled>
+						✓ {getDisplayText(`normalForm.${nf}`)}
+					</button>
 				{:else}
-					<a href="/inspect/{string.normalize(nf).urlEncode()}" rel="nofollow">
-						{getDisplayText(`normalForm.${nf}`)}
-					</a>
+					<form method="get" action="/inspect/{string.normalize(nf).urlEncode()}">
+						<button>
+							{getDisplayText(`normalForm.${nf}`)}
+						</button>
+					</form>
 				{/if}
 			</li>
 		{/each}

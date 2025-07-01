@@ -43,7 +43,8 @@
 		visibility: visible;
 	}
 
-	ul :global(li > *) {
+	ul :global(li > a),
+	ul :global(li > button) {
 		font-family: inherit;
 		font-size: inherit;
 		font-weight: normal;
@@ -58,7 +59,23 @@
 		width: 100%;
 	}
 
-	ul :global(li > .disabled) {
+	ul :global(li > form > button) {
+		font-family: inherit;
+		font-size: inherit;
+		font-weight: normal;
+		display: block;
+		text-decoration: none;
+		padding: 0.5em;
+		border: none;
+		border-bottom: 1px solid var(--main-border);
+		color: inherit;
+		border-radius: inherit;
+		background-color: inherit;
+		width: 100%;
+	}
+
+	ul :global(li > .disabled),
+	ul :global(li > :disabled) {
 		color: var(--disabled-text);
 	}
 
