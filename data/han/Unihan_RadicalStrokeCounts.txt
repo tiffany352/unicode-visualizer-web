@@ -1,18 +1,16 @@
-#
 # Unihan_RadicalStrokeCounts.txt
-# Date: 2023-07-15 00:00:00 GMT [KL]
-# Unicode version: 15.1.0
+# Date: 2024-07-31 00:00:00 GMT [KL]
+# Unicode Version 16.0.0
 #
 # Unicode Character Database
-# © 2023 Unicode®, Inc.
+# © 2024 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
-# For terms of use, see http://www.unicode.org/terms_of_use.html
-# For documentation, see http://www.unicode.org/reports/tr38/
+# For terms of use and license, see https://www.unicode.org/terms_of_use.html
+#
+# For documentation, see https://www.unicode.org/reports/tr38/
 #
 # This file contains data on the following fields from the Unihan database:
 #	kRSAdobe_Japan1_6
-#
-# For details on the file format, see http://www.unicode.org/reports/tr38/
 #
 U+3402	kRSAdobe_Japan1_6	C+13698+1.1.5 V+13697+21.2.4 V+13699+1.1.5
 U+3405	kRSAdobe_Japan1_6	C+15387+3.1.1 C+15387+4.1.1
