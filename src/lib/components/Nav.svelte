@@ -30,6 +30,7 @@
 		<hr />
 		<h2>Browse</h2>
 		<NavLink {segment} {closeMenu} href="/blocks">Blocks</NavLink>
+		<NavLink {segment} {closeMenu} href="/categories">Categories</NavLink>
 		<NavLink {segment} {closeMenu} href="/sequences">Sequences</NavLink>
 		<NavLink {segment} {closeMenu} href="/versions">Versions</NavLink>
 	</ul>

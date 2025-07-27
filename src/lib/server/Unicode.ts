@@ -752,3 +752,73 @@ export function getEmoji(): Char[] {
 	cachedEmoji = list;
 	return list;
 }
+
+export interface GeneralCategory {
+	abbr: string,
+	name: string,
+	slug: string,
+	count: number,
+}
+
+const categories: GeneralCategory[] = [];
+const categoriesByAbbr: Map<string, GeneralCategory> = new Map();
+for (const entry of Data.valueAliases) {
+	if (entry.Type != 'gc') continue;
+	// the 1-letter abbrevs are categories-of-categories
+	if (entry.Value.length == 1) continue;
+
+	const category = {
+		abbr: entry.Value,
+		name: entry.Alias.replace('_', ' '),
+		slug: toSlug(entry.Alias),
+		count: 0,
+	};
+	categories.push(category);
+	categoriesByAbbr.set(entry.Value, category);
+	aliasValues.set(entry.Type + ":" + entry.Value, entry.Alias)
+}
+categories.sort((a, b) => {
+	if (a.abbr < b.abbr) return -1;
+	if (a.abbr > b.abbr) return 1;
+	return 0;
+});
+
+for (const entry of charList) {
+	const category = categoriesByAbbr.get(entry.General_Category);
+	if (entry.range)
+		category.count += entry.range.last - entry.range.first + 1;
+	else
+		category.count += 1;
+}
+
+export function getCategories(): GeneralCategory[] {
+	return categories;
+}
+
+const cachedCategoryCodepoints: Map<string, Char[]> = new Map();
+export function getCodepointsInCategory(abbr: string): Char[] {
+	if (cachedCategoryCodepoints.has(abbr))
+		return cachedCategoryCodepoints.get(abbr);
+
+	const list = [];
+	const limit = 1000;
+	for (const entry of charList) {
+		if (list.length >= limit) break;
+		if (entry.General_Category != abbr) continue;
+		if (entry.Codepoint != null) {
+			const char = parseEntry(entry, entry.Codepoint);
+			list.push(char);
+		} else {
+			const start = entry.range.first;
+			const stop = Math.min(entry.range.last, start + limit - list.length - 1);
+			for (let i = start; i <= stop; i++) {
+				const char = parseEntry(entry, i);
+				list.push(char);
+			}
+		}
+	}
+
+	cachedCategoryCodepoints.set(abbr, list);
+
+	return list;
+}
