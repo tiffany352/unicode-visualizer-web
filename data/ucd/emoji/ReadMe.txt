@@ -1,22 +1,22 @@
 # Unicode Character Database
-# Date: 2024-08-25
-# © 2024 Unicode®, Inc.
+# Date: 2025-08-15
+# © 2025 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use and license, see https://www.unicode.org/terms_of_use.html
 
-This directory contains final data files for Unicode, Version 16.0
+This directory contains final data files for Unicode, Version 17.0
 
-Public/emoji/16.0/
+Public/17.0.0/emoji/
 
   emoji-data.txt
   emoji-variation-sequences.txt
 
-The following related files are found in Unicode Emoji, Version 16.0
+The following related files are found in Unicode Emoji, Version 17.0
 
-Public/16.0.0/ucd/emoji/
+Public/17.0.0/ucd/emoji/
 
   emoji-sequences.txt
   emoji-zwj-sequences.txt
   emoji-test.txt
 
-For documentation, see UTS #51 Unicode Emoji, Version 16.0
+For documentation, see UTS #51 Unicode Emoji, Version 17.0

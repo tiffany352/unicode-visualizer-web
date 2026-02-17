@@ -1,9 +1,9 @@
 # Unihan_DictionaryIndices.txt
-# Date: 2024-07-31 00:00:00 GMT [KL]
-# Unicode Version 16.0.0
+# Date: 2025-07-24 00:00:00 GMT [KL]
+# Unicode Version 17.0.0
 #
 # Unicode Character Database
-# © 2024 Unicode®, Inc.
+# © 2025 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use and license, see https://www.unicode.org/terms_of_use.html
 #
@@ -774,7 +774,7 @@ U+34A7	kIRGHanyuDaZidian	10239.090
 U+34A7	kIRGKangXi	0121.370
 U+34A7	kKangXi	0121.370
 U+34A7	kMorohashi	01312 01312:E0100
-U+34A8	kHanYu	10239.060
+U+34A8	kHanYu	10239.050
 U+34A8	kIRGHanyuDaZidian	10239.050
 U+34A8	kIRGKangXi	0122.061
 U+34A8	kKangXi	0122.061
@@ -9208,12 +9208,11 @@ U+3AD9	kIRGKangXi	0491.190
 U+3AD9	kKangXi	0491.190
 U+3AD9	kMorohashi	13809
 U+3ADA	kCihaiT	635.104
-U+3ADA	kHanYu	21493.030
-U+3ADA	kIRGHanyuDaZidian	21493.030
-U+3ADA	kIRGKangXi	0502.080
-U+3ADA	kKangXi	0502.080
+U+3ADA	kHanYu	21493.020
+U+3ADA	kIRGHanyuDaZidian	21493.020
+U+3ADA	kIRGKangXi	0492.020
+U+3ADA	kKangXi	0492.020
 U+3ADA	kMorohashi	13813
-U+3ADA	kSBGY	481.24
 U+3ADA	kSMSZD2003Index	290.06
 U+3ADB	kHanYu	21500.070
 U+3ADB	kIRGHanyuDaZidian	21500.070
@@ -104518,11 +104517,12 @@ U+66F5	kIRGKangXi	0502.061
 U+66F5	kKangXi	0502.061
 U+66F5	kMorohashi	14284 14284:E0102
 U+66F6	kCihaiT	650.201
-U+66F6	kHanYu	21493.020
-U+66F6	kIRGHanyuDaZidian	21493.020
-U+66F6	kIRGKangXi	0492.020
-U+66F6	kKangXi	0492.020
+U+66F6	kHanYu	21493.030
+U+66F6	kIRGHanyuDaZidian	21493.030
+U+66F6	kIRGKangXi	0502.080
+U+66F6	kKangXi	0502.080
 U+66F6	kMorohashi	14287
+U+66F6	kSBGY	481.24
 U+66F6	kSMSZD2003Index	297.13
 U+66F7	kCihaiT	650.301
 U+66F7	kDaeJaweon	0874.150
@@ -253683,7 +253683,7 @@ U+20455	kIRGKangXi	0121.351
 U+20455	kKangXi	0121.351
 U+20456	kIRGKangXi	0121.351
 U+20456	kKangXi	0121.351
-U+20457	kHanYu	10239.050
+U+20457	kHanYu	10239.060
 U+20457	kIRGHanyuDaZidian	10239.060
 U+20457	kIRGKangXi	0121.390
 U+20457	kKangXi	0121.390
@@ -424409,6 +424409,10 @@ U+2CE33	kMeyerWempe	970
 U+2CE75	kKangXi	1631.110
 U+2CE75	kMorohashi	48663
 U+2CE76	kCheungBauerIndex	475.01
+U+2CE9E	kCowles	2059
+U+2CE9E	kFennIndex	272.04
+U+2CE9E	kLau	1028
+U+2CE9E	kMeyerWempe	1368*
 U+2CEC1	kMorohashi	02787
 U+2CF02	kMorohashi	00117
 U+2CF3E	kKangXi	0087.141
